@@ -62,7 +62,7 @@ const Auth = () => {
     } else {
       toast({
         title: "Login realizado com sucesso!",
-        description: "Bem-vindo de volta ao Perguntados!",
+        description: "Bem-vindo de volta ao BrainBolt!",
       });
     }
 
@@ -115,7 +115,7 @@ const Auth = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-auth p-4 no-scroll">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Perguntados</h1>
+          <h1 className="text-4xl font-bold text-white mb-2">BrainBolt</h1>
           <p className="text-white/80">Entre para começar a jogar!</p>
         </div>
 
