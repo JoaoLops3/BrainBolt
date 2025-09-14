@@ -12,6 +12,28 @@ dist
 dist-ssr
 *.local
 
+
+# Environment variables and secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# API keys and configuration files
+config.json
+secrets.json
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -22,3 +44,28 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Build outputs
+build/
+out/
+.next/
+.nuxt/
+
+# Capacitor specific
+android/app/src/main/assets/public/
+ios/App/App/public/
+
+# Supabase
+.supabase/
