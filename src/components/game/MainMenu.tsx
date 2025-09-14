@@ -53,7 +53,7 @@ export const MainMenu = ({
         {/* Header with user info */}
         <div className="text-center">
           <h1 className="text-5xl font-bold text-white mb-2 animate-bounce">
-            Perguntados
+            BrainBolt
           </h1>
           <p className="text-white/80 mb-6">Teste seus conhecimentos!</p>
 

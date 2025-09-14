@@ -20,6 +20,7 @@ dist-ssr
 .env.test.local
 .env.production.local
 .env.*.local
+!.env.example
 
 # API keys and configuration files
 config.json

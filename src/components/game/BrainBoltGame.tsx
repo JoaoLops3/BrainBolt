@@ -65,7 +65,7 @@ const initialCategories: CategoryInfo[] = [
   },
 ];
 
-export const PerguntadosGame = () => {
+export const BrainBoltGame = () => {
   const { toast } = useToast();
   const { user } = useAuth();
   const [gameState, setGameState] = useState<GameState>({
