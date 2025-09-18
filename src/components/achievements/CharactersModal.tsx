@@ -212,20 +212,20 @@ export const CharactersModal = ({
     return (
       <Card
         key={character.id}
-        className={`transition-all hover:scale-105 ${
+        className={`transition-all hover:scale-[1.02] hover:shadow-md ${
           isLocked ? "opacity-60" : ""
-        } h-fit`}
+        } h-fit border-2 hover:border-primary/20`}
       >
-        <CardHeader className="pb-2 p-3 sm:p-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Avatar className="h-10 w-10 sm:h-12 sm:w-12">
+        <CardHeader className="pb-3 p-4 sm:p-5">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex items-start gap-3 min-w-0 flex-1">
+              <Avatar className="h-12 w-12 sm:h-14 sm:w-14 flex-shrink-0">
                 <AvatarImage
                   src={character.image_url}
                   alt={character.name}
                   className={isLocked ? "filter grayscale" : ""}
                 />
-                <AvatarFallback>
+                <AvatarFallback className="text-sm font-semibold">
                   {isLocked ? (
                     <Lock className="h-6 w-6" />
                   ) : (
@@ -233,20 +233,22 @@ export const CharactersModal = ({
                   )}
                 </AvatarFallback>
               </Avatar>
-              <div>
-                <CardTitle className="text-xs sm:text-sm">
+              <div className="min-w-0 flex-1">
+                <CardTitle className="text-sm sm:text-base font-semibold leading-tight mb-2">
                   {character.name}
                 </CardTitle>
                 <div className="flex items-center gap-1 flex-wrap">
                   <Badge
                     variant="outline"
-                    className={getCategoryColor(character.category)}
+                    className={`${getCategoryColor(
+                      character.category
+                    )} text-xs`}
                   >
                     {character.category}
                   </Badge>
                   <Badge
                     variant="secondary"
-                    className={getRarityColor(character.rarity)}
+                    className={`${getRarityColor(character.rarity)} text-xs`}
                   >
                     <RarityIcon className="h-3 w-3 mr-1" />
                     {character.rarity}
@@ -259,11 +261,11 @@ export const CharactersModal = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => toggleFavorite(character.id)}
-                className={
+                className={`flex-shrink-0 h-8 w-8 p-0 ${
                   userCharacter.is_favorite
                     ? "text-red-500 hover:text-red-700"
                     : "text-gray-400 hover:text-red-500"
-                }
+                }`}
               >
                 <Heart
                   className={`h-4 w-4 ${
@@ -274,23 +276,25 @@ export const CharactersModal = ({
             )}
           </div>
         </CardHeader>
-        <CardContent className="p-3 sm:p-6 pt-0">
-          <p className="text-xs sm:text-sm text-muted-foreground mb-2">
+        <CardContent className="p-4 sm:p-5 pt-0 space-y-3">
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
             {character.description}
           </p>
 
           {character.special_ability && (
-            <div className="bg-primary/5 p-2 rounded-lg mb-2">
-              <p className="text-xs font-medium text-primary">
+            <div className="bg-primary/5 border border-primary/10 p-3 rounded-lg">
+              <p className="text-xs font-semibold text-primary mb-1">
                 Habilidade Especial:
               </p>
-              <p className="text-xs">{character.special_ability}</p>
+              <p className="text-xs text-primary/90">
+                {character.special_ability}
+              </p>
             </div>
           )}
 
           {isLocked ? (
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Target className="h-4 w-4" />
+            <div className="flex items-center gap-2 text-muted-foreground bg-muted/50 p-2 rounded-lg">
+              <Target className="h-4 w-4 flex-shrink-0" />
               <span className="text-xs">
                 Acerte {character.unlock_requirement} perguntas de{" "}
                 {character.category}
@@ -298,11 +302,13 @@ export const CharactersModal = ({
             </div>
           ) : (
             userCharacter && (
-              <div className="flex items-center gap-1 text-green-600">
-                <Trophy className="h-4 w-4" />
-                <span className="text-xs sm:text-sm font-medium">
+              <div className="flex items-center gap-2 text-green-600 bg-green-50 p-2 rounded-lg">
+                <Trophy className="h-4 w-4 flex-shrink-0" />
+                <span className="text-xs font-medium">
                   Desbloqueado em{" "}
-                  {new Date(userCharacter.unlocked_at).toLocaleDateString()}
+                  {new Date(userCharacter.unlocked_at).toLocaleDateString(
+                    "pt-BR"
+                  )}
                 </span>
               </div>
             )
@@ -319,8 +325,8 @@ export const CharactersModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] max-w-6xl h-[90vh] max-h-[90vh] overflow-y-auto p-2 sm:p-6">
-        <DialogHeader>
+      <DialogContent className="w-[95vw] max-w-6xl h-[90vh] max-h-[90vh] flex flex-col p-2 sm:p-6">
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
             <Users className="h-4 w-4 sm:h-5 sm:w-5" />
             Coleção de Personagens
@@ -333,8 +339,11 @@ export const CharactersModal = ({
           </div>
         </DialogHeader>
 
-        <Tabs defaultValue="unlocked" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 h-10">
+        <Tabs
+          defaultValue="unlocked"
+          className="w-full flex flex-col flex-1 min-h-0"
+        >
+          <TabsList className="grid w-full grid-cols-2 h-10 flex-shrink-0">
             <TabsTrigger value="unlocked" className="text-xs sm:text-sm">
               Coletados ({unlockedCharacters.length})
             </TabsTrigger>
@@ -343,24 +352,53 @@ export const CharactersModal = ({
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="unlocked" className="mt-4 overflow-y-auto">
-            {unlockedCharacters.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Nenhum personagem coletado ainda</p>
+          <TabsContent
+            value="unlocked"
+            className="mt-4 flex-1 overflow-y-auto min-h-0"
+          >
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                <span className="ml-2 text-muted-foreground">
+                  Carregando personagens...
+                </span>
+              </div>
+            ) : unlockedCharacters.length === 0 ? (
+              <div className="text-center py-12 text-muted-foreground">
+                <Users className="h-16 w-16 mx-auto mb-4 opacity-50" />
+                <p className="text-lg font-medium mb-2">
+                  Nenhum personagem coletado ainda
+                </p>
                 <p className="text-sm">
                   Acerte perguntas por categoria para desbloquear personagens!
                 </p>
               </div>
             ) : (
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {Object.entries(groupedUnlocked).map(
                   ([category, characters]) => (
-                    <div key={category}>
-                      <h3 className="text-base sm:text-lg font-semibold mb-3 capitalize">
-                        {category}
-                      </h3>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3">
+                    <div key={category} className="space-y-4">
+                      <div className="flex items-center gap-3">
+                        <h3 className="text-lg sm:text-xl font-bold capitalize">
+                          {category}
+                        </h3>
+                        <Badge
+                          variant="outline"
+                          className={getCategoryColor(category)}
+                        >
+                          {characters.length} personagem
+                          {characters.length !== 1 ? "s" : ""}
+                        </Badge>
+                      </div>
+                      <div
+                        className={`grid gap-4 ${
+                          characters.length === 1
+                            ? "grid-cols-1 max-w-sm mx-auto"
+                            : characters.length === 2
+                            ? "grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto"
+                            : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3"
+                        }`}
+                      >
                         {characters.map((uc) =>
                           renderCharacterCard(uc.character, uc)
                         )}
@@ -372,21 +410,51 @@ export const CharactersModal = ({
             )}
           </TabsContent>
 
-          <TabsContent value="locked" className="mt-4 overflow-y-auto">
-            {lockedCharacters.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
-                <Crown className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Todos os personagens foram coletados!</p>
+          <TabsContent
+            value="locked"
+            className="mt-4 flex-1 overflow-y-auto min-h-0"
+          >
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                <span className="ml-2 text-muted-foreground">
+                  Carregando personagens...
+                </span>
+              </div>
+            ) : lockedCharacters.length === 0 ? (
+              <div className="text-center py-12 text-muted-foreground">
+                <Crown className="h-16 w-16 mx-auto mb-4 opacity-50" />
+                <p className="text-lg font-medium mb-2">
+                  Todos os personagens foram coletados!
+                </p>
                 <p className="text-sm">Você completou a coleção!</p>
               </div>
             ) : (
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {Object.entries(groupedLocked).map(([category, characters]) => (
-                  <div key={category}>
-                    <h3 className="text-base sm:text-lg font-semibold mb-3 capitalize">
-                      {category}
-                    </h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3">
+                  <div key={category} className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-lg sm:text-xl font-bold capitalize">
+                        {category}
+                      </h3>
+                      <Badge
+                        variant="outline"
+                        className={getCategoryColor(category)}
+                      >
+                        {characters.length} personagem
+                        {characters.length !== 1 ? "s" : ""} bloqueado
+                        {characters.length !== 1 ? "s" : ""}
+                      </Badge>
+                    </div>
+                    <div
+                      className={`grid gap-4 ${
+                        characters.length === 1
+                          ? "grid-cols-1 max-w-sm mx-auto"
+                          : characters.length === 2
+                          ? "grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto"
+                          : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3"
+                      }`}
+                    >
                       {characters.map((character) =>
                         renderCharacterCard(character, undefined, true)
                       )}
