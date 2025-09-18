@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "com.joaolops3.brainbolt"
+    namespace "com.joaolops3.perguntados"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.joaolops3.brainbolt"
+        applicationId "com.joaolops3.perguntados"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

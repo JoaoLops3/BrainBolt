@@ -68,85 +68,83 @@ export const QuestionCard = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4 no-scroll">
-      <div className="w-full max-w-2xl space-y-6">
-        {/* Progress */}
-        <div className="bg-white/20 backdrop-blur-lg border border-white/30 rounded-xl p-4 shadow-lg">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-white/80 text-sm font-medium">Progresso</span>
-            <span className="text-white text-sm font-bold">
-              {questionNumber} / {totalQuestions}
-            </span>
-          </div>
-          <Progress
-            value={(questionNumber / totalQuestions) * 100}
-            className="h-3 bg-white/20"
-          />
+    <div className="w-full space-y-4 sm:space-y-6">
+      {/* Progress */}
+      <div className="bg-white/20 backdrop-blur-lg border border-white/30 rounded-xl p-3 sm:p-4 shadow-lg">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-white/80 text-sm font-medium">Progresso</span>
+          <span className="text-white text-sm font-bold">
+            {questionNumber} / {totalQuestions}
+          </span>
         </div>
+        <Progress
+          value={(questionNumber / totalQuestions) * 100}
+          className="h-2 sm:h-3 bg-white/20"
+        />
+      </div>
 
-        {/* Question Card */}
-        <Card className="bg-white/95 backdrop-blur-lg border-white/30 shadow-2xl animate-in slide-in-from-bottom-4 duration-500 hover:shadow-3xl transition-all duration-300">
-          <CardHeader className="text-center space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Badge
-                  variant="secondary"
-                  className={`${
-                    categoryColors[question.category]
-                  } text-white border-white/20`}
-                >
-                  {categoryNames[question.category]}
-                </Badge>
-
-                {gameMode === "speed" && (
-                  <Badge
-                    variant="destructive"
-                    className="bg-orange-500 text-white"
-                  >
-                    <Zap className="h-3 w-3 mr-1" />
-                    Veloz
-                  </Badge>
-                )}
-              </div>
-
+      {/* Question Card */}
+      <Card className="bg-white/95 backdrop-blur-lg border-white/30 shadow-2xl animate-in slide-in-from-bottom-4 duration-500 hover:shadow-3xl transition-all duration-300">
+        <CardHeader className="text-center space-y-3 sm:space-y-4 p-4 sm:p-6">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center space-x-2 flex-wrap">
               <Badge
-                variant="outline"
-                className="border-muted text-muted-foreground"
+                variant="secondary"
+                className={`${
+                  categoryColors[question.category]
+                } text-white border-white/20`}
               >
-                {questionNumber} / {totalQuestions}
+                {categoryNames[question.category]}
               </Badge>
+
+              {gameMode === "speed" && (
+                <Badge
+                  variant="destructive"
+                  className="bg-orange-500 text-white"
+                >
+                  <Zap className="h-3 w-3 mr-1" />
+                  Veloz
+                </Badge>
+              )}
             </div>
 
-            <CardTitle className="text-2xl font-bold leading-tight">
-              {question.question}
-            </CardTitle>
+            <Badge
+              variant="outline"
+              className="border-muted text-muted-foreground"
+            >
+              {questionNumber} / {totalQuestions}
+            </Badge>
+          </div>
 
-            <CardDescription className="text-base">
-              Escolha a alternativa correta
-            </CardDescription>
-          </CardHeader>
+          <CardTitle className="text-lg sm:text-xl md:text-2xl font-bold leading-tight">
+            {question.question}
+          </CardTitle>
 
-          <CardContent className="space-y-3">
-            {question.options.map((option, index) => (
-              <Button
-                key={index}
-                onClick={() => !showAnswer && onSelectAnswer(index)}
-                disabled={showAnswer}
-                className={cn(
-                  "w-full p-6 text-left text-lg transition-all duration-300 hover:scale-[1.02] justify-start font-medium",
-                  getButtonStyle(index)
-                )}
-                variant="ghost"
-              >
-                <span className="mr-4 font-bold text-primary">
-                  {String.fromCharCode(65 + index)}.
-                </span>
-                <span className="flex-1">{option}</span>
-              </Button>
-            ))}
-          </CardContent>
-        </Card>
-      </div>
+          <CardDescription className="text-sm sm:text-base">
+            Escolha a alternativa correta
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent className="space-y-2 sm:space-y-3 p-4 sm:p-6">
+          {question.options.map((option, index) => (
+            <Button
+              key={index}
+              onClick={() => !showAnswer && onSelectAnswer(index)}
+              disabled={showAnswer}
+              className={cn(
+                "w-full p-4 sm:p-6 text-left text-base sm:text-lg transition-all duration-300 hover:scale-[1.02] justify-start font-medium",
+                getButtonStyle(index)
+              )}
+              variant="ghost"
+            >
+              <span className="mr-3 sm:mr-4 font-bold text-primary">
+                {String.fromCharCode(65 + index)}.
+              </span>
+              <span className="flex-1 text-left">{option}</span>
+            </Button>
+          ))}
+        </CardContent>
+      </Card>
     </div>
   );
 };

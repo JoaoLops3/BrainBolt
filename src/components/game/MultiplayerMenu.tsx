@@ -31,8 +31,8 @@ export const MultiplayerMenu = ({
 
   const generateRoomCode = () => {
     // Generate a more unique room code
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let result = '';
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let result = "";
     for (let i = 0; i < 6; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
@@ -61,18 +61,8 @@ export const MultiplayerMenu = ({
         ...data,
         game_status: data.game_status as MultiplayerRoom["game_status"],
       });
-
-      toast({
-        title: "Sala criada!",
-        description: `Código da sala: ${newRoomCode}`,
-      });
     } catch (error) {
       console.error("Erro ao criar sala:", error);
-      toast({
-        title: "Erro",
-        description: "Não foi possível criar a sala",
-        variant: "destructive",
-      });
     } finally {
       setLoading(false);
     }
@@ -110,18 +100,8 @@ export const MultiplayerMenu = ({
         ...data,
         game_status: data.game_status as MultiplayerRoom["game_status"],
       });
-
-      toast({
-        title: "Sala encontrada!",
-        description: "Aguarde o host iniciar o jogo...",
-      });
     } catch (error) {
       console.error("Erro ao entrar na sala:", error);
-      toast({
-        title: "Erro",
-        description: "Sala não encontrada ou já ocupada",
-        variant: "destructive",
-      });
     } finally {
       setLoading(false);
     }
@@ -130,10 +110,6 @@ export const MultiplayerMenu = ({
   const copyRoomCode = () => {
     if (currentRoom) {
       navigator.clipboard.writeText(currentRoom.room_code);
-      toast({
-        title: "Copiado!",
-        description: "Código da sala copiado para a área de transferência",
-      });
     }
   };
 
@@ -166,10 +142,6 @@ export const MultiplayerMenu = ({
           });
 
           if (updatedRoom.guest_id && !currentRoom.guest_id) {
-            toast({
-              title: "Jogador encontrado!",
-              description: "Outro jogador entrou na sala",
-            });
           }
 
           // If game started, redirect both players to game

@@ -41,7 +41,7 @@ const Auth = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-auth no-scroll">
+      <div className="min-h-[100dvh] flex items-center justify-center bg-gradient-auth overflow-y-auto safe-top safe-bottom">
         <Loader2 className="h-8 w-8 animate-spin text-white" />
       </div>
     );
@@ -62,7 +62,7 @@ const Auth = () => {
     } else {
       toast({
         title: "Login realizado com sucesso!",
-        description: "Bem-vindo de volta ao BrainBolt!",
+        description: "Bem-vindo de volta ao Perguntados!",
       });
     }
 
@@ -112,10 +112,10 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-auth p-4 no-scroll">
+    <div className="min-h-[100dvh] flex items-center justify-center bg-gradient-auth p-4 overflow-y-auto safe-top safe-bottom">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">BrainBolt</h1>
+          <h1 className="text-4xl font-bold text-white mb-2">Perguntados</h1>
           <p className="text-white/80">Entre para começar a jogar!</p>
         </div>
 

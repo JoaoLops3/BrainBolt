@@ -65,7 +65,7 @@ const initialCategories: CategoryInfo[] = [
   },
 ];
 
-export const BrainBoltGame = () => {
+export const PerguntadosGame = () => {
   const { toast } = useToast();
   const { user } = useAuth();
   const [gameState, setGameState] = useState<GameState>({
@@ -162,14 +162,6 @@ export const BrainBoltGame = () => {
       });
 
       setGameStartTime(Date.now());
-
-      toast({
-        title: "Jogo iniciado!",
-        description:
-          mode === "speed"
-            ? "Modo veloz ativado! Você tem 15 segundos por pergunta."
-            : "Boa sorte! Responda as perguntas e colete os personagens.",
-      });
     },
     [selectQuestions, toast]
   );
@@ -270,19 +262,6 @@ export const BrainBoltGame = () => {
             timeLeft: nextTimeLeft,
           };
         });
-
-        if (isCorrect) {
-          toast({
-            title: "Correto! 🎉",
-            description: "+100 pontos",
-          });
-        } else {
-          toast({
-            title: "Incorreto 😔",
-            description: "Continue tentando!",
-            variant: "destructive",
-          });
-        }
       }, 2000);
     },
     [
@@ -370,16 +349,28 @@ export const BrainBoltGame = () => {
         <SettingsModal open={settingsOpen} onOpenChange={setSettingsOpen} />
 
         <StatsModal open={statsOpen} onOpenChange={setStatsOpen} />
-        
-        <AdvancedStatsModal open={advancedStatsOpen} onOpenChange={setAdvancedStatsOpen} />
 
-        <AchievementsModal open={achievementsOpen} onOpenChange={setAchievementsOpen} />
+        <AdvancedStatsModal
+          open={advancedStatsOpen}
+          onOpenChange={setAdvancedStatsOpen}
+        />
 
-        <CharactersModal open={charactersOpen} onOpenChange={setCharactersOpen} />
+        <AchievementsModal
+          open={achievementsOpen}
+          onOpenChange={setAchievementsOpen}
+        />
 
-        <ImprovedFriendsModal open={friendsOpen} onOpenChange={setFriendsOpen} />
-        
-        <AchievementNotification 
+        <CharactersModal
+          open={charactersOpen}
+          onOpenChange={setCharactersOpen}
+        />
+
+        <ImprovedFriendsModal
+          open={friendsOpen}
+          onOpenChange={setFriendsOpen}
+        />
+
+        <AchievementNotification
           notification={notification}
           onClose={clearNotification}
         />
@@ -447,30 +438,34 @@ export const BrainBoltGame = () => {
         </svg>
       </button>
 
-      {/* Timer for speed mode */}
-      {gameState.gameMode === "speed" && (
-        <div className="fixed top-4 right-4 z-10">
-          <GameTimer
-            timeLeft={gameState.timeLeft}
-            totalTime={gameState.totalTime}
-            isActive={
-              gameState.selectedAnswer === null && !gameState.showAnswer
-            }
-            onTimeUp={handleTimeUp}
-            onTick={handleTimerTick}
+      <div className="min-h-screen bg-gradient-primary flex flex-col items-center justify-center p-4 no-scroll w-full">
+        <div className="w-full max-w-2xl space-y-4">
+          {/* Timer for speed mode - positioned above progress */}
+          {gameState.gameMode === "speed" && (
+            <div className="flex justify-center">
+              <GameTimer
+                timeLeft={gameState.timeLeft}
+                totalTime={gameState.totalTime}
+                isActive={
+                  gameState.selectedAnswer === null && !gameState.showAnswer
+                }
+                onTimeUp={handleTimeUp}
+                onTick={handleTimerTick}
+              />
+            </div>
+          )}
+
+          <QuestionCard
+            question={currentQuestion}
+            questionNumber={gameState.currentQuestionIndex + 1}
+            totalQuestions={gameQuestions.length}
+            selectedAnswer={gameState.selectedAnswer}
+            showAnswer={gameState.showAnswer}
+            onSelectAnswer={handleAnswerSelect}
+            gameMode={gameState.gameMode}
           />
         </div>
-      )}
-
-      <QuestionCard
-        question={currentQuestion}
-        questionNumber={gameState.currentQuestionIndex + 1}
-        totalQuestions={gameQuestions.length}
-        selectedAnswer={gameState.selectedAnswer}
-        showAnswer={gameState.showAnswer}
-        onSelectAnswer={handleAnswerSelect}
-        gameMode={gameState.gameMode}
-      />
+      </div>
     </div>
   );
 };

@@ -47,7 +47,7 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // BrainBolt categories
+        // Perguntados categories
         sports: "hsl(var(--sports))",
         entertainment: "hsl(var(--entertainment))",
         art: "hsl(var(--art))",

@@ -134,8 +134,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signOut = async () => {
     await supabase.auth.signOut();
-
-    localStorage.removeItem('brainbolt_user');
+    localStorage.removeItem('perguntados_user');
   };
 
   const updateProfile = async (updates: Partial<Profile>) => {
@@ -154,7 +153,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Save user to localStorage when profile changes
   useEffect(() => {
     if (user && profile) {
-      localStorage.setItem('brainbolt_user', JSON.stringify({
+      localStorage.setItem('perguntados_user', JSON.stringify({
         user,
         profile
       }));

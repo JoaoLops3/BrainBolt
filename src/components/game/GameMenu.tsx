@@ -27,7 +27,7 @@ export const GameMenu = ({ categories, onStartGame }: GameMenuProps) => {
       <div className="text-center space-y-8 max-w-2xl w-full">
         {/* Logo/Title */}
         <div className="animate-bounce-in">
-          <h1 className="text-6xl font-bold text-white mb-2">BrainBolt</h1>
+          <h1 className="text-6xl font-bold text-white mb-2">Perguntados</h1>
           <p className="text-white/80 text-xl">Teste seus conhecimentos!</p>
         </div>
 

@@ -1,12 +1,18 @@
-import { useState } from 'react';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
-import { User, Save, Image } from 'lucide-react';
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import { User, Save, Image } from "lucide-react";
 
 interface SettingsModalProps {
   open: boolean;
@@ -14,45 +20,37 @@ interface SettingsModalProps {
 }
 
 const avatarOptions = [
-  '/placeholder.svg',
-  'https://api.dicebear.com/7.x/adventurer/svg?seed=1',
-  'https://api.dicebear.com/7.x/adventurer/svg?seed=2',
-  'https://api.dicebear.com/7.x/adventurer/svg?seed=3',
-  'https://api.dicebear.com/7.x/adventurer/svg?seed=4',
-  'https://api.dicebear.com/7.x/adventurer/svg?seed=5',
-  'https://api.dicebear.com/7.x/adventurer/svg?seed=6',
+  "/placeholder.svg",
+  "https://api.dicebear.com/7.x/adventurer/svg?seed=1",
+  "https://api.dicebear.com/7.x/adventurer/svg?seed=2",
+  "https://api.dicebear.com/7.x/adventurer/svg?seed=3",
+  "https://api.dicebear.com/7.x/adventurer/svg?seed=4",
+  "https://api.dicebear.com/7.x/adventurer/svg?seed=5",
+  "https://api.dicebear.com/7.x/adventurer/svg?seed=6",
 ];
 
 export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
   const { profile, updateProfile } = useAuth();
   const { toast } = useToast();
-  const [displayName, setDisplayName] = useState(profile?.display_name || '');
-  const [selectedAvatar, setSelectedAvatar] = useState(profile?.avatar_url || '/placeholder.svg');
+  const [displayName, setDisplayName] = useState(profile?.display_name || "");
+  const [selectedAvatar, setSelectedAvatar] = useState(
+    profile?.avatar_url || "/placeholder.svg"
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSave = async () => {
     if (!profile) return;
-    
+
     setIsLoading(true);
-    
+
     try {
       await updateProfile({
         display_name: displayName,
-        avatar_url: selectedAvatar
+        avatar_url: selectedAvatar,
       });
-      
-      toast({
-        title: "Configurações salvas!",
-        description: "Suas alterações foram aplicadas com sucesso."
-      });
-      
+
       onOpenChange(false);
     } catch (error) {
-      toast({
-        title: "Erro ao salvar",
-        description: "Não foi possível salvar as alterações.",
-        variant: "destructive"
-      });
     } finally {
       setIsLoading(false);
     }
@@ -70,7 +68,7 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
             Personalize seu perfil e avatar no jogo.
           </DialogDescription>
         </DialogHeader>
-        
+
         <div className="space-y-6 py-4">
           {/* Avatar Selection */}
           <div className="space-y-3">
@@ -78,7 +76,7 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
               <Image className="h-4 w-4" />
               <span>Avatar</span>
             </Label>
-            
+
             <div className="flex items-center justify-center mb-4">
               <Avatar className="h-20 w-20">
                 <AvatarImage src={selectedAvatar} />
@@ -87,7 +85,7 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
                 </AvatarFallback>
               </Avatar>
             </div>
-            
+
             <div className="grid grid-cols-4 gap-2">
               {avatarOptions.map((avatar, index) => (
                 <button
@@ -95,9 +93,9 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
                   type="button"
                   onClick={() => setSelectedAvatar(avatar)}
                   className={`relative p-1 rounded-lg transition-all ${
-                    selectedAvatar === avatar 
-                      ? 'ring-2 ring-primary bg-primary/10' 
-                      : 'hover:bg-muted'
+                    selectedAvatar === avatar
+                      ? "ring-2 ring-primary bg-primary/10"
+                      : "hover:bg-muted"
                   }`}
                 >
                   <Avatar className="h-12 w-12">
@@ -129,7 +127,9 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
               <h4 className="font-medium text-sm">Suas Estatísticas</h4>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
-                  <span className="text-muted-foreground">Pontuação Total:</span>
+                  <span className="text-muted-foreground">
+                    Pontuação Total:
+                  </span>
                   <div className="font-semibold">{profile.total_score}</div>
                 </div>
                 <div>
@@ -137,7 +137,9 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
                   <div className="font-semibold">{profile.games_played}</div>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Melhor Sequência:</span>
+                  <span className="text-muted-foreground">
+                    Melhor Sequência:
+                  </span>
                   <div className="font-semibold">{profile.best_streak}</div>
                 </div>
               </div>
@@ -146,18 +148,12 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
         </div>
 
         <div className="flex justify-end space-x-2">
-          <Button 
-            variant="outline" 
-            onClick={() => onOpenChange(false)}
-          >
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
-          <Button 
-            onClick={handleSave}
-            disabled={isLoading}
-          >
+          <Button onClick={handleSave} disabled={isLoading}>
             <Save className="mr-2 h-4 w-4" />
-            {isLoading ? 'Salvando...' : 'Salvar'}
+            {isLoading ? "Salvando..." : "Salvar"}
           </Button>
         </div>
       </DialogContent>

@@ -36,7 +36,7 @@ All colors MUST be HSL.
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
 
-    /* BrainBolt Category Colors */
+    /* Perguntados Category Colors */
     --sports: 45 93% 58%;
     --entertainment: 330 81% 60%;
     --art: 271 81% 56%;
@@ -59,6 +59,37 @@ All colors MUST be HSL.
     /* Effects */
     --shadow-card: 0 4px 12px -2px hsl(var(--primary) / 0.08);
     --shadow-button: 0 2px 8px -2px hsl(var(--primary) / 0.2);
+    
+    /* Glassmorphism Effects */
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-blur: blur(10px);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    
+    /* Enhanced Gradients */
+    --gradient-glass: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.1), 
+      rgba(255, 255, 255, 0.05)
+    );
+    --gradient-rainbow: linear-gradient(135deg, 
+      hsl(262 83% 58%), 
+      hsl(330 81% 60%), 
+      hsl(45 93% 58%), 
+      hsl(142 76% 36%), 
+      hsl(217 91% 60%), 
+      hsl(25 95% 53%)
+    );
+    --gradient-aurora: linear-gradient(135deg, 
+      hsl(262 83% 58% / 0.8), 
+      hsl(330 81% 60% / 0.6), 
+      hsl(45 93% 58% / 0.8), 
+      hsl(142 76% 36% / 0.6)
+    );
+    
+    /* Animation Variables */
+    --animation-duration: 0.3s;
+    --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --bounce-easing: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --radius: 0.5rem;
 
@@ -123,49 +154,23 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
-  /* Global scroll blocking - highest priority */
-  * {
-    overflow: hidden !important;
-    max-width: 100vw !important;
-    max-height: 100vh !important;
-  }
-
   html, body {
     @apply bg-background text-foreground;
-    overflow: hidden !important;
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 100vw !important;
-    max-height: 100vh !important;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-  }
-
-  body {
-    margin: 0 !important;
-    padding: 0 !important;
-    max-width: 100vw !important;
-    max-height: 100vh !important;
-    overflow: hidden !important;
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-  }
-
-  /* Prevent overflow on all containers */
-  div, section, main, article, aside, nav, header, footer {
-    max-width: 100vw !important;
-    max-height: 100vh !important;
-    overflow: hidden !important;
+    width: 100%;
+    min-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
 @layer utilities {
+  /* Safe area helpers */
+  .safe-top { padding-top: env(safe-area-inset-top); }
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+  .safe-left { padding-left: env(safe-area-inset-left); }
+  .safe-right { padding-right: env(safe-area-inset-right); }
+
   .bg-gradient-primary {
     background: var(--gradient-primary);
   }
@@ -181,12 +186,198 @@ All colors MUST be HSL.
   .bg-gradient-hero {
     background: var(--gradient-hero);
   }
+  
+  .bg-gradient-glass {
+    background: var(--gradient-glass);
+  }
+  
+  .bg-gradient-rainbow {
+    background: var(--gradient-rainbow);
+  }
+  
+  .bg-gradient-aurora {
+    background: var(--gradient-aurora);
+  }
+
+  /* Glassmorphism Components */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+  
+  .glass-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  }
+  
+  .glass-button {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all var(--animation-duration) var(--animation-easing);
+  }
+  
+  .glass-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+  }
+
+  /* Enhanced Animations */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite alternate;
+  }
+  
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+  }
+  
+  .animate-bounce-in {
+    animation: bounce-in 0.6s var(--bounce-easing);
+  }
+  
+  .animate-slide-up {
+    animation: slide-up 0.4s var(--animation-easing);
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.5s var(--animation-easing);
+  }
+  
+  .animate-scale-in {
+    animation: scale-in 0.3s var(--bounce-easing);
+  }
+
+  /* Hover Effects */
+  .hover-lift {
+    transition: all var(--animation-duration) var(--animation-easing);
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.3);
+  }
+  
+  .hover-glow:hover {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+  }
+  
+  .hover-scale:hover {
+    transform: scale(1.05);
+  }
+
+  /* Keyframe Animations */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+  
+  @keyframes pulse-glow {
+    0% {
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+    }
+    100% {
+      box-shadow: 0 0 40px rgba(139, 92, 246, 0.6);
+    }
+  }
+  
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+  
+  @keyframes bounce-in {
+    0% {
+      transform: scale(0.3);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    70% {
+      transform: scale(0.9);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slide-up {
+    0% {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes scale-in {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  @keyframes rotate-slow {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 
   /* Prevent all scroll */
   .no-scroll {
-    overflow: hidden;
-    max-width: 100vw;
-    max-height: 100vh;
+    /* Evitar scroll horizontal, permitir scroll vertical */
+    overflow-x: hidden;
   }
 
   .no-scroll-x {
@@ -196,16 +387,13 @@ All colors MUST be HSL.
 
   /* Allow scroll only in specific components like modals */
   .allow-scroll {
-    overflow: auto !important;
-    max-height: 100vh !important;
-    max-width: 100vw !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Allow scroll for specific modal content */
   .allow-scroll * {
     overflow: visible !important;
-    max-width: none !important;
-    max-height: none !important;
   }
 
   .container-mobile {
@@ -222,23 +410,11 @@ All colors MUST be HSL.
     box-sizing: border-box;
   }
 
-  .overflow-hidden {
-    overflow: hidden !important;
-  }
+  /* Remover override agressivo do Tailwind */
 
   /* Specific mobile fixes */
   @media (max-width: 768px) {
-    .grid {
-      max-width: 100vw !important;
-      max-height: 100vh !important;
-      overflow: hidden !important;
-    }
-    
-    .flex {
-      max-width: 100vw !important;
-      max-height: 100vh !important;
-      overflow: hidden !important;
-    }
+    /* Não bloquear scroll em layouts */
     
     .space-x-3 > * + * {
       margin-left: 0.5rem;
@@ -248,11 +424,9 @@ All colors MUST be HSL.
       margin-left: 0.75rem;
     }
 
-    /* Force no scroll on all mobile elements */
-    * {
-      max-width: 100vw !important;
-      max-height: 100vh !important;
-      overflow: hidden !important;
+    /* Evitar horizontais em mobile */
+    html, body {
+      overflow-x: hidden;
     }
 
     /* Mobile optimizations for multiplayer */

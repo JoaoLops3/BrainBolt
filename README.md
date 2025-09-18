@@ -1,7 +1,7 @@
-# 🎯 BrainBolt - Jogo de Quiz Online
+# 🎯 Perguntados - Jogo de Quiz Online
 
 <div align="center">
-  <img src="/logo.png" alt="BrainBolt Logo" width="200" height="200">
+  <img src="/logo.png" alt="Perguntados Logo" width="200" height="200">
   
   [![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=flat&logo=react&logoColor=white)](https://reactjs.org/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -13,7 +13,7 @@
 
 ## 📖 Sobre o Projeto
 
-**BrainBolt** é um jogo de quiz online moderno e interativo que testa seus conhecimentos em 6 categorias diferentes. Desenvolvido com React, TypeScript e Supabase, oferece uma experiência gamificada completa com sistema de amigos, multiplayer e estatísticas detalhadas.
+**Perguntados** é um jogo de quiz online moderno e interativo que testa seus conhecimentos em 6 categorias diferentes. Desenvolvido com React, TypeScript e Supabase, oferece uma experiência gamificada completa com sistema de amigos, multiplayer e estatísticas detalhadas.
 
 ### ✨ Características Principais
 
@@ -56,7 +56,7 @@
 - **Capacitor 7.4.3** - Framework para apps híbridos nativos
 - **iOS & Android** - Versões nativas otimizadas
 - **PWA** - Progressive Web App com cache offline
-- **App ID**: `com.joaolops3.brainbolt`
+- **App ID**: `com.joaolops3.perguntados`
 
 ## 🎮 Funcionalidades Detalhadas
 
@@ -208,7 +208,7 @@ npx cap run android
 
 ### Configuração Mobile
 
-- **App ID**: `com.joaolops3.brainbolt`
+- **App ID**: `com.joaolops3.perguntados`
 - **Splash Screen**: Cor roxa (#8B5CF6) personalizada
 - **PWA**: Funciona offline após primeiro carregamento
 
@@ -253,7 +253,7 @@ npx cap run android
 quiz-world-quest/
 ├── src/
 │   ├── components/          # Componentes React organizados
-│   │   ├── game/           # Lógica do jogo (BrainBoltGame, MultiplayerGame)
+│   │   ├── game/           # Lógica do jogo (PerguntadosGame, MultiplayerGame)
 │   │   ├── friends/        # Sistema de amigos (FriendsModal, FriendProfile)
 │   │   └── ui/             # Componentes de interface (shadcn/ui)
 │   ├── contexts/           # Contextos React (AuthContext)

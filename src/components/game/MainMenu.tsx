@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { GameMode } from "@/types/game";
+import { ConnectivityStatus } from "@/components/status/ConnectivityStatus";
 import {
   Zap,
   Brain,
@@ -20,6 +21,7 @@ import {
   LogOut,
   User,
   Users,
+  BookOpen,
   UserPlus,
   BarChart3,
 } from "lucide-react";
@@ -52,13 +54,18 @@ export const MainMenu = ({
       <div className="w-full max-w-md space-y-6 mx-auto">
         {/* Header with user info */}
         <div className="text-center">
-          <h1 className="text-5xl font-bold text-white mb-2 animate-bounce">
-            BrainBolt
+          <h1 className="text-5xl font-bold text-white animate-float bg-gradient-rainbow bg-clip-text text-transparent mb-2">
+            Perguntados
           </h1>
-          <p className="text-white/80 mb-6">Teste seus conhecimentos!</p>
+          <div className="flex flex-col items-center gap-2 mb-6">
+            <p className="text-white/80 animate-fade-in text-center">
+              Teste seus conhecimentos!
+            </p>
+            <ConnectivityStatus />
+          </div>
 
           {profile && (
-            <Card className="bg-white/20 border-white/30 backdrop-blur-lg mb-6 shadow-xl w-full">
+            <Card className="glass-card mb-6 shadow-xl w-full animate-slide-up">
               <CardContent className="p-4 w-full">
                 <div className="flex items-center space-x-4 w-full">
                   <Avatar className="h-12 w-12">
@@ -101,7 +108,7 @@ export const MainMenu = ({
         {/* Game Mode Selection */}
         <div className="space-y-4 w-full">
           <Card
-            className="bg-white/20 border-white/30 backdrop-blur-lg hover:bg-white/30 transition-all duration-300 cursor-pointer group shadow-xl hover:shadow-2xl w-full"
+            className="glass-card hover-lift cursor-pointer group shadow-xl hover:shadow-2xl w-full animate-bounce-in"
             onClick={() => onSelectMode("normal")}
           >
             <CardHeader className="pb-3">
@@ -130,8 +137,9 @@ export const MainMenu = ({
           </Card>
 
           <Card
-            className="bg-white/20 border-white/30 backdrop-blur-lg hover:bg-white/30 transition-all duration-300 cursor-pointer group shadow-xl hover:shadow-2xl w-full"
+            className="glass-card hover-lift cursor-pointer group shadow-xl hover:shadow-2xl w-full animate-bounce-in"
             onClick={() => onSelectMode("speed")}
+            style={{ animationDelay: "0.1s" }}
           >
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
@@ -160,8 +168,9 @@ export const MainMenu = ({
           </Card>
 
           <Card
-            className="bg-white/20 border-white/30 backdrop-blur-lg hover:bg-white/30 transition-all duration-300 cursor-pointer group shadow-xl hover:shadow-2xl w-full"
+            className="glass-card hover-lift cursor-pointer group shadow-xl hover:shadow-2xl w-full animate-bounce-in"
             onClick={onStartMultiplayer}
+            style={{ animationDelay: "0.2s" }}
           >
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
@@ -193,7 +202,7 @@ export const MainMenu = ({
         <div className="grid grid-cols-4 gap-2 w-full">
           <Button
             variant="outline"
-            className="bg-white/20 border-white/30 text-white hover:bg-white/30 transition-all duration-200 shadow-lg w-full"
+            className="glass-button text-white hover:bg-white/30 transition-all duration-200 shadow-lg w-full hover-scale"
             onClick={onViewStats}
           >
             <Trophy className="h-4 w-4" />
@@ -201,7 +210,7 @@ export const MainMenu = ({
 
           <Button
             variant="outline"
-            className="bg-white/20 border-white/30 text-white hover:bg-white/30 transition-all duration-200 shadow-lg w-full"
+            className="glass-button text-white hover:bg-white/30 transition-all duration-200 shadow-lg w-full hover-scale"
             onClick={onViewAdvancedStats}
           >
             <BarChart3 className="h-4 w-4" />
@@ -209,7 +218,7 @@ export const MainMenu = ({
 
           <Button
             variant="outline"
-            className="bg-white/20 border-white/30 text-white hover:bg-white/30 transition-all duration-200 shadow-lg w-full"
+            className="glass-button text-white hover:bg-white/30 transition-all duration-200 shadow-lg w-full hover-scale"
             onClick={onViewAchievements}
           >
             <Trophy className="h-4 w-4" />
@@ -217,15 +226,15 @@ export const MainMenu = ({
 
           <Button
             variant="outline"
-            className="bg-white/20 border-white/30 text-white hover:bg-white/30 transition-all duration-200 shadow-lg w-full"
+            className="glass-button text-white hover:bg-white/30 transition-all duration-200 shadow-lg w-full hover-scale"
             onClick={onViewCharacters}
           >
-            <Users className="h-4 w-4" />
+            <BookOpen className="h-4 w-4" />
           </Button>
 
           <Button
             variant="outline"
-            className="bg-white/20 border-white/30 text-white hover:bg-white/30 transition-all duration-200 shadow-lg w-full"
+            className="glass-button text-white hover:bg-white/30 transition-all duration-200 shadow-lg w-full hover-scale"
             onClick={onOpenFriends}
           >
             <UserPlus className="h-4 w-4" />
@@ -233,7 +242,7 @@ export const MainMenu = ({
 
           <Button
             variant="outline"
-            className="bg-white/20 border-white/30 text-white hover:bg-white/30 transition-all duration-200 shadow-lg w-full"
+            className="glass-button text-white hover:bg-white/30 transition-all duration-200 shadow-lg w-full hover-scale"
             onClick={onOpenSettings}
           >
             <Settings className="h-4 w-4" />

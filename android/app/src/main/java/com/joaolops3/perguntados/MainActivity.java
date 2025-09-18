@@ -1,4 +1,4 @@
-package com.joaolops3.brainbolt;
+package com.joaolops3.perguntados;
 
 import com.getcapacitor.BridgeActivity;
 
