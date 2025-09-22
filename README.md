@@ -1,7 +1,7 @@
 # 🎯 Perguntados - Jogo de Quiz Online
 
 <div align="center">
-  <img src="/logo.png" alt="Perguntados Logo" width="200" height="200">
+  <img src="./public/Brain%20Bolt%20Logo.png" alt="Brain Bolt Logo" width="200" height="200">
   
   [![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=flat&logo=react&logoColor=white)](https://reactjs.org/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
