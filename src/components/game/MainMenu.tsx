@@ -54,8 +54,8 @@ export const MainMenu = ({
       <div className="w-full max-w-md space-y-6 mx-auto">
         {/* Header with user info */}
         <div className="text-center">
-          <h1 className="text-5xl font-bold text-white animate-float bg-gradient-rainbow bg-clip-text text-transparent mb-2">
-            Perguntados
+          <h1 className="text-5xl font-bold text-white animate-float mb-2">
+            BrainBolt
           </h1>
           <div className="flex flex-col items-center gap-2 mb-6">
             <p className="text-white/80 animate-fade-in text-center">

@@ -115,6 +115,11 @@ const Auth = () => {
     <div className="min-h-[100dvh] flex items-center justify-center bg-gradient-auth p-4 overflow-y-auto safe-top safe-bottom">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
+          <img
+            src="/Brain%20Bolt%20Logo.png"
+            alt="Brain Bolt Logo"
+            className="mx-auto w-28 md:w-32 h-auto mb-3 select-none object-contain"
+          />
           <h1 className="text-4xl font-bold text-white mb-2">Perguntados</h1>
           <p className="text-white/80">Entre para começar a jogar!</p>
         </div>
