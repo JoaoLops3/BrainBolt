@@ -85,8 +85,8 @@ export const useNotifications = () => {
 
       try {
         const notification = new Notification(title, {
-          icon: "/public/characters/Brain%20Bolt%20Logo.png",
-          badge: "/public/characters/Brain%20Bolt%20Logo.png",
+          icon: "/Brain-Bolt-Logo.png",
+          badge: "/Brain-Bolt-Logo.png",
           requireInteraction: true,
           ...options,
         });

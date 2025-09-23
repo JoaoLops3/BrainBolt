@@ -6,7 +6,7 @@ const DYNAMIC_CACHE = 'perguntados-dynamic-v1.0.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/public/characters/Brain%20Bolt%20Logo.png',
+  '/Brain-Bolt-Logo.png',
   '/manifest.json',
   '/src/main.tsx',
   '/src/App.tsx',
@@ -259,8 +259,8 @@ self.addEventListener('push', (event) => {
   
   const options = {
     body: event.data ? event.data.text() : 'Nova notificação do Perguntados!',
-    icon: '/public/characters/Brain%20Bolt%20Logo.png',
-    badge: '/public/characters/Brain%20Bolt%20Logo.png',
+    icon: '/Brain-Bolt-Logo.png',
+    badge: '/Brain-Bolt-Logo.png',
     vibrate: [200, 100, 200],
     data: {
       dateOfArrival: Date.now(),
@@ -270,12 +270,12 @@ self.addEventListener('push', (event) => {
       {
         action: 'explore',
         title: 'Jogar Agora',
-        icon: '/public/characters/Brain%20Bolt%20Logo.png'
+        icon: '/Brain-Bolt-Logo.png'
       },
       {
         action: 'close',
         title: 'Fechar',
-        icon: '/public/characters/Brain%20Bolt%20Logo.png'
+        icon: '/Brain-Bolt-Logo.png'
       }
     ]
   };
