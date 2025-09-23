@@ -113,23 +113,29 @@ const Auth = () => {
 
   return (
     <div className="min-h-[100dvh] flex items-center justify-center bg-gradient-auth p-4 overflow-y-auto safe-top safe-bottom">
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-md animate-fade-in-up">
         <div className="text-center mb-8">
-          <img
-            src="/Brain%20Bolt%20Logo.png"
-            alt="Brain Bolt Logo"
-            className="mx-auto w-28 md:w-32 h-auto mb-3 select-none object-contain"
-          />
-          <h1 className="text-4xl font-bold text-white mb-2">Perguntados</h1>
-          <p className="text-white/80">Entre para começar a jogar!</p>
+          <div className="relative animate-float">
+            <img
+              src="/Brain%20Bolt%20Logo.png"
+              alt="Brain Bolt Logo"
+              className="mx-auto w-24 sm:w-28 md:w-32 h-auto mb-3 select-none object-contain animate-scale-in"
+            />
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2 animate-slide-up">
+            Perguntados
+          </h1>
+          <p className="text-white/80 text-sm sm:text-base animate-fade-in">
+            Entre para começar a jogar!
+          </p>
         </div>
 
-        <Card className="backdrop-blur-lg bg-white/20 border-white/30 shadow-2xl">
+        <Card className="backdrop-blur-lg bg-white/20 border-white/30 shadow-2xl animate-slide-up">
           <CardHeader>
-            <CardTitle className="text-white text-center text-2xl font-bold">
+            <CardTitle className="text-white text-center text-xl sm:text-2xl font-bold">
               Acesso
             </CardTitle>
-            <CardDescription className="text-white/80 text-center">
+            <CardDescription className="text-white/80 text-center text-sm sm:text-base">
               Entre na sua conta ou crie uma nova
             </CardDescription>
           </CardHeader>
@@ -160,7 +166,7 @@ const Auth = () => {
                       variant="outline"
                       onClick={() => handleOAuthSignIn("google")}
                       disabled={isLoading}
-                      className="w-full bg-white/20 border-white/40 text-white hover:bg-white/30 hover:border-white/60"
+                      className="w-full bg-white/20 border-white/40 text-white hover:bg-white/30 hover:border-white/60 transition-all duration-300 hover-lift animate-slide-in-left"
                     >
                       <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                         <path
@@ -188,7 +194,7 @@ const Auth = () => {
                       variant="outline"
                       onClick={() => handleOAuthSignIn("apple")}
                       disabled={isLoading}
-                      className="w-full bg-white/20 border-white/40 text-white hover:bg-white/30 hover:border-white/60"
+                      className="w-full bg-white/20 border-white/40 text-white hover:bg-white/30 hover:border-white/60 transition-all duration-300 hover-lift animate-slide-in-left"
                     >
                       <svg
                         className="mr-2 h-4 w-4"
@@ -283,7 +289,7 @@ const Auth = () => {
                   <Button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full bg-white text-primary hover:bg-white/90 font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                    className="w-full bg-white text-primary hover:bg-white/90 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-scale-in"
                   >
                     {isLoading ? (
                       <>
@@ -306,7 +312,7 @@ const Auth = () => {
                       variant="outline"
                       onClick={() => handleOAuthSignIn("google")}
                       disabled={isLoading}
-                      className="w-full bg-white/20 border-white/40 text-white hover:bg-white/30 hover:border-white/60"
+                      className="w-full bg-white/20 border-white/40 text-white hover:bg-white/30 hover:border-white/60 transition-all duration-300 hover-lift animate-slide-in-left"
                     >
                       <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                         <path
@@ -334,7 +340,7 @@ const Auth = () => {
                       variant="outline"
                       onClick={() => handleOAuthSignIn("apple")}
                       disabled={isLoading}
-                      className="w-full bg-white/20 border-white/40 text-white hover:bg-white/30 hover:border-white/60"
+                      className="w-full bg-white/20 border-white/40 text-white hover:bg-white/30 hover:border-white/60 transition-all duration-300 hover-lift animate-slide-in-left"
                     >
                       <svg
                         className="mr-2 h-4 w-4"
@@ -433,7 +439,7 @@ const Auth = () => {
                   <Button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full bg-white text-primary hover:bg-white/90 font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
+                    className="w-full bg-white text-primary hover:bg-white/90 font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover-lift animate-scale-in"
                   >
                     {isLoading ? (
                       <>

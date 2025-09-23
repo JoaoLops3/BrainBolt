@@ -1,10 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -69,7 +64,9 @@ export const ImprovedFriendsModal = ({
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showUserSearch, setShowUserSearch] = useState(false);
   const [showComparison, setShowComparison] = useState(false);
-  const [comparisonFriendId, setComparisonFriendId] = useState<string | null>(null);
+  const [comparisonFriendId, setComparisonFriendId] = useState<string | null>(
+    null
+  );
   const [loading, setLoading] = useState(false);
 
   // Fetch friends and requests
@@ -230,22 +227,42 @@ export const ImprovedFriendsModal = ({
 
   return (
     <>
-      <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-2xl max-h-[80vh] allow-scroll">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Users className="h-5 w-5" />
-              Amigos
-            </DialogTitle>
-          </DialogHeader>
+      <ResponsiveDialog
+        open={open}
+        onOpenChange={onOpenChange}
+        maxWidth="2xl"
+        maxHeight="screen"
+      >
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 text-lg sm:text-xl">
+            <Users className="h-5 w-5 sm:h-6 sm:w-6" />
+            Amigos
+          </div>
 
           <Tabs defaultValue="friends" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="friends">Amigos ({friends.length})</TabsTrigger>
-              <TabsTrigger value="requests">
-                Pedidos ({friendRequests.length})
+            <TabsList className="grid w-full grid-cols-3 h-auto p-1 gap-1">
+              <TabsTrigger
+                value="friends"
+                className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap"
+              >
+                <span className="hidden sm:inline">Amigos</span>
+                <span className="sm:hidden">Amigos</span>
+                <span className="ml-1">({friends.length})</span>
               </TabsTrigger>
-              <TabsTrigger value="search">Buscar</TabsTrigger>
+              <TabsTrigger
+                value="requests"
+                className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap"
+              >
+                <span className="hidden sm:inline">Pedidos</span>
+                <span className="sm:hidden">Pedidos</span>
+                <span className="ml-1">({friendRequests.length})</span>
+              </TabsTrigger>
+              <TabsTrigger
+                value="search"
+                className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap"
+              >
+                Buscar
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="friends" className="space-y-4">
@@ -260,23 +277,26 @@ export const ImprovedFriendsModal = ({
               ) : (
                 <div className="space-y-3">
                   {friends.map((friendship) => (
-                    <Card key={friendship.id} className="p-4">
-                      <div className="flex items-center justify-between">
+                    <Card
+                      key={friendship.id}
+                      className="p-4 sm:p-6 transition-transform duration-200 hover:scale-[1.02]"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div className="flex items-center gap-3">
-                          <Avatar>
+                          <Avatar className="h-12 w-12 sm:h-14 sm:w-14">
                             <AvatarImage
                               src={friendship.friend_profile.avatar_url}
                             />
                             <AvatarFallback>
-                              <User className="h-4 w-4" />
+                              <User className="h-6 w-6" />
                             </AvatarFallback>
                           </Avatar>
-                          <div>
-                            <h4 className="font-semibold">
+                          <div className="min-w-0 flex-1">
+                            <h4 className="font-semibold text-sm sm:text-base">
                               {friendship.friend_profile.display_name ||
                                 "Jogador"}
                             </h4>
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
                               <span className="flex items-center gap-1">
                                 <Trophy className="h-3 w-3" />
                                 {friendship.friend_profile.win_percentage.toFixed(
@@ -299,17 +319,27 @@ export const ImprovedFriendsModal = ({
                               setSelectedProfile(friendship.friend_profile);
                               setShowProfileModal(true);
                             }}
+                            className="h-8 w-8 sm:h-9 sm:w-auto sm:px-3"
                           >
                             <Eye className="h-4 w-4" />
+                            <span className="hidden sm:inline ml-2">Ver</span>
                           </Button>
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => openComparison(friendship.friend_profile.user_id)}
+                            onClick={() =>
+                              openComparison(friendship.friend_profile.user_id)
+                            }
+                            className="h-8 w-8 sm:h-9 sm:w-auto sm:px-3"
                           >
                             <BarChart3 className="h-4 w-4" />
+                            <span className="hidden sm:inline ml-2">
+                              Comparar
+                            </span>
                           </Button>
-                          <Badge variant="secondary">Amigo</Badge>
+                          <Badge variant="secondary" className="text-xs">
+                            Amigo
+                          </Badge>
                         </div>
                       </div>
                     </Card>
@@ -327,23 +357,26 @@ export const ImprovedFriendsModal = ({
               ) : (
                 <div className="space-y-3">
                   {friendRequests.map((request) => (
-                    <Card key={request.id} className="p-4">
-                      <div className="flex items-center justify-between">
+                    <Card
+                      key={request.id}
+                      className="p-4 sm:p-6 transition-transform duration-200 hover:scale-[1.02]"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div className="flex items-center gap-3">
-                          <Avatar>
+                          <Avatar className="h-12 w-12 sm:h-14 sm:w-14">
                             <AvatarImage
                               src={request.requester_profile.avatar_url}
                             />
                             <AvatarFallback>
-                              <User className="h-4 w-4" />
+                              <User className="h-6 w-6" />
                             </AvatarFallback>
                           </Avatar>
-                          <div>
-                            <h4 className="font-semibold">
+                          <div className="min-w-0 flex-1">
+                            <h4 className="font-semibold text-sm sm:text-base">
                               {request.requester_profile.display_name ||
                                 "Jogador"}
                             </h4>
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-xs sm:text-sm text-muted-foreground">
                               Quer ser seu amigo
                             </p>
                           </div>
@@ -352,20 +385,25 @@ export const ImprovedFriendsModal = ({
                           <Button
                             size="sm"
                             onClick={() =>
-                              acceptFriendRequest(
-                                request.id,
-                                request.user_id
-                              )
+                              acceptFriendRequest(request.id, request.user_id)
                             }
+                            className="h-8 w-8 sm:h-9 sm:w-auto sm:px-3"
                           >
                             <Check className="h-4 w-4" />
+                            <span className="hidden sm:inline ml-2">
+                              Aceitar
+                            </span>
                           </Button>
                           <Button
                             size="sm"
                             variant="outline"
                             onClick={() => rejectFriendRequest(request.id)}
+                            className="h-8 w-8 sm:h-9 sm:w-auto sm:px-3"
                           >
                             <X className="h-4 w-4" />
+                            <span className="hidden sm:inline ml-2">
+                              Recusar
+                            </span>
                           </Button>
                         </div>
                       </div>
@@ -379,23 +417,25 @@ export const ImprovedFriendsModal = ({
               <div className="space-y-4">
                 <Button
                   onClick={() => setShowUserSearch(true)}
-                  className="w-full h-12"
+                  className="w-full h-10 sm:h-12"
                   size="lg"
                 >
                   <Search className="h-4 w-4 mr-2" />
-                  Buscar por Nome, Username ou Email
+                  <span className="text-sm sm:text-base">
+                    Buscar por Nome, Username ou Email
+                  </span>
                 </Button>
 
                 <div className="text-center text-muted-foreground">
-                  <p className="text-sm">
+                  <p className="text-xs sm:text-sm">
                     Encontre outros jogadores e compare suas estatísticas!
                   </p>
                 </div>
               </div>
             </TabsContent>
           </Tabs>
-        </DialogContent>
-      </Dialog>
+        </div>
+      </ResponsiveDialog>
 
       {selectedProfile && (
         <FriendProfileModal
