@@ -1,10 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -62,7 +57,7 @@ interface GlobalRanking {
 
 const categoryNames = {
   sports: "Esportes",
-  entertainment: "Entretenimento", 
+  entertainment: "Entretenimento",
   art: "Arte",
   science: "Ciência",
   geography: "Geografia",
@@ -128,11 +123,21 @@ export const AdvancedStatsModal = ({
     const totalScore = sessions.reduce((sum, s) => sum + s.final_score, 0);
     const averageScore = Math.round(totalScore / totalGames);
     const bestScore = Math.max(...sessions.map((s) => s.final_score));
-    const totalCorrect = sessions.reduce((sum, s) => sum + s.correct_answers, 0);
-    const totalQuestions = sessions.reduce((sum, s) => sum + s.questions_answered, 0);
-    const accuracy = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+    const totalCorrect = sessions.reduce(
+      (sum, s) => sum + s.correct_answers,
+      0
+    );
+    const totalQuestions = sessions.reduce(
+      (sum, s) => sum + s.questions_answered,
+      0
+    );
+    const accuracy =
+      totalQuestions > 0
+        ? Math.round((totalCorrect / totalQuestions) * 100)
+        : 0;
     const bestStreak = Math.max(...sessions.map((s) => s.max_streak));
-    const averageTime = sessions.reduce((sum, s) => sum + s.time_spent, 0) / totalGames;
+    const averageTime =
+      sessions.reduce((sum, s) => sum + s.time_spent, 0) / totalGames;
 
     return {
       totalGames,
@@ -148,88 +153,119 @@ export const AdvancedStatsModal = ({
 
   if (loading) {
     return (
-      <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-4xl max-h-[80vh] allow-scroll">
-          <div className="flex items-center justify-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      <ResponsiveDialog
+        open={open}
+        onOpenChange={onOpenChange}
+        maxWidth="4xl"
+        maxHeight="screen"
+      >
+        <div className="flex items-center justify-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      </ResponsiveDialog>
     );
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[80vh] allow-scroll">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <BarChart3 className="h-5 w-5" />
-            Estatísticas Avançadas
-          </DialogTitle>
-        </DialogHeader>
+    <ResponsiveDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      maxWidth="4xl"
+      maxHeight="screen"
+    >
+      <div className="space-y-4">
+        <div className="flex items-center gap-2 text-lg sm:text-xl">
+          <BarChart3 className="h-5 w-5 sm:h-6 sm:w-6" />
+          Estatísticas Avançadas
+        </div>
 
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Visão Geral</TabsTrigger>
-            <TabsTrigger value="categories">Por Categoria</TabsTrigger>
-            <TabsTrigger value="history">Histórico</TabsTrigger>
-            <TabsTrigger value="rankings">Rankings</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto p-1 gap-1">
+            <TabsTrigger
+              value="overview"
+              className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap"
+            >
+              <span className="hidden sm:inline">Visão Geral</span>
+              <span className="sm:hidden">Geral</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="categories"
+              className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap"
+            >
+              <span className="hidden sm:inline">Por Categoria</span>
+              <span className="sm:hidden">Categoria</span>
+            </TabsTrigger>
+            <TabsTrigger
+              value="history"
+              className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap"
+            >
+              Histórico
+            </TabsTrigger>
+            <TabsTrigger
+              value="rankings"
+              className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap"
+            >
+              Rankings
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm flex items-center gap-1">
-                    <Target className="h-4 w-4" />
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+              <Card className="transition-transform duration-200 hover:scale-[1.02]">
+                <CardHeader className="pb-2 p-3 sm:p-4">
+                  <CardTitle className="text-xs sm:text-sm flex items-center gap-1">
+                    <Target className="h-3 w-3 sm:h-4 sm:w-4" />
                     Precisão
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pb-2">
-                  <div className="text-2xl font-bold text-primary">
+                <CardContent className="pb-2 p-3 sm:p-4 pt-0">
+                  <div className="text-lg sm:text-2xl font-bold text-primary">
                     {overallStats?.accuracy || 0}%
                   </div>
-                  <Progress value={overallStats?.accuracy || 0} className="mt-2" />
+                  <Progress
+                    value={overallStats?.accuracy || 0}
+                    className="mt-2"
+                  />
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm flex items-center gap-1">
-                    <Zap className="h-4 w-4" />
+              <Card className="transition-transform duration-200 hover:scale-[1.02]">
+                <CardHeader className="pb-2 p-3 sm:p-4">
+                  <CardTitle className="text-xs sm:text-sm flex items-center gap-1">
+                    <Zap className="h-3 w-3 sm:h-4 sm:w-4" />
                     Melhor Streak
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pb-2">
-                  <div className="text-2xl font-bold text-yellow-500">
+                <CardContent className="pb-2 p-3 sm:p-4 pt-0">
+                  <div className="text-lg sm:text-2xl font-bold text-yellow-500">
                     {overallStats?.bestStreak || 0}
                   </div>
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm flex items-center gap-1">
-                    <Clock className="h-4 w-4" />
+              <Card className="transition-transform duration-200 hover:scale-[1.02]">
+                <CardHeader className="pb-2 p-3 sm:p-4">
+                  <CardTitle className="text-xs sm:text-sm flex items-center gap-1">
+                    <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
                     Tempo Médio
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pb-2">
-                  <div className="text-2xl font-bold text-blue-500">
+                <CardContent className="pb-2 p-3 sm:p-4 pt-0">
+                  <div className="text-lg sm:text-2xl font-bold text-blue-500">
                     {overallStats?.averageTime || 0}s
                   </div>
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm flex items-center gap-1">
-                    <Trophy className="h-4 w-4" />
+              <Card className="transition-transform duration-200 hover:scale-[1.02]">
+                <CardHeader className="pb-2 p-3 sm:p-4">
+                  <CardTitle className="text-xs sm:text-sm flex items-center gap-1">
+                    <Trophy className="h-3 w-3 sm:h-4 sm:w-4" />
                     Pontuação Média
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="pb-2">
-                  <div className="text-2xl font-bold text-green-500">
+                <CardContent className="pb-2 p-3 sm:p-4 pt-0">
+                  <div className="text-lg sm:text-2xl font-bold text-green-500">
                     {overallStats?.averageScore || 0}
                   </div>
                 </CardContent>
@@ -244,22 +280,37 @@ export const AdvancedStatsModal = ({
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {["normal", "speed", "multiplayer"].map((mode) => {
-                    const modeSessions = sessions.filter((s) => s.game_mode === mode);
-                    const modeAccuracy = modeSessions.length > 0
-                      ? Math.round(
-                          (modeSessions.reduce((sum, s) => sum + s.correct_answers, 0) /
-                            modeSessions.reduce((sum, s) => sum + s.questions_answered, 0)) * 100
-                        )
-                      : 0;
+                    const modeSessions = sessions.filter(
+                      (s) => s.game_mode === mode
+                    );
+                    const modeAccuracy =
+                      modeSessions.length > 0
+                        ? Math.round(
+                            (modeSessions.reduce(
+                              (sum, s) => sum + s.correct_answers,
+                              0
+                            ) /
+                              modeSessions.reduce(
+                                (sum, s) => sum + s.questions_answered,
+                                0
+                              )) *
+                              100
+                          )
+                        : 0;
 
                     return (
                       <div key={mode} className="p-4 rounded-lg border">
                         <div className="flex items-center justify-between mb-2">
                           <span className="font-medium capitalize">
-                            {mode === "multiplayer" ? "Multiplayer" : 
-                             mode === "speed" ? "Velocidade" : "Normal"}
+                            {mode === "multiplayer"
+                              ? "Multiplayer"
+                              : mode === "speed"
+                              ? "Velocidade"
+                              : "Normal"}
                           </span>
-                          <Badge variant="secondary">{modeSessions.length} jogos</Badge>
+                          <Badge variant="secondary">
+                            {modeSessions.length} jogos
+                          </Badge>
                         </div>
                         <div className="space-y-2">
                           <div className="flex justify-between text-sm">
@@ -282,7 +333,13 @@ export const AdvancedStatsModal = ({
                 <Card key={category.category}>
                   <CardHeader className="pb-2">
                     <CardTitle className="text-lg flex items-center justify-between">
-                      <span>{categoryNames[category.category as keyof typeof categoryNames]}</span>
+                      <span>
+                        {
+                          categoryNames[
+                            category.category as keyof typeof categoryNames
+                          ]
+                        }
+                      </span>
                       <Badge variant="outline">
                         {category.questions_answered} perguntas
                       </Badge>
@@ -293,23 +350,29 @@ export const AdvancedStatsModal = ({
                       <div>
                         <div className="flex justify-between text-sm mb-1">
                           <span>Precisão</span>
-                          <span>{category.accuracy_percentage.toFixed(1)}%</span>
+                          <span>
+                            {category.accuracy_percentage.toFixed(1)}%
+                          </span>
                         </div>
                         <Progress value={category.accuracy_percentage} />
                       </div>
-                      
+
                       <div className="grid grid-cols-2 gap-2 text-sm">
                         <div className="text-center p-2 bg-muted rounded">
                           <div className="font-bold text-green-600">
                             {category.correct_answers}
                           </div>
-                          <div className="text-xs text-muted-foreground">Acertos</div>
+                          <div className="text-xs text-muted-foreground">
+                            Acertos
+                          </div>
                         </div>
                         <div className="text-center p-2 bg-muted rounded">
                           <div className="font-bold text-yellow-600">
                             {category.best_streak}
                           </div>
-                          <div className="text-xs text-muted-foreground">Melhor Streak</div>
+                          <div className="text-xs text-muted-foreground">
+                            Melhor Streak
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -326,11 +389,15 @@ export const AdvancedStatsModal = ({
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className={`p-2 rounded-lg ${
-                          session.game_mode === "speed" ? "bg-orange-500/20" :
-                          session.game_mode === "multiplayer" ? "bg-purple-500/20" :
-                          "bg-blue-500/20"
-                        }`}>
+                        <div
+                          className={`p-2 rounded-lg ${
+                            session.game_mode === "speed"
+                              ? "bg-orange-500/20"
+                              : session.game_mode === "multiplayer"
+                              ? "bg-purple-500/20"
+                              : "bg-blue-500/20"
+                          }`}
+                        >
                           {session.game_mode === "speed" ? (
                             <Zap className="h-4 w-4 text-orange-400" />
                           ) : session.game_mode === "multiplayer" ? (
@@ -339,36 +406,54 @@ export const AdvancedStatsModal = ({
                             <Brain className="h-4 w-4 text-blue-400" />
                           )}
                         </div>
-                        
+
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="font-bold">{session.final_score} pontos</span>
-                            <Badge variant={
-                              session.game_result === "win" ? "default" :
-                              session.game_result === "loss" ? "destructive" : "secondary"
-                            }>
-                              {session.game_result === "win" ? "Vitória" :
-                               session.game_result === "loss" ? "Derrota" :
-                               session.game_result === "draw" ? "Empate" : "Completo"}
+                            <span className="font-bold">
+                              {session.final_score} pontos
+                            </span>
+                            <Badge
+                              variant={
+                                session.game_result === "win"
+                                  ? "default"
+                                  : session.game_result === "loss"
+                                  ? "destructive"
+                                  : "secondary"
+                              }
+                            >
+                              {session.game_result === "win"
+                                ? "Vitória"
+                                : session.game_result === "loss"
+                                ? "Derrota"
+                                : session.game_result === "draw"
+                                ? "Empate"
+                                : "Completo"}
                             </Badge>
                           </div>
-                          
+
                           <div className="text-sm text-muted-foreground">
-                            {session.correct_answers}/{session.questions_answered} corretas
-                            • {session.accuracy_percentage?.toFixed(1) || 0}% precisão
-                            • {session.max_streak} streak
-                            • {Math.round(session.time_spent / session.questions_answered)}s/pergunta
+                            {session.correct_answers}/
+                            {session.questions_answered} corretas •{" "}
+                            {session.accuracy_percentage?.toFixed(1) || 0}%
+                            precisão • {session.max_streak} streak •{" "}
+                            {Math.round(
+                              session.time_spent / session.questions_answered
+                            )}
+                            s/pergunta
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="text-sm text-muted-foreground">
-                        {new Date(session.completed_at).toLocaleDateString("pt-BR", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
+                        {new Date(session.completed_at).toLocaleDateString(
+                          "pt-BR",
+                          {
+                            day: "2-digit",
+                            month: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }
+                        )}
                       </div>
                     </div>
                   </CardContent>
@@ -444,13 +529,15 @@ export const AdvancedStatsModal = ({
                 <div className="text-center text-muted-foreground py-8">
                   <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
                   <p>Gráfico de progresso em desenvolvimento</p>
-                  <p className="text-sm">Acompanhe sua evolução ao longo do tempo</p>
+                  <p className="text-sm">
+                    Acompanhe sua evolução ao longo do tempo
+                  </p>
                 </div>
               </CardContent>
             </Card>
           </TabsContent>
         </Tabs>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </ResponsiveDialog>
   );
 };

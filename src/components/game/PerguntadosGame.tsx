@@ -8,7 +8,7 @@ import {
   GameMode,
 } from "@/types/game";
 import { questions } from "@/data/questions";
-import { MainMenu } from "./MainMenu";
+import { ImprovedMainMenu } from "./ImprovedMainMenu";
 import { QuestionCard } from "./QuestionCard";
 import { GameResults } from "./GameResults";
 import { GameTimer } from "./GameTimer";
@@ -119,7 +119,7 @@ export const PerguntadosGame = () => {
   };
 
   const selectQuestions = useCallback(() => {
-    // Select 3 questions per category (18 total)
+    // Select 4 questions per category (24 total)
     const selectedQuestions: Question[] = [];
     const categoriesOrder: CategoryType[] = [
       "sports",
@@ -135,7 +135,7 @@ export const PerguntadosGame = () => {
         (q) => q.category === category
       );
       const shuffledCategoryQuestions = shuffleArray(categoryQuestions);
-      selectedQuestions.push(...shuffledCategoryQuestions.slice(0, 3));
+      selectedQuestions.push(...shuffledCategoryQuestions.slice(0, 4));
     });
 
     return shuffleArray(selectedQuestions);
@@ -335,7 +335,7 @@ export const PerguntadosGame = () => {
   if (gameState.gamePhase === "menu") {
     return (
       <>
-        <MainMenu
+        <ImprovedMainMenu
           onSelectMode={startGame}
           onStartMultiplayer={startMultiplayer}
           onOpenSettings={() => setSettingsOpen(true)}

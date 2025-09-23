@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -114,74 +108,85 @@ export const StatsModal = ({ open, onOpenChange }: StatsModalProps) => {
   const stats = calculateStats();
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-background/95 backdrop-blur-lg border-border max-w-2xl max-h-[80vh] allow-scroll">
-        <DialogHeader>
-          <DialogTitle className="flex items-center space-x-2">
-            <Trophy className="h-5 w-5" />
-            <span>Suas Estatísticas</span>
-          </DialogTitle>
-          <DialogDescription>
-            Acompanhe seu desempenho e progresso no jogo.
-          </DialogDescription>
-        </DialogHeader>
+    <ResponsiveDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      maxWidth="2xl"
+      maxHeight="screen"
+    >
+      <div className="space-y-4">
+        <div className="flex items-center gap-2 text-lg sm:text-xl">
+          <Trophy className="h-5 w-5 sm:h-6 sm:w-6" />
+          Suas Estatísticas
+        </div>
+        <p className="text-sm sm:text-base text-muted-foreground">
+          Acompanhe seu desempenho e progresso no jogo.
+        </p>
 
         <div className="space-y-6 py-4">
           {/* Overall Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm flex items-center space-x-1">
-                  <Target className="h-4 w-4" />
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <Card className="transition-transform duration-200 hover:scale-[1.02]">
+              <CardHeader className="pb-2 p-3 sm:p-4">
+                <CardTitle className="text-xs sm:text-sm flex items-center space-x-1">
+                  <Target className="h-3 w-3 sm:h-4 sm:w-4" />
                   <span>Jogos</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="pb-2">
-                <div className="text-2xl font-bold">{stats.totalGames}</div>
+              <CardContent className="pb-2 p-3 sm:p-4 pt-0">
+                <div className="text-lg sm:text-2xl font-bold">
+                  {stats.totalGames}
+                </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm flex items-center space-x-1">
-                  <Trophy className="h-4 w-4" />
+            <Card className="transition-transform duration-200 hover:scale-[1.02]">
+              <CardHeader className="pb-2 p-3 sm:p-4">
+                <CardTitle className="text-xs sm:text-sm flex items-center space-x-1">
+                  <Trophy className="h-3 w-3 sm:h-4 sm:w-4" />
                   <span>Melhor</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="pb-2">
-                <div className="text-2xl font-bold">{stats.bestScore}</div>
+              <CardContent className="pb-2 p-3 sm:p-4 pt-0">
+                <div className="text-lg sm:text-2xl font-bold">
+                  {stats.bestScore}
+                </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm flex items-center space-x-1">
-                  <TrendingUp className="h-4 w-4" />
+            <Card className="transition-transform duration-200 hover:scale-[1.02]">
+              <CardHeader className="pb-2 p-3 sm:p-4">
+                <CardTitle className="text-xs sm:text-sm flex items-center space-x-1">
+                  <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4" />
                   <span>Precisão</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="pb-2">
-                <div className="text-2xl font-bold">{stats.accuracy}%</div>
+              <CardContent className="pb-2 p-3 sm:p-4 pt-0">
+                <div className="text-lg sm:text-2xl font-bold">
+                  {stats.accuracy}%
+                </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm flex items-center space-x-1">
-                  <Zap className="h-4 w-4" />
+            <Card className="transition-transform duration-200 hover:scale-[1.02]">
+              <CardHeader className="pb-2 p-3 sm:p-4">
+                <CardTitle className="text-xs sm:text-sm flex items-center space-x-1">
+                  <Zap className="h-3 w-3 sm:h-4 sm:w-4" />
                   <span>Sequência</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="pb-2">
-                <div className="text-2xl font-bold">{stats.bestStreak}</div>
+              <CardContent className="pb-2 p-3 sm:p-4 pt-0">
+                <div className="text-lg sm:text-2xl font-bold">
+                  {stats.bestStreak}
+                </div>
               </CardContent>
             </Card>
           </div>
 
           {/* Recent Games */}
           <div className="space-y-3">
-            <h3 className="text-lg font-semibold flex items-center space-x-2">
-              <Clock className="h-5 w-5" />
+            <h3 className="text-base sm:text-lg font-semibold flex items-center space-x-2">
+              <Clock className="h-4 w-4 sm:h-5 sm:w-5" />
               <span>Jogos Recentes</span>
             </h3>
 
@@ -192,8 +197,11 @@ export const StatsModal = ({ open, onOpenChange }: StatsModalProps) => {
             ) : sessions.length > 0 ? (
               <div className="space-y-2 max-h-64 overflow-y-auto">
                 {sessions.map((session) => (
-                  <Card key={session.id} className="p-3">
-                    <div className="flex items-center justify-between">
+                  <Card
+                    key={session.id}
+                    className="p-3 sm:p-4 transition-transform duration-200 hover:scale-[1.01]"
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                       <div className="flex items-center space-x-3">
                         <div
                           className={`p-2 rounded-lg ${
@@ -209,9 +217,9 @@ export const StatsModal = ({ open, onOpenChange }: StatsModalProps) => {
                           )}
                         </div>
 
-                        <div>
-                          <div className="flex items-center space-x-2">
-                            <span className="font-medium">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                            <span className="font-medium text-sm sm:text-base">
                               {session.final_score} pontos
                             </span>
                             <Badge
@@ -220,13 +228,14 @@ export const StatsModal = ({ open, onOpenChange }: StatsModalProps) => {
                                   ? "destructive"
                                   : "default"
                               }
+                              className="text-xs w-fit"
                             >
                               {session.game_mode === "speed"
                                 ? "Veloz"
                                 : "Normal"}
                             </Badge>
                           </div>
-                          <div className="text-sm text-muted-foreground">
+                          <div className="text-xs sm:text-sm text-muted-foreground">
                             {session.correct_answers}/
                             {session.questions_answered} corretas
                             {session.max_streak > 0 &&
@@ -235,7 +244,7 @@ export const StatsModal = ({ open, onOpenChange }: StatsModalProps) => {
                         </div>
                       </div>
 
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-xs sm:text-sm text-muted-foreground">
                         {new Date(session.completed_at).toLocaleDateString(
                           "pt-BR"
                         )}
@@ -246,12 +255,14 @@ export const StatsModal = ({ open, onOpenChange }: StatsModalProps) => {
               </div>
             ) : (
               <div className="text-center text-muted-foreground py-8">
-                Nenhum jogo jogado ainda. Que tal começar agora?
+                <p className="text-sm sm:text-base">
+                  Nenhum jogo jogado ainda. Que tal começar agora?
+                </p>
               </div>
             )}
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </ResponsiveDialog>
   );
 };
