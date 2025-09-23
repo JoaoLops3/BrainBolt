@@ -1,3 +1,8 @@
+/* Import custom animations */
+@import './styles/animations.css';
+@import './styles/animations-fix.css';
+@import './styles/global-animations.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

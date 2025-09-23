@@ -1,0 +1,79 @@
+/* Fix para animações contínuas desnecessárias */
+
+/* Garantir que animações só aconteçam quando necessário */
+.animate-pulse:not(:hover):not(.hover\:animate-pulse) {
+  animation: none !important;
+}
+
+/* Evitar animações em elementos que não devem ter */
+button:not(:hover) .animate-pulse,
+.group:not(:hover) .animate-pulse {
+  animation: none !important;
+}
+
+/* Melhorar performance das animações */
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  will-change: transform;
+}
+
+/* Garantir que animações parem quando o elemento sai de foco */
+.group:focus-within .animate-pulse {
+  animation-play-state: running;
+}
+
+.group:not(:focus-within) .animate-pulse {
+  animation-play-state: paused;
+}
+
+/* Otimizar animações de hover */
+.group:hover .animate-pulse {
+  animation-duration: 1s;
+}
+
+/* Evitar animações em elementos invisíveis */
+.opacity-0 .animate-pulse,
+.hidden .animate-pulse,
+[aria-hidden="true"] .animate-pulse {
+  animation: none !important;
+}
+
+/* Melhorar transições */
+.transition-opacity {
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+/* Garantir que gradientes não causem problemas */
+.bg-gradient-to-r {
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* Otimizar elementos com backdrop-filter */
+.backdrop-blur-sm,
+.backdrop-blur-md,
+.backdrop-blur-lg {
+  will-change: backdrop-filter;
+}
+
+/* Melhorar performance de transformações */
+.hover\:scale-105:hover {
+  transform: scale(1.05);
+  will-change: transform;
+}
+
+.hover\:-translate-y-1:hover {
+  transform: translateY(-0.25rem);
+  will-change: transform;
+}
+
+/* Evitar repaint desnecessário */
+.group:hover .opacity-0 {
+  opacity: 0;
+}
+
+.group:hover .opacity-100 {
+  opacity: 1;
+}
