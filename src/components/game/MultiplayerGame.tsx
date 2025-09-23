@@ -36,7 +36,7 @@ export const MultiplayerGame = ({
     if (isHost && gameQuestions.length === 0) {
       const shuffledQuestions = [...questions]
         .sort(() => Math.random() - 0.5)
-        .slice(0, 10);
+        .slice(0, 24);
       setGameQuestions(shuffledQuestions);
     }
   }, [isHost, gameQuestions.length]);
@@ -165,11 +165,11 @@ export const MultiplayerGame = ({
         user_id: user.id,
         game_mode: "multiplayer",
         final_score: userScore,
-        questions_answered: 10,
+        questions_answered: 24,
         correct_answers: Math.floor(userScore / 100),
         categories_completed: [],
         max_streak: 0,
-        time_spent: 150, // 10 questions * 15 seconds
+        time_spent: 360, // 24 questions * 15 seconds
         game_result: gameResult,
         opponent_id: opponentId,
         room_id: room.id,
@@ -234,12 +234,12 @@ export const MultiplayerGame = ({
   // Synchronized timer calculation
   const calculateTimeLeft = useCallback(() => {
     if (!room?.question_start_time) return 15;
-    
+
     const startTime = new Date(room.question_start_time).getTime();
     const now = Date.now();
     const elapsed = Math.floor((now - startTime) / 1000);
     const remaining = Math.max(0, 15 - elapsed);
-    
+
     return remaining;
   }, [room?.question_start_time]);
 
@@ -249,7 +249,7 @@ export const MultiplayerGame = ({
       const updateTimer = () => {
         const newTimeLeft = calculateTimeLeft();
         setTimeLeft(newTimeLeft);
-        
+
         if (newTimeLeft === 0 && selectedAnswer === null) {
           handleTimeUp();
         }
@@ -260,7 +260,12 @@ export const MultiplayerGame = ({
 
       return () => clearInterval(interval);
     }
-  }, [room?.question_start_time, room?.game_status, selectedAnswer, calculateTimeLeft]);
+  }, [
+    room?.question_start_time,
+    room?.game_status,
+    selectedAnswer,
+    calculateTimeLeft,
+  ]);
 
   // Listen to room updates
   useEffect(() => {
@@ -307,7 +312,7 @@ export const MultiplayerGame = ({
       setCurrentQuestion(question || null);
       setSelectedAnswer(null);
       setShowAnswer(false);
-      
+
       // Set timer based on server synchronization
       if (room.question_start_time) {
         const newTimeLeft = calculateTimeLeft();
@@ -483,7 +488,7 @@ export const MultiplayerGame = ({
       <QuestionCard
         question={currentQuestion}
         questionNumber={room.current_question_index + 1}
-        totalQuestions={10}
+        totalQuestions={24}
         selectedAnswer={selectedAnswer}
         showAnswer={showAnswer}
         onSelectAnswer={handleAnswerSelect}

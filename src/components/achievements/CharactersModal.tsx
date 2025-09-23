@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ControlledSpinner } from "@/components/ui/ControlledSpinner";
 import {
   Users,
   Star,
@@ -94,7 +95,10 @@ export const CharactersModal = ({
   const [loading, setLoading] = useState(false);
 
   const fetchCharacters = async () => {
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
     setLoading(true);
     try {
@@ -178,8 +182,11 @@ export const CharactersModal = ({
   };
 
   useEffect(() => {
-    if (open) {
+    if (open && user) {
       fetchCharacters();
+    } else if (!open) {
+      // Reset loading state when modal closes
+      setLoading(false);
     }
   }, [open, user]);
 
@@ -212,7 +219,7 @@ export const CharactersModal = ({
     return (
       <Card
         key={character.id}
-        className={`transition-all hover:scale-[1.02] hover:shadow-md ${
+        className={`transition-transform duration-200 hover:scale-[1.02] hover:shadow-md ${
           isLocked ? "opacity-60" : ""
         } h-fit border-2 hover:border-primary/20`}
       >
@@ -356,13 +363,12 @@ export const CharactersModal = ({
             value="unlocked"
             className="mt-4 flex-1 overflow-y-auto min-h-0"
           >
-            {loading ? (
-              <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                <span className="ml-2 text-muted-foreground">
-                  Carregando personagens...
-                </span>
-              </div>
+            {loading && allCharacters.length === 0 ? (
+              <ControlledSpinner
+                isLoading={loading}
+                label="Carregando personagens..."
+                size="md"
+              />
             ) : unlockedCharacters.length === 0 ? (
               <div className="text-center py-12 text-muted-foreground">
                 <Users className="h-16 w-16 mx-auto mb-4 opacity-50" />
@@ -414,13 +420,12 @@ export const CharactersModal = ({
             value="locked"
             className="mt-4 flex-1 overflow-y-auto min-h-0"
           >
-            {loading ? (
-              <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                <span className="ml-2 text-muted-foreground">
-                  Carregando personagens...
-                </span>
-              </div>
+            {loading && allCharacters.length === 0 ? (
+              <ControlledSpinner
+                isLoading={loading}
+                label="Carregando personagens..."
+                size="md"
+              />
             ) : lockedCharacters.length === 0 ? (
               <div className="text-center py-12 text-muted-foreground">
                 <Crown className="h-16 w-16 mx-auto mb-4 opacity-50" />
