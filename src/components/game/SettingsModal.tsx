@@ -1,11 +1,5 @@
 import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -57,36 +51,39 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-background/95 backdrop-blur-lg border-border max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center space-x-2">
-            <User className="h-5 w-5" />
-            <span>Configurações do Perfil</span>
-          </DialogTitle>
-          <DialogDescription>
-            Personalize seu perfil e avatar no jogo.
-          </DialogDescription>
-        </DialogHeader>
+    <ResponsiveDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      maxWidth="md"
+      maxHeight="screen"
+    >
+      <div className="space-y-4">
+        <div className="flex items-center gap-2 text-lg sm:text-xl">
+          <User className="h-5 w-5 sm:h-6 sm:w-6" />
+          Configurações do Perfil
+        </div>
+        <p className="text-sm sm:text-base text-muted-foreground">
+          Personalize seu perfil e avatar no jogo.
+        </p>
 
         <div className="space-y-6 py-4">
           {/* Avatar Selection */}
           <div className="space-y-3">
-            <Label className="text-sm font-medium flex items-center space-x-2">
-              <Image className="h-4 w-4" />
+            <Label className="text-xs sm:text-sm font-medium flex items-center space-x-2">
+              <Image className="h-3 w-3 sm:h-4 sm:w-4" />
               <span>Avatar</span>
             </Label>
 
             <div className="flex items-center justify-center mb-4">
-              <Avatar className="h-20 w-20">
+              <Avatar className="h-16 w-16 sm:h-20 sm:w-20">
                 <AvatarImage src={selectedAvatar} />
                 <AvatarFallback className="bg-primary text-white">
-                  <User className="h-8 w-8" />
+                  <User className="h-6 w-6 sm:h-8 sm:w-8" />
                 </AvatarFallback>
               </Avatar>
             </div>
 
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
               {avatarOptions.map((avatar, index) => (
                 <button
                   key={index}
@@ -98,10 +95,10 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
                       : "hover:bg-muted"
                   }`}
                 >
-                  <Avatar className="h-12 w-12">
+                  <Avatar className="h-10 w-10 sm:h-12 sm:w-12">
                     <AvatarImage src={avatar} />
                     <AvatarFallback>
-                      <User className="h-6 w-6" />
+                      <User className="h-5 w-5 sm:h-6 sm:w-6" />
                     </AvatarFallback>
                   </Avatar>
                 </button>
@@ -111,21 +108,26 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
 
           {/* Display Name */}
           <div className="space-y-2">
-            <Label htmlFor="displayName">Nome de exibição</Label>
+            <Label htmlFor="displayName" className="text-xs sm:text-sm">
+              Nome de exibição
+            </Label>
             <Input
               id="displayName"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="Digite seu nome"
               maxLength={30}
+              className="text-sm sm:text-base"
             />
           </div>
 
           {/* Stats Display */}
           {profile && (
-            <div className="bg-muted/50 rounded-lg p-3 space-y-2">
-              <h4 className="font-medium text-sm">Suas Estatísticas</h4>
-              <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="bg-muted/50 rounded-lg p-3 sm:p-4 space-y-2">
+              <h4 className="font-medium text-xs sm:text-sm">
+                Suas Estatísticas
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
                 <div>
                   <span className="text-muted-foreground">
                     Pontuação Total:
@@ -147,16 +149,24 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
           )}
         </div>
 
-        <div className="flex justify-end space-x-2">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+        <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-2">
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            className="text-xs sm:text-sm"
+          >
             Cancelar
           </Button>
-          <Button onClick={handleSave} disabled={isLoading}>
-            <Save className="mr-2 h-4 w-4" />
+          <Button
+            onClick={handleSave}
+            disabled={isLoading}
+            className="text-xs sm:text-sm"
+          >
+            <Save className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
             {isLoading ? "Salvando..." : "Salvar"}
           </Button>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </ResponsiveDialog>
   );
 };

@@ -39,7 +39,7 @@ export const QuestionCard = ({
     }
 
     if (index === question.correctAnswer) {
-      return "bg-green-500 text-white animate-pulse border-2 border-green-400 shadow-lg";
+      return "bg-green-500 text-white border-2 border-green-400 shadow-lg";
     }
 
     if (selectedAnswer === index && index !== question.correctAnswer) {

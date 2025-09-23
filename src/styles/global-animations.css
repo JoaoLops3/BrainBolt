@@ -1,0 +1,296 @@
+/* Sistema Global de Animações - BrainBolt */
+
+/* ===== ANIMAÇÕES DE ENTRADA ===== */
+@keyframes globalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes globalSlideInLeft {
+  from { 
+    opacity: 0; 
+    transform: translateX(-20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateX(0); 
+  }
+}
+
+@keyframes globalSlideInRight {
+  from { 
+    opacity: 0; 
+    transform: translateX(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateX(0); 
+  }
+}
+
+@keyframes globalSlideInUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes globalSlideInDown {
+  from { 
+    opacity: 0; 
+    transform: translateY(-20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes globalScaleIn {
+  from { 
+    opacity: 0; 
+    transform: scale(0.9); 
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+}
+
+@keyframes globalBounceIn {
+  0% { 
+    opacity: 0; 
+    transform: scale(0.3); 
+  }
+  50% { 
+    transform: scale(1.05); 
+  }
+  70% { 
+    transform: scale(0.9); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+}
+
+/* ===== ANIMAÇÕES DE SAÍDA ===== */
+@keyframes globalFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes globalScaleOut {
+  from { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+  to { 
+    opacity: 0; 
+    transform: scale(0.9); 
+  }
+}
+
+/* ===== EFEITOS HOVER ===== */
+@keyframes globalHoverLift {
+  to { 
+    transform: translateY(-2px); 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+  }
+}
+
+@keyframes globalHoverScale {
+  to { 
+    transform: scale(1.02); 
+  }
+}
+
+@keyframes globalHoverGlow {
+  to { 
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); 
+  }
+}
+
+/* ===== CLASSES UTILITÁRIAS ===== */
+
+/* Animações de entrada */
+.animate-global-fade-in {
+  animation: globalFadeIn 0.3s ease-out;
+}
+
+.animate-global-slide-in-left {
+  animation: globalSlideInLeft 0.4s ease-out;
+}
+
+.animate-global-slide-in-right {
+  animation: globalSlideInRight 0.4s ease-out;
+}
+
+.animate-global-slide-in-up {
+  animation: globalSlideInUp 0.4s ease-out;
+}
+
+.animate-global-slide-in-down {
+  animation: globalSlideInDown 0.4s ease-out;
+}
+
+.animate-global-scale-in {
+  animation: globalScaleIn 0.3s ease-out;
+}
+
+.animate-global-bounce-in {
+  animation: globalBounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Animações de saída */
+.animate-global-fade-out {
+  animation: globalFadeOut 0.3s ease-out;
+}
+
+.animate-global-scale-out {
+  animation: globalScaleOut 0.3s ease-out;
+}
+
+/* Efeitos hover */
+.hover-global-lift {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hover-global-lift:hover {
+  animation: globalHoverLift 0.2s ease-out forwards;
+}
+
+.hover-global-scale {
+  transition: transform 0.2s ease-in-out;
+}
+
+.hover-global-scale:hover {
+  animation: globalHoverScale 0.2s ease-out forwards;
+}
+
+.hover-global-glow {
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.hover-global-glow:hover {
+  animation: globalHoverGlow 0.3s ease-out forwards;
+}
+
+/* ===== TRANSIÇÕES GLOBAIS ===== */
+.transition-global-all {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-global-transform {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-global-opacity {
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-global-colors {
+  transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+/* ===== DELAYS ===== */
+.delay-global-100 { animation-delay: 0.1s; }
+.delay-global-200 { animation-delay: 0.2s; }
+.delay-global-300 { animation-delay: 0.3s; }
+.delay-global-400 { animation-delay: 0.4s; }
+.delay-global-500 { animation-delay: 0.5s; }
+
+/* ===== DURAÇÕES ===== */
+.duration-global-fast { animation-duration: 0.2s; }
+.duration-global-normal { animation-duration: 0.3s; }
+.duration-global-slow { animation-duration: 0.5s; }
+
+/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+  .animate-global-fade-in,
+  .animate-global-scale-in {
+    animation-duration: 0.2s;
+  }
+  
+  .animate-global-slide-in-left,
+  .animate-global-slide-in-right,
+  .animate-global-slide-in-up,
+  .animate-global-slide-in-down {
+    animation-duration: 0.3s;
+  }
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  .animate-global-fade-in,
+  .animate-global-slide-in-left,
+  .animate-global-slide-in-right,
+  .animate-global-slide-in-up,
+  .animate-global-slide-in-down,
+  .animate-global-scale-in,
+  .animate-global-bounce-in,
+  .animate-global-fade-out,
+  .animate-global-scale-out {
+    animation: none !important;
+  }
+  
+  .hover-global-lift:hover,
+  .hover-global-scale:hover,
+  .hover-global-glow:hover {
+    animation: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  
+  .transition-global-all,
+  .transition-global-transform,
+  .transition-global-opacity,
+  .transition-global-colors {
+    transition: none !important;
+  }
+}
+
+/* ===== PERFORMANCE ===== */
+.animate-global-fade-in,
+.animate-global-slide-in-left,
+.animate-global-slide-in-right,
+.animate-global-slide-in-up,
+.animate-global-slide-in-down,
+.animate-global-scale-in,
+.animate-global-bounce-in {
+  will-change: transform, opacity;
+}
+
+.hover-global-lift,
+.hover-global-scale,
+.hover-global-glow {
+  will-change: transform, box-shadow;
+}
+
+/* Reset will-change após animação */
+.animate-global-fade-in,
+.animate-global-slide-in-left,
+.animate-global-slide-in-right,
+.animate-global-slide-in-up,
+.animate-global-slide-in-down,
+.animate-global-scale-in,
+.animate-global-bounce-in {
+  animation-fill-mode: both;
+}
+
+/* ===== UTILIDADES ===== */
+.animation-pause {
+  animation-play-state: paused;
+}
+
+.animation-play {
+  animation-play-state: running;
+}
+
+.animation-none {
+  animation: none !important;
+}
