@@ -1,7 +1,7 @@
 {
-  "name": "Perguntados - Quiz World Quest",
-  "short_name": "Perguntados",
-  "description": "Teste seus conhecimentos em 6 categorias diferentes! Jogue Perguntados online e colete todos os personagens.",
+  "name": "Brain Bolt - Quiz World Quest",
+  "short_name": "Brain Bolt",
+  "description": "Teste seus conhecimentos em 6 categorias diferentes! Jogue Brain Bolt online e colete todos os personagens.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#8B5CF6",

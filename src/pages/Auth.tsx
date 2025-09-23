@@ -123,7 +123,7 @@ const Auth = () => {
             />
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2 animate-slide-up">
-            Perguntados
+            Brain Bolt
           </h1>
           <p className="text-white/80 text-sm sm:text-base animate-fade-in">
             Entre para começar a jogar!

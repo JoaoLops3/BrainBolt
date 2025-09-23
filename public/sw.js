@@ -258,7 +258,7 @@ self.addEventListener('push', (event) => {
   console.log('Service Worker: Push received', event);
   
   const options = {
-    body: event.data ? event.data.text() : 'Nova notificação do Perguntados!',
+    body: event.data ? event.data.text() : 'Nova notificação do Brain Bolt!',
     icon: '/Brain-Bolt-Logo.png',
     badge: '/Brain-Bolt-Logo.png',
     vibrate: [200, 100, 200],
@@ -281,7 +281,7 @@ self.addEventListener('push', (event) => {
   };
   
   event.waitUntil(
-    self.registration.showNotification('Perguntados', options)
+    self.registration.showNotification('Brain Bolt', options)
   );
 });
 
