@@ -1,7 +1,7 @@
-# 🎯 Perguntados - Jogo de Quiz Online
+# 🧠 Brain Bolt - Jogo de Quiz Educacional
 
 <div align="center">
-  <img src="./public/Brain%20Bolt%20Logo.png" alt="Brain Bolt Logo" width="200" height="200">
+  <img src="./public/Brain-Bolt-Logo.png" alt="Brain Bolt Logo" width="200" height="200">
   
   [![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=flat&logo=react&logoColor=white)](https://reactjs.org/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -13,11 +13,18 @@
 
 ## 📖 Sobre o Projeto
 
-**Perguntados** é um jogo de quiz online moderno e interativo que testa seus conhecimentos em 6 categorias diferentes. Desenvolvido com React, TypeScript e Supabase, oferece uma experiência gamificada completa com sistema de amigos, multiplayer e estatísticas detalhadas.
+**Brain Bolt** é um jogo de quiz educacional que transforma o aprendizado em uma experiência divertida e gamificada. Desenvolvido especialmente para uso em salas de aula, combina tecnologia digital com interação física para criar um ambiente de aprendizado envolvente e competitivo.
+
+### 🎯 Missão Educacional
+
+O Brain Bolt foi criado para resolver um dos maiores desafios da educação moderna: manter o foco e o engajamento dos alunos durante as aulas. Através da gamificação, os estudantes aprendem sem perceber, competem de forma saudável e desenvolvem conhecimentos em diversas áreas enquanto se divertem.
 
 ### ✨ Características Principais
 
-- 🎮 **Dois Modos de Jogo**: Normal (sem tempo) e Veloz (15 segundos por pergunta)
+- 🎮 **Três Modos de Jogo**:
+  - **Normal**: Sem pressão de tempo para estudo detalhado
+  - **Veloz**: 15 segundos por pergunta para desafio intenso
+  - **🏫 Físico**: Modo para salas de aula com botões físicos
 - 🏆 **6 Categorias**: Esportes, Entretenimento, Arte, Ciências, Geografia e História (400+ perguntas)
 - 👥 **Sistema de Amigos Completo**: Busque, adicione e gerencie amigos com perfis detalhados
 - 🌐 **Multiplayer em Tempo Real**: Partidas online com salas privadas e sincronização via Supabase
@@ -26,6 +33,7 @@
 - 📱 **Multiplataforma**: PWA no navegador e apps nativos para iOS/Android
 - 🔐 **Autenticação Segura**: Sistema de login com Supabase Auth
 - 🏅 **Sistema de Conquistas**: Colete personagens por categoria e acompanhe rankings
+- 🏫 **Sistema de Salas Educacionais**: Crie grupos/salas para competições em sala de aula
 
 ## 🚀 Stack Tecnológica
 
@@ -56,7 +64,7 @@
 - **Capacitor 7.4.3** - Framework para apps híbridos nativos
 - **iOS & Android** - Versões nativas otimizadas
 - **PWA** - Progressive Web App com cache offline
-- **App ID**: `com.joaolops3.perguntados`
+- **App ID**: `com.joaolops3.brainbolt`
 
 ## 🎮 Funcionalidades Detalhadas
 
@@ -64,9 +72,24 @@
 
 - **Modo Normal**: Partidas sem pressão de tempo para estudo detalhado
 - **Modo Veloz**: 15 segundos por pergunta para desafio intenso
+- **🏫 Modo Físico**: Revolucionário sistema para salas de aula
+  - **4 Botões de Resposta**: Cada aluno tem 4 botões para escolher entre as alternativas (A, B, C, D)
+  - **1 Botão de Resposta Rápida**: Botão especial para quem quer responder primeiro
+  - **Competição Física**: Alunos competem fisicamente apertando os botões
+  - **Dinâmica em Sala**: Professor controla o jogo, alunos participam ativamente
 - **Sistema de Pontuação**: 100 pontos por acerto, bônus por streaks
 - **Coleção de Personagens**: Desbloqueie personagens acertando 2+ perguntas por categoria
 - **Dificuldade Progressiva**: Perguntas de fácil a difícil por categoria
+
+### 🏫 Sistema de Salas Educacionais
+
+- **Criação de Grupos/Salas**: Professores podem criar salas específicas para suas turmas
+- **Período de Competição**: Defina data de início e fim (não pode ser alterado depois)
+- **Adição de Alunos**: Convide alunos para participar da sala
+- **Rankings por Sala**: Visualize quem tem mais precisão, pontos e conquistas
+- **Competições Escolares**: Professores podem organizar competições diárias, semanais ou mensais
+- **Gamificação Educacional**: Alunos ganham conquistas e competem de forma saudável
+- **Relatórios de Performance**: Acompanhe o progresso individual e da turma
 
 ### Multiplayer em Tempo Real
 
@@ -105,12 +128,33 @@
 
 ## 🎮 Como Jogar
 
+### 🏠 Uso Individual
+
 1. **Cadastre-se** ou faça login na plataforma
-2. **Escolha o modo**: Normal ou Veloz
+2. **Escolha o modo**: Normal, Veloz ou Físico
 3. **Responda perguntas** de diferentes categorias
 4. **Colete personagens** acertando 2+ perguntas por categoria
 5. **Desafie amigos** no modo multiplayer
 6. **Acompanhe suas estatísticas** e melhore seu desempenho
+
+### 🏫 Uso em Sala de Aula
+
+1. **Professor cria uma sala** para sua turma
+2. **Define o período** da competição (início e fim)
+3. **Convida os alunos** para participar da sala
+4. **Inicia o modo físico** com botões para cada aluno
+5. **Alunos competem** fisicamente apertando os botões
+6. **Acompanha rankings** e progresso da turma
+7. **Organiza competições** diárias, semanais ou mensais
+8. **Premia os melhores** alunos ou turmas
+
+### 🎯 Dinâmica Educacional
+
+- **Aprendizado Gamificado**: Alunos aprendem sem perceber
+- **Competição Saudável**: Estimula o estudo e a participação
+- **Engajamento Total**: Mantém o foco dos alunos durante as aulas
+- **Feedback Imediato**: Resultados instantâneos e rankings em tempo real
+- **Flexibilidade**: Use em qualquer matéria ou disciplina
 
 ## 🛠️ Instalação e Configuração
 
@@ -123,8 +167,8 @@
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/JoaoLops3/quiz-world-quest.git
-cd quiz-world-quest
+git clone https://github.com/JoaoLops3/BrainBolt.git
+cd BrainBolt
 ```
 
 ### 2. Instale as dependências
@@ -208,7 +252,7 @@ npx cap run android
 
 ### Configuração Mobile
 
-- **App ID**: `com.joaolops3.perguntados`
+- **App ID**: `com.joaolops3.brainbolt`
 - **Splash Screen**: Cor roxa (#8B5CF6) personalizada
 - **PWA**: Funciona offline após primeiro carregamento
 
@@ -250,10 +294,10 @@ npx cap run android
 ## 📁 Estrutura do Projeto
 
 ```
-quiz-world-quest/
+BrainBolt/
 ├── src/
 │   ├── components/          # Componentes React organizados
-│   │   ├── game/           # Lógica do jogo (PerguntadosGame, MultiplayerGame)
+│   │   ├── game/           # Lógica do jogo (BrainBoltGame, MultiplayerGame)
 │   │   ├── friends/        # Sistema de amigos (FriendsModal, FriendProfile)
 │   │   └── ui/             # Componentes de interface (shadcn/ui)
 │   ├── contexts/           # Contextos React (AuthContext)
@@ -366,10 +410,14 @@ npm run type-check   # Verificação de tipos TypeScript
 
 - [ ] **Sistema de Notificações Push**: Alertas para partidas multiplayer e convites
 - [ ] **Modo Torneio**: Competições com múltiplos jogadores e eliminatórias
-- [ ] **Criação de Perguntas**: Sistema para usuários criarem suas próprias perguntas
+- [ ] **Criação de Perguntas**: Sistema para professores criarem suas próprias perguntas
 - [ ] **Temas Personalizados**: Customização de cores e estilos da interface
 - [ ] **Modo Offline**: Jogo completo sem conexão com internet
 - [ ] **Integração Social**: Compartilhamento de resultados nas redes sociais
+- [ ] **Botões Físicos**: Hardware dedicado para o modo físico em sala de aula
+- [ ] **Relatórios Avançados**: Análise detalhada do progresso dos alunos
+- [ ] **Integração com LMS**: Conectividade com sistemas de gestão de aprendizado
+- [ ] **Modo Professor**: Dashboard completo para gerenciamento de salas e alunos
 
 ### Otimizações Técnicas
 
@@ -387,16 +435,41 @@ npm run type-check   # Verificação de tipos TypeScript
 - [ ] **Internacionalização**: Suporte a múltiplos idiomas
 - [ ] **Responsividade Avançada**: Otimização para tablets e diferentes resoluções
 
+## 🎓 Impacto Educacional
+
+### Benefícios para Professores
+
+- **Engajamento Total**: Mantém a atenção dos alunos durante toda a aula
+- **Avaliação Contínua**: Feedback imediato sobre o aprendizado da turma
+- **Gamificação Natural**: Transforma o estudo em diversão
+- **Flexibilidade**: Use em qualquer matéria ou disciplina
+- **Competição Saudável**: Estimula o estudo e a participação
+- **Relatórios Detalhados**: Acompanhe o progresso individual e da turma
+
+### Benefícios para Alunos
+
+- **Aprendizado Divertido**: Estuda sem perceber que está estudando
+- **Competição Saudável**: Desenvolve espírito competitivo positivo
+- **Feedback Imediato**: Sabe instantaneamente se acertou ou errou
+- **Conquistas e Rankings**: Motivação através de gamificação
+- **Participação Ativa**: Todos os alunos participam da aula
+- **Desenvolvimento de Conhecimento**: Aprende enquanto se diverte
+
+### Benefícios para Instituições
+
+- **Melhoria no Aprendizado**: Alunos mais engajados aprendem melhor
+- **Tecnologia Educacional**: Posiciona a escola como inovadora
+- **Relatórios Institucionais**: Dados sobre o desempenho das turmas
+- **Competições Escolares**: Organize torneios entre turmas ou séries
+- **Diferencial Competitivo**: Atrai alunos e pais interessados em inovação
+
 ## 📄 Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ## 👨‍💻 Autor
 
-**João Gabriel Lopes Aguiar**
-
 - GitHub: [@JoaoLops3](https://github.com/JoaoLops3)
-- LinkedIn: [João Gabriel](https://linkedin.com/in/joaogabriellopes)
 
 ## 🙏 Agradecimentos
 
@@ -404,3 +477,4 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 - [shadcn/ui](https://ui.shadcn.com) pelos componentes de interface
 - [Lucide](https://lucide.dev) pelos ícones
 - [Tailwind CSS](https://tailwindcss.com) pelo framework CSS
+- **Educadores e Alunos** que inspiraram este projeto educacional
