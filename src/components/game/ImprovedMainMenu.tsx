@@ -20,6 +20,7 @@ import {
   TrendingUp,
   Award,
 } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { LogOut } from "lucide-react";
 import { useStats } from "@/contexts/StatsContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -47,7 +48,7 @@ export const ImprovedMainMenu = ({
   onViewCharacters,
 }: ImprovedMainMenuProps) => {
   const { stats, loading } = useStats();
-  const { user, signOut } = useAuth();
+  const { user, profile, signOut } = useAuth();
   const [showStats, setShowStats] = useState(false);
   const navigate = useNavigate();
 
@@ -88,9 +89,18 @@ export const ImprovedMainMenu = ({
           <CardHeader className="pb-4">
             <div className="flex items-center space-x-3 sm:space-x-4">
               <div className="relative">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                  <User className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
-                </div>
+                <Avatar
+                  className="w-12 h-12 sm:w-16 sm:h-16 border-2 border-white shadow-lg cursor-pointer hover:border-purple-300 transition-all duration-200 hover:scale-105"
+                  onClick={onOpenSettings}
+                >
+                  <AvatarImage
+                    src={profile?.avatar_url || "/placeholder.svg"}
+                    alt={profile?.display_name || "Avatar do usuário"}
+                  />
+                  <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500">
+                    <User className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+                  </AvatarFallback>
+                </Avatar>
                 {stats && (
                   <Badge
                     className="absolute -top-1 -right-1 bg-green-500 hover:bg-green-600 text-xs transition-all duration-200"
@@ -102,7 +112,9 @@ export const ImprovedMainMenu = ({
               </div>
               <div className="flex-1 min-w-0">
                 <CardTitle className="text-white text-lg sm:text-xl truncate">
-                  {user?.user_metadata?.display_name || "Jogador"}
+                  {profile?.display_name ||
+                    user?.user_metadata?.display_name ||
+                    "Jogador"}
                 </CardTitle>
                 <p className="text-white/80 text-xs sm:text-sm">
                   Nível {stats ? Math.floor(stats.totalScore / 1000) + 1 : 1}

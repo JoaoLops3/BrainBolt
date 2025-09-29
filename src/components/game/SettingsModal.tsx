@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,6 +32,14 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
   );
   const [isLoading, setIsLoading] = useState(false);
 
+  // Sincronizar estado com o profile quando ele mudar ou modal abrir
+  useEffect(() => {
+    if (profile && open) {
+      setDisplayName(profile.display_name || "");
+      setSelectedAvatar(profile.avatar_url || "/placeholder.svg");
+    }
+  }, [profile, open]);
+
   const handleSave = async () => {
     if (!profile) return;
 
@@ -43,8 +51,18 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
         avatar_url: selectedAvatar,
       });
 
+      toast({
+        title: "✅ Perfil atualizado!",
+        description: "Configurações salvas.",
+      });
+
       onOpenChange(false);
     } catch (error) {
+      toast({
+        title: "❌ Erro ao salvar",
+        description: "Tente novamente.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }

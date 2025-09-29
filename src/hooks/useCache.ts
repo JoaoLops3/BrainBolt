@@ -41,7 +41,7 @@ export const useCache = <T>(cacheKey: string, ttl: number = 5 * 60 * 1000) => {
 
   const loadCacheFromStorage = useCallback(() => {
     try {
-      const stored = localStorage.getItem(`perguntados-cache-${cacheKey}`);
+      const stored = localStorage.getItem(`brainbolt-cache-${cacheKey}`);
       if (stored) {
         const cacheData = JSON.parse(stored);
         const cacheMap = new Map(Object.entries(cacheData));
@@ -57,7 +57,7 @@ export const useCache = <T>(cacheKey: string, ttl: number = 5 * 60 * 1000) => {
     try {
       const cacheObj = Object.fromEntries(cache);
       localStorage.setItem(
-        `perguntados-cache-${cacheKey}`,
+        `brainbolt-cache-${cacheKey}`,
         JSON.stringify(cacheObj)
       );
     } catch (error) {

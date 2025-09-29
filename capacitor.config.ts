@@ -2,7 +2,7 @@ import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
   appId: "com.joaolops3.perguntados",
-  appName: "Perguntados",
+  appName: "Brain Bolt",
   webDir: "dist",
   plugins: {
     SplashScreen: {
