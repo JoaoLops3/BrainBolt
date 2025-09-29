@@ -22,6 +22,7 @@ import { AchievementsModal } from "@/components/achievements/AchievementsModal";
 import { CharactersModal } from "@/components/achievements/CharactersModal";
 import { AchievementNotification } from "@/components/achievements/AchievementNotification";
 import { useAchievements } from "@/hooks/useAchievements";
+import { useRetentionNotifications } from "@/hooks/useRetentionNotifications";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -106,6 +107,8 @@ export const BrainBoltGame = () => {
   const [achievementsOpen, setAchievementsOpen] = useState(false);
   const [charactersOpen, setCharactersOpen] = useState(false);
   const { notification, clearNotification } = useAchievements();
+  const { updateLastSession, sendSessionEndNotification } =
+    useRetentionNotifications();
 
   const [gameStartTime, setGameStartTime] = useState<number>(0);
 
@@ -236,6 +239,10 @@ export const BrainBoltGame = () => {
             if (user) {
               saveGameSession(finalStats).catch(console.error);
             }
+
+            // Atualizar última sessão e enviar notificação de retenção
+            updateLastSession();
+            sendSessionEndNotification();
 
             return {
               ...prev,

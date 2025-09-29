@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
 
 interface Achievement {
   id: string;
@@ -25,9 +26,16 @@ interface NotificationData {
 
 export const useAchievements = () => {
   const { user } = useAuth();
-  const [notification, setNotification] = useState<NotificationData | null>(null);
-  const [previousAchievements, setPreviousAchievements] = useState<Set<string>>(new Set());
-  const [previousCharacters, setPreviousCharacters] = useState<Set<string>>(new Set());
+  const { settings, sendLocalNotification } = usePushNotifications();
+  const [notification, setNotification] = useState<NotificationData | null>(
+    null
+  );
+  const [previousAchievements, setPreviousAchievements] = useState<Set<string>>(
+    new Set()
+  );
+  const [previousCharacters, setPreviousCharacters] = useState<Set<string>>(
+    new Set()
+  );
 
   // Load initial state
   const loadInitialState = useCallback(async () => {
@@ -42,7 +50,9 @@ export const useAchievements = () => {
         .eq("is_completed", true);
 
       if (achievements) {
-        setPreviousAchievements(new Set(achievements.map(a => a.achievement_id)));
+        setPreviousAchievements(
+          new Set(achievements.map((a) => a.achievement_id))
+        );
       }
 
       // Load user characters
@@ -52,7 +62,7 @@ export const useAchievements = () => {
         .eq("user_id", user.id);
 
       if (characters) {
-        setPreviousCharacters(new Set(characters.map(c => c.character_id)));
+        setPreviousCharacters(new Set(characters.map((c) => c.character_id)));
       }
     } catch (error) {
       console.error("Error loading initial achievements state:", error);
@@ -67,19 +77,23 @@ export const useAchievements = () => {
       // Check for new achievements
       const { data: currentAchievements } = await supabase
         .from("user_achievements")
-        .select(`
+        .select(
+          `
           achievement_id,
           achievement:achievements(*)
-        `)
+        `
+        )
         .eq("user_id", user.id)
         .eq("is_completed", true);
 
       if (currentAchievements) {
-        const currentAchievementIds = new Set(currentAchievements.map(a => a.achievement_id));
-        
+        const currentAchievementIds = new Set(
+          currentAchievements.map((a) => a.achievement_id)
+        );
+
         // Find newly unlocked achievements
-        const newAchievements = currentAchievements.filter(a => 
-          !previousAchievements.has(a.achievement_id)
+        const newAchievements = currentAchievements.filter(
+          (a) => !previousAchievements.has(a.achievement_id)
         );
 
         if (newAchievements.length > 0) {
@@ -89,6 +103,19 @@ export const useAchievements = () => {
             type: "achievement",
             achievement: latestAchievement.achievement,
           });
+
+          // Send push notification if enabled
+          if (settings.achievements) {
+            sendLocalNotification(
+              "🏆 Nova Conquista!",
+              `Você desbloqueou: ${latestAchievement.achievement.name}`,
+              {
+                tag: "achievement",
+                icon: "/Brain-Bolt-Logo.png",
+                requireInteraction: true,
+              }
+            );
+          }
         }
 
         setPreviousAchievements(currentAchievementIds);
@@ -97,18 +124,22 @@ export const useAchievements = () => {
       // Check for new characters
       const { data: currentCharacters } = await supabase
         .from("user_characters")
-        .select(`
+        .select(
+          `
           character_id,
           character:characters(*)
-        `)
+        `
+        )
         .eq("user_id", user.id);
 
       if (currentCharacters) {
-        const currentCharacterIds = new Set(currentCharacters.map(c => c.character_id));
-        
+        const currentCharacterIds = new Set(
+          currentCharacters.map((c) => c.character_id)
+        );
+
         // Find newly unlocked characters
-        const newCharacters = currentCharacters.filter(c => 
-          !previousCharacters.has(c.character_id)
+        const newCharacters = currentCharacters.filter(
+          (c) => !previousCharacters.has(c.character_id)
         );
 
         if (newCharacters.length > 0 && !notification) {
@@ -118,6 +149,19 @@ export const useAchievements = () => {
             type: "character",
             character: latestCharacter.character,
           });
+
+          // Send push notification if enabled
+          if (settings.achievements) {
+            sendLocalNotification(
+              "✨ Novo Personagem!",
+              `Você desbloqueou: ${latestCharacter.character.name}`,
+              {
+                tag: "character",
+                icon: "/Brain-Bolt-Logo.png",
+                requireInteraction: true,
+              }
+            );
+          }
         }
 
         setPreviousCharacters(currentCharacterIds);
@@ -139,14 +183,14 @@ export const useAchievements = () => {
     if (!user) return;
 
     const achievementsChannel = supabase
-      .channel('user-achievements-changes')
+      .channel("user-achievements-changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'user_achievements',
-          filter: `user_id=eq.${user.id}`
+          event: "INSERT",
+          schema: "public",
+          table: "user_achievements",
+          filter: `user_id=eq.${user.id}`,
         },
         () => {
           // Delay check to ensure transaction is complete
@@ -154,12 +198,12 @@ export const useAchievements = () => {
         }
       )
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'user_achievements',
-          filter: `user_id=eq.${user.id}`
+          event: "UPDATE",
+          schema: "public",
+          table: "user_achievements",
+          filter: `user_id=eq.${user.id}`,
         },
         () => {
           setTimeout(checkForNewUnlocks, 1000);
@@ -168,14 +212,14 @@ export const useAchievements = () => {
       .subscribe();
 
     const charactersChannel = supabase
-      .channel('user-characters-changes')
+      .channel("user-characters-changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'user_characters',
-          filter: `user_id=eq.${user.id}`
+          event: "INSERT",
+          schema: "public",
+          table: "user_characters",
+          filter: `user_id=eq.${user.id}`,
         },
         () => {
           setTimeout(checkForNewUnlocks, 1000);
