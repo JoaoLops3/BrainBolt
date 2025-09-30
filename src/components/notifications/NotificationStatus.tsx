@@ -24,7 +24,7 @@ export const NotificationStatus = ({
   // Se foi negado ou nunca pediu, mostrar prompt discreto
   if (permission === "denied" || permission === "default") {
     return (
-      <div className="fixed top-4 left-4 z-50">
+      <div className="fixed left-4 z-50 safe-top-fixed">
         <Button
           variant="ghost"
           size="sm"

@@ -397,7 +397,7 @@ export const MultiplayerGame = ({
     user?.id === room.host_id ? room.guest_answer : room.host_answer;
 
   return (
-    <div className="min-h-screen bg-gradient-primary relative no-scroll">
+    <div className="min-h-screen bg-gradient-primary relative no-scroll safe-top safe-bottom">
       {/* Connection Status */}
       <MultiplayerConnectionStatus
         isConnected={!!room}
@@ -409,7 +409,7 @@ export const MultiplayerGame = ({
       {/* Exit button */}
       <button
         onClick={onBackToMenu}
-        className="absolute top-4 left-4 z-30 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30"
+        className="absolute left-4 z-30 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 safe-top-fixed"
       >
         <svg
           className="w-6 h-6"
@@ -427,7 +427,7 @@ export const MultiplayerGame = ({
       </button>
 
       {/* Score display */}
-      <div className="fixed top-4 left-16 right-4 z-10">
+      <div className="fixed left-16 right-4 z-10 safe-top-fixed">
         <div className="flex justify-between items-center">
           <Card className="px-4 py-2">
             <div className="flex items-center gap-2">
@@ -465,7 +465,10 @@ export const MultiplayerGame = ({
       </div>
 
       {/* Answer status */}
-      <div className="fixed top-20 left-1/2 -translate-x-1/2 z-10">
+      <div
+        className="fixed left-1/2 -translate-x-1/2 z-10"
+        style={{ top: `calc(env(safe-area-inset-top) + 8rem)` }}
+      >
         <Card className="px-4 py-2">
           <div className="text-sm text-center">
             <span

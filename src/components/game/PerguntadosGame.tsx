@@ -417,11 +417,11 @@ export const BrainBoltGame = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-primary relative no-scroll">
+    <div className="min-h-screen bg-gradient-primary relative no-scroll safe-top safe-bottom">
       {/* Exit button */}
       <button
         onClick={backToMenu}
-        className="absolute top-4 left-4 z-20 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30"
+        className="absolute left-4 z-20 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 safe-top-fixed"
       >
         <svg
           className="w-6 h-6"

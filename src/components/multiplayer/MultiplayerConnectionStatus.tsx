@@ -13,30 +13,36 @@ export const MultiplayerConnectionStatus = ({
   isConnected,
   roomCode,
   playersCount,
-  ping
+  ping,
 }: MultiplayerConnectionStatusProps) => {
-  const [connectionQuality, setConnectionQuality] = useState<'good' | 'medium' | 'poor'>('good');
+  const [connectionQuality, setConnectionQuality] = useState<
+    "good" | "medium" | "poor"
+  >("good");
 
   useEffect(() => {
     if (ping !== undefined) {
-      if (ping < 100) setConnectionQuality('good');
-      else if (ping < 300) setConnectionQuality('medium');
-      else setConnectionQuality('poor');
+      if (ping < 100) setConnectionQuality("good");
+      else if (ping < 300) setConnectionQuality("medium");
+      else setConnectionQuality("poor");
     }
   }, [ping]);
 
   const getConnectionColor = () => {
-    if (!isConnected) return 'text-red-500';
+    if (!isConnected) return "text-red-500";
     switch (connectionQuality) {
-      case 'good': return 'text-green-500';
-      case 'medium': return 'text-yellow-500';
-      case 'poor': return 'text-red-500';
-      default: return 'text-green-500';
+      case "good":
+        return "text-green-500";
+      case "medium":
+        return "text-yellow-500";
+      case "poor":
+        return "text-red-500";
+      default:
+        return "text-green-500";
     }
   };
 
   return (
-    <Card className="fixed top-4 right-4 z-50 px-3 py-2 bg-white/90 backdrop-blur-sm">
+    <Card className="fixed right-4 z-50 px-3 py-2 bg-white/90 backdrop-blur-sm safe-top-fixed">
       <div className="flex items-center gap-3 text-sm">
         <div className="flex items-center gap-1">
           {isConnected ? (
@@ -45,7 +51,7 @@ export const MultiplayerConnectionStatus = ({
             <WifiOff className="h-4 w-4 text-red-500" />
           )}
           <span className={getConnectionColor()}>
-            {isConnected ? 'Conectado' : 'Desconectado'}
+            {isConnected ? "Conectado" : "Desconectado"}
           </span>
         </div>
 

@@ -84,7 +84,7 @@ export const ImprovedMainMenu = ({
         maxWidth="4xl"
         padding="md"
         spacing="md"
-        className="pt-4 sm:pt-6"
+        className="pt-12 sm:pt-12"
       >
         {/* Header com avatar e nome */}
         <Card className="backdrop-blur-lg bg-white/20 border-white/30 shadow-2xl animate-in fade-in-0 slide-in-from-top-4">
