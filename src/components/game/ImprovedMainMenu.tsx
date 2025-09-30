@@ -21,7 +21,6 @@ import {
   Award,
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { NotificationStatus } from "@/components/notifications/NotificationStatus";
 import { LogOut } from "lucide-react";
 import { useStats } from "@/contexts/StatsContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -79,7 +78,6 @@ export const ImprovedMainMenu = ({
 
   return (
     <div className="min-h-screen bg-gradient-primary overflow-y-auto safe-top safe-bottom">
-      <NotificationStatus onOpenSettings={onOpenSettings} />
       <ResponsiveContainer
         maxWidth="4xl"
         padding="md"

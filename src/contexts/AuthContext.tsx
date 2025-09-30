@@ -47,10 +47,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Timeout de segurança para evitar loading infinito
+    const loadingTimeout = setTimeout(() => {
+      console.warn("Auth loading timeout - setting loading to false");
+      setLoading(false);
+    }, 10000); // 10 segundos
+
     // Set up auth state listener
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
+      clearTimeout(loadingTimeout);
       setSession(session);
       setUser(session?.user ?? null);
 
@@ -61,41 +68,62 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         }, 0);
       } else {
         setProfile(null);
-      }
-
-      setLoading(false);
-    });
-
-    // Check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-
-      if (session?.user) {
-        fetchProfile(session.user.id);
-      } else {
         setLoading(false);
       }
     });
 
-    return () => subscription.unsubscribe();
+    // Check for existing session
+    supabase.auth
+      .getSession()
+      .then(({ data: { session } }) => {
+        clearTimeout(loadingTimeout);
+        setSession(session);
+        setUser(session?.user ?? null);
+
+        if (session?.user) {
+          fetchProfile(session.user.id);
+        } else {
+          setLoading(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Error getting session:", error);
+        clearTimeout(loadingTimeout);
+        setLoading(false);
+      });
+
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(loadingTimeout);
+    };
   }, []);
 
   const fetchProfile = async (userId: string) => {
     try {
+      // Timeout para fetchProfile
+      const profileTimeout = setTimeout(() => {
+        console.warn("Profile fetch timeout");
+        setLoading(false);
+      }, 5000); // 5 segundos
+
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
         .eq("user_id", userId)
         .single();
 
+      clearTimeout(profileTimeout);
+
       if (error) {
         console.error("Error fetching profile:", error);
+        // Se não conseguir buscar profile, continua mesmo assim
+        setProfile(null);
       } else {
         setProfile(data);
       }
     } catch (error) {
       console.error("Error fetching profile:", error);
+      setProfile(null);
     } finally {
       setLoading(false);
     }

@@ -8,7 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { usePushNotifications } from "@/hooks/usePushNotifications";
+import { useNativeNotifications } from "@/hooks/useNativeNotifications";
 import {
   User,
   Save,
@@ -45,7 +45,7 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
     requestPermission,
     updateSettings: updateNotificationSettings,
     testNotifications,
-  } = usePushNotifications();
+  } = useNativeNotifications();
 
   const [displayName, setDisplayName] = useState(profile?.display_name || "");
   const [selectedAvatar, setSelectedAvatar] = useState(
@@ -262,6 +262,28 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
                   </Button>
                   <p className="text-xs text-muted-foreground mt-1 text-center">
                     Verá 3 notificações de exemplo (manhã, tarde, noite)
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      localStorage.removeItem("brainbolt-onboarding-completed");
+                      localStorage.setItem("brainbolt-first-time", "true");
+                      toast({
+                        title: "Onboarding resetado",
+                        description:
+                          "Feche e abra o app para ver o tour novamente",
+                      });
+                    }}
+                    className="w-full text-xs"
+                  >
+                    🔄 Ver Tour Novamente
+                  </Button>
+                  <p className="text-xs text-muted-foreground mt-1 text-center">
+                    Resetar e ver a apresentação inicial
                   </p>
                 </div>
               </div>

@@ -1,12 +1,12 @@
 import { useEffect, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useStats } from "@/contexts/StatsContext";
-import { usePushNotifications } from "@/hooks/usePushNotifications";
+import { useNativeNotifications } from "@/hooks/useNativeNotifications";
 
 export const useRetentionNotifications = () => {
   const { user } = useAuth();
   const { stats } = useStats();
-  const { settings, sendLocalNotification } = usePushNotifications();
+  const { settings, sendLocalNotification } = useNativeNotifications();
 
   // Verificar última sessão para notificação de inatividade
   const checkInactivity = useCallback(() => {
@@ -21,8 +21,8 @@ export const useRetentionNotifications = () => {
         (now.getTime() - lastSessionDate.getTime()) / (1000 * 60 * 60 * 24)
       );
 
-      // Se não jogou por 3 dias, enviar notificação especial
-      if (daysSinceLastSession >= 3) {
+      // Se não jogou por 1 dia, enviar notificação especial
+      if (daysSinceLastSession >= 1) {
         sendLocalNotification(
           "🎯 Sentimos sua falta!",
           "Que tal voltar e bater seu recorde?",
@@ -33,8 +33,8 @@ export const useRetentionNotifications = () => {
         );
       }
 
-      // Se não jogou por 7 dias, notificação mais direta
-      if (daysSinceLastSession >= 7) {
+      // Se não jogou por 3 dias, notificação mais direta
+      if (daysSinceLastSession >= 3) {
         sendLocalNotification(
           "🔥 Sua streak está esperando!",
           "Não deixe seu progresso escapar. Jogue agora!",
@@ -141,12 +141,12 @@ export const useRetentionNotifications = () => {
     const randomEncouragement =
       encouragements[Math.floor(Math.random() * encouragements.length)];
 
-    // Agendar notificação para 2 horas depois
+    // Agendar notificação para 4 horas depois
     setTimeout(() => {
       sendLocalNotification("🎮 Pronto para mais?", randomEncouragement, {
         tag: "session-followup",
       });
-    }, 2 * 60 * 60 * 1000); // 2 horas
+    }, 4 * 60 * 60 * 1000); // 4 horas
   }, [settings.gameUpdates, sendLocalNotification]);
 
   // Atualizar última sessão

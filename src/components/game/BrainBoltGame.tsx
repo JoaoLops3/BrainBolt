@@ -23,6 +23,8 @@ import { CharactersModal } from "@/components/achievements/CharactersModal";
 import { AchievementNotification } from "@/components/achievements/AchievementNotification";
 import { useAchievements } from "@/hooks/useAchievements";
 import { useRetentionNotifications } from "@/hooks/useRetentionNotifications";
+import { useNativeNotifications } from "@/hooks/useNativeNotifications";
+import { useDailyNotifications } from "@/hooks/useDailyNotifications";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -109,8 +111,31 @@ export const BrainBoltGame = () => {
   const { notification, clearNotification } = useAchievements();
   const { updateLastSession, sendSessionEndNotification } =
     useRetentionNotifications();
+  const { requestPermission, permission, isSupported } =
+    useNativeNotifications();
+  useDailyNotifications(); // Ativar notificações diárias automáticas
 
   const [gameStartTime, setGameStartTime] = useState<number>(0);
+
+  // Auto-solicitar permissão apenas se não passou pelo onboarding
+  useEffect(() => {
+    const hasCompletedOnboarding = localStorage.getItem(
+      "brainbolt-onboarding-completed"
+    );
+
+    if (
+      user &&
+      isSupported &&
+      permission === "default" &&
+      !hasCompletedOnboarding
+    ) {
+      const timer = setTimeout(() => {
+        requestPermission();
+      }, 60000); // 1 minuto para usuários que não passaram pelo onboarding
+
+      return () => clearTimeout(timer);
+    }
+  }, [user, isSupported, permission, requestPermission]);
 
   const shuffleArray = <T,>(array: T[]): T[] => {
     const shuffled = [...array];
