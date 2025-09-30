@@ -1,5 +1,5 @@
 {
-  "name": "Brain Bolt - Quiz World Quest",
+  "name": "Brain Bolt",
   "short_name": "Brain Bolt",
   "description": "Teste seus conhecimentos em 6 categorias diferentes! Jogue Brain Bolt online e colete todos os personagens.",
   "start_url": "/",
@@ -59,7 +59,7 @@
       "url": "/?mode=speed",
       "icons": [
         {
-          "src": "/logo.png",
+          "src": "/Brain-Bolt-Logo.png",
           "sizes": "96x96"
         }
       ]
@@ -71,7 +71,7 @@
       "url": "/?mode=multiplayer",
       "icons": [
         {
-          "src": "/logo.png",
+          "src": "/Brain-Bolt-Logo.png",
           "sizes": "96x96"
         }
       ]

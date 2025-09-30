@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { PerguntadosGame } from "@/components/game/PerguntadosGame";
+import { BrainBoltGame } from "@/components/game/BrainBoltGame";
 import { Loader2 } from "lucide-react";
 
 const Index = () => {
@@ -18,7 +18,7 @@ const Index = () => {
     return <Navigate to="/auth" replace />;
   }
 
-  return <PerguntadosGame />;
+  return <BrainBoltGame />;
 };
 
 export default Index;

@@ -62,7 +62,7 @@ const Auth = () => {
     } else {
       toast({
         title: "Login realizado com sucesso!",
-        description: "Bem-vindo de volta ao Perguntados!",
+        description: "Bem-vindo de volta ao Brain Bolt!",
       });
     }
 

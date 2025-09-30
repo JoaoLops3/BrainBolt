@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,6 +32,14 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
   );
   const [isLoading, setIsLoading] = useState(false);
 
+  // Sincronizar estado com o profile quando ele mudar ou modal abrir
+  useEffect(() => {
+    if (profile && open) {
+      setDisplayName(profile.display_name || "");
+      setSelectedAvatar(profile.avatar_url || "/placeholder.svg");
+    }
+  }, [profile, open]);
+
   const handleSave = async () => {
     if (!profile) return;
 
@@ -43,8 +51,18 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
         avatar_url: selectedAvatar,
       });
 
+      toast({
+        title: "✅ Perfil atualizado!",
+        description: "Configurações salvas.",
+      });
+
       onOpenChange(false);
     } catch (error) {
+      toast({
+        title: "❌ Erro ao salvar",
+        description: "Tente novamente.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -120,33 +138,6 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
               className="text-sm sm:text-base"
             />
           </div>
-
-          {/* Stats Display */}
-          {profile && (
-            <div className="bg-muted/50 rounded-lg p-3 sm:p-4 space-y-2">
-              <h4 className="font-medium text-xs sm:text-sm">
-                Suas Estatísticas
-              </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
-                <div>
-                  <span className="text-muted-foreground">
-                    Pontuação Total:
-                  </span>
-                  <div className="font-semibold">{profile.total_score}</div>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">Jogos:</span>
-                  <div className="font-semibold">{profile.games_played}</div>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">
-                    Melhor Sequência:
-                  </span>
-                  <div className="font-semibold">{profile.best_streak}</div>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
 
         <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-2">

@@ -43,7 +43,7 @@ export const useOffline = () => {
 
   const loadOfflineData = useCallback(() => {
     try {
-      const stored = localStorage.getItem("perguntados-offline-data");
+      const stored = localStorage.getItem("brainbolt-offline-data");
       if (stored) {
         const data = JSON.parse(stored);
         setOfflineData(data);
@@ -55,7 +55,7 @@ export const useOffline = () => {
 
   const saveOfflineData = useCallback((data: OfflineData) => {
     try {
-      localStorage.setItem("perguntados-offline-data", JSON.stringify(data));
+      localStorage.setItem("brainbolt-offline-data", JSON.stringify(data));
       setOfflineData(data);
     } catch (error) {
       console.error("Error saving offline data:", error);
@@ -196,7 +196,7 @@ export const useOffline = () => {
     // Check if we have enough offline data to play
     return (
       offlineData.gameSessions.length > 0 ||
-      localStorage.getItem("perguntados-questions-cache") !== null
+      localStorage.getItem("brainbolt-questions-cache") !== null
     );
   }, [offlineData.gameSessions]);
 

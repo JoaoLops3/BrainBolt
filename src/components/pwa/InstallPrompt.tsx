@@ -73,7 +73,7 @@ export const InstallPrompt = () => {
 
     // Check if app is installed (PWA)
     const isInstalledPWA =
-      localStorage.getItem("perguntados-installed") === "true";
+      localStorage.getItem("brainbolt-installed") === "true";
     setIsInstalled(isInstalledPWA || isStandaloneMode);
 
     // Determine install source based on user agent
@@ -95,7 +95,7 @@ export const InstallPrompt = () => {
 
       if (outcome === "accepted") {
         console.log("User accepted the install prompt");
-        localStorage.setItem("perguntados-installed", "true");
+        localStorage.setItem("brainbolt-installed", "true");
       } else {
         console.log("User dismissed the install prompt");
       }
@@ -106,10 +106,10 @@ export const InstallPrompt = () => {
       // Redirect to app store
       const userAgent = navigator.userAgent;
       if (/iPhone|iPad|iPod/.test(userAgent)) {
-        window.open("https://apps.apple.com/app/perguntados", "_blank");
+        window.open("https://apps.apple.com/app/brainbolt", "_blank");
       } else if (/Android/.test(userAgent)) {
         window.open(
-          "https://play.google.com/store/apps/details?id=com.joaolops3.perguntados",
+          "https://play.google.com/store/apps/details?id=com.joaolops3.brainbolt",
           "_blank"
         );
       }
@@ -119,7 +119,7 @@ export const InstallPrompt = () => {
   const handleDismiss = () => {
     setShowPrompt(false);
     // Don't show again for this session
-    sessionStorage.setItem("perguntados-install-dismissed", "true");
+    sessionStorage.setItem("brainbolt-install-dismissed", "true");
   };
 
   // Don't show if already installed or dismissed
@@ -128,7 +128,7 @@ export const InstallPrompt = () => {
   }
 
   // Check if user dismissed in this session
-  if (sessionStorage.getItem("perguntados-install-dismissed") === "true") {
+  if (sessionStorage.getItem("brainbolt-install-dismissed") === "true") {
     return null;
   }
 
