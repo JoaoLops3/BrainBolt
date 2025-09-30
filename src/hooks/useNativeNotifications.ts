@@ -183,7 +183,7 @@ export const useNativeNotifications = (): NativeNotificationHook => {
                 body,
                 id: Date.now(),
                 largeIcon: "res://drawable/ic_launcher",
-                smallIcon: "res://drawable/ic_launcher",
+                smallIcon: "res://drawable/ic_stat_icon_config_sample",
                 iconColor: "#8B5CF6",
                 extra: {
                   tag: options.tag || "default",
@@ -233,7 +233,7 @@ export const useNativeNotifications = (): NativeNotificationHook => {
                 every: "day",
               },
               largeIcon: "res://drawable/ic_launcher",
-              smallIcon: "res://drawable/ic_launcher",
+              smallIcon: "res://drawable/ic_stat_icon_config_sample",
               iconColor: "#8B5CF6",
             },
           ],
