@@ -166,8 +166,8 @@ export const ImprovedMainMenu = ({
           statValue={stats?.multiplayerWins || 0}
           statLabel="vitórias"
           badge={
-            stats?.pendingInvites
-              ? `${stats.pendingInvites} convites`
+            stats?.pendingInvites && stats.pendingInvites > 0
+              ? `${stats.pendingInvites}`
               : undefined
           }
           badgeVariant={stats?.pendingInvites ? "destructive" : "default"}
@@ -233,7 +233,9 @@ export const ImprovedMainMenu = ({
             label="Amigos"
             statValue={stats?.friendsCount || 0}
             badge={
-              stats?.pendingInvites ? `${stats.pendingInvites}` : undefined
+              stats?.pendingFriendRequests && stats.pendingFriendRequests > 0
+                ? `${stats.pendingFriendRequests}`
+                : undefined
             }
             badgeVariant="destructive"
             onClick={onOpenFriends}

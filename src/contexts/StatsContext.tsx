@@ -36,7 +36,8 @@ interface UserStats {
 
   // Amigos
   friendsCount: number;
-  pendingInvites: number;
+  pendingInvites: number; // Multiplayer invites recebidos
+  pendingFriendRequests: number; // Pedidos de amizade recebidos
 
   // Performance por categoria
   categoryStats: Record<
@@ -137,6 +138,16 @@ export const StatsProvider: React.FC<{ children: React.ReactNode }> = ({
 
       if (invitesError) throw invitesError;
 
+      // Buscar pedidos de amizade pendentes (recebidos)
+      const { data: pendingFriendRequests, error: friendRequestsError } =
+        await supabase
+          .from("friendships")
+          .select("id")
+          .eq("friend_id", user.id)
+          .eq("status", "pending");
+
+      if (friendRequestsError) throw friendRequestsError;
+
       // Buscar estatísticas por categoria
       const { data: categoryStats, error: categoryStatsError } = await supabase
         .from("category_performance")
@@ -175,6 +186,7 @@ export const StatsProvider: React.FC<{ children: React.ReactNode }> = ({
         totalCharacters: totalCharacters?.length || 0,
         friendsCount: friends?.length || 0,
         pendingInvites: pendingInvites?.length || 0,
+        pendingFriendRequests: pendingFriendRequests?.length || 0,
         categoryStats: categoryStatsMap,
       };
 
