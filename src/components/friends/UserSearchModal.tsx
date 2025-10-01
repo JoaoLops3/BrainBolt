@@ -49,6 +49,10 @@ export const UserSearchModal = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
+  const [sentRequests, setSentRequests] = useState<Set<string>>(new Set());
+  const [friendshipStatus, setFriendshipStatus] = useState<
+    Record<string, "accepted" | "pending" | "none">
+  >({});
 
   const searchUsers = async (query: string) => {
     if (!query.trim() || query.length < 2) {
@@ -63,7 +67,52 @@ export const UserSearchModal = ({
       });
 
       if (error) throw error;
-      setSearchResults(data || []);
+      const results = data || [];
+      setSearchResults(results);
+
+      // Após obter resultados, buscar status de amizade para cada usuário listado
+      if (results.length > 0 && user) {
+        const ids = results.map((r: SearchResult) => r.id);
+        try {
+          const inList = ids.join(",");
+          const { data: rels, error: relsError } = await supabase
+            .from("friendships")
+            .select("user_id, friend_id, status")
+            .or(
+              `and(user_id.eq.${user.id},friend_id.in.(${inList})),and(user_id.in.(${inList}),friend_id.eq.${user.id})`
+            );
+
+          if (relsError) throw relsError;
+
+          const statusMap: Record<string, "accepted" | "pending" | "none"> = {};
+          ids.forEach((id) => (statusMap[id] = "none"));
+
+          (rels || []).forEach((rel) => {
+            const otherId =
+              rel.user_id === user.id ? rel.friend_id : rel.user_id;
+            // Priorizar accepted sobre pending
+            if (rel.status === "accepted") {
+              statusMap[otherId] = "accepted";
+            } else if (
+              rel.status === "pending" &&
+              statusMap[otherId] !== "accepted"
+            ) {
+              statusMap[otherId] = "pending";
+            }
+          });
+
+          // Incluir os recém enviados nesta sessão
+          sentRequests.forEach((id) => {
+            if (statusMap[id] !== "accepted") statusMap[id] = "pending";
+          });
+
+          setFriendshipStatus(statusMap);
+        } catch (e) {
+          console.error("Error fetching friendship status:", e);
+        }
+      } else {
+        setFriendshipStatus({});
+      }
     } catch (error) {
       console.error("Error searching users:", error);
       toast({
@@ -118,6 +167,9 @@ export const UserSearchModal = ({
       });
 
       if (error) throw error;
+
+      setSentRequests((prev) => new Set(prev).add(targetUserId));
+      setFriendshipStatus((prev) => ({ ...prev, [targetUserId]: "pending" }));
 
       toast({
         title: "Sucesso!",
@@ -199,7 +251,7 @@ export const UserSearchModal = ({
               <p className="text-sm text-muted-foreground">
                 {searchResults.length} usuário(s) encontrado(s)
               </p>
-              
+
               {searchResults.map((result) => (
                 <Card key={result.id} className="p-4">
                   <div className="flex items-center justify-between">
@@ -210,7 +262,7 @@ export const UserSearchModal = ({
                           <User className="h-6 w-6" />
                         </AvatarFallback>
                       </Avatar>
-                      
+
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
                           <h4 className="font-semibold">
@@ -222,15 +274,25 @@ export const UserSearchModal = ({
                               {result.username}
                             </Badge>
                           )}
+                          {friendshipStatus[result.id] === "accepted" && (
+                            <Badge className="text-xs bg-green-500/20 text-green-300 border-green-400/30">
+                              Amigo
+                            </Badge>
+                          )}
+                          {friendshipStatus[result.id] === "pending" && (
+                            <Badge className="text-xs bg-yellow-500/20 text-yellow-300 border-yellow-400/30">
+                              Pendente
+                            </Badge>
+                          )}
                         </div>
-                        
+
                         {result.email && (
                           <div className="flex items-center gap-1 text-xs text-muted-foreground">
                             <Mail className="h-3 w-3" />
                             {result.email}
                           </div>
                         )}
-                        
+
                         <div className="flex items-center gap-4 text-sm text-muted-foreground">
                           <span className="flex items-center gap-1">
                             <Trophy className="h-3 w-3" />
@@ -243,15 +305,26 @@ export const UserSearchModal = ({
                         </div>
                       </div>
                     </div>
-                    
-                    <Button
-                      onClick={() => sendFriendRequest(result.id)}
-                      size="sm"
-                      className="gap-2"
-                    >
-                      <UserPlus className="h-4 w-4" />
-                      Adicionar
-                    </Button>
+
+                    {friendshipStatus[result.id] === "accepted" ? (
+                      <Button size="sm" className="gap-2" disabled>
+                        Amigo
+                      </Button>
+                    ) : friendshipStatus[result.id] === "pending" ||
+                      sentRequests.has(result.id) ? (
+                      <Button size="sm" className="gap-2" disabled>
+                        Já enviado
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => sendFriendRequest(result.id)}
+                        size="sm"
+                        className="gap-2"
+                      >
+                        <UserPlus className="h-4 w-4" />
+                        Adicionar
+                      </Button>
+                    )}
                   </div>
                 </Card>
               ))}
