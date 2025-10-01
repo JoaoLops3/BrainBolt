@@ -155,7 +155,7 @@ const Auth = () => {
     <div className="min-h-[100dvh] flex items-center justify-center bg-gradient-auth p-4 overflow-y-auto safe-top safe-bottom">
       <div className="w-full max-w-md animate-fade-in-up">
         <div className="text-center mb-8">
-          <div className="relative animate-float">
+          <div className="relative animate-float" style={{ pointerEvents: 'none' }}>
             <img
               src="/Brain%20Bolt%20Logo.png"
               alt="Brain Bolt Logo"
@@ -170,7 +170,7 @@ const Auth = () => {
           </p>
         </div>
 
-        <Card className="backdrop-blur-lg bg-white/20 border-white/30 shadow-2xl animate-slide-up">
+        <Card className="backdrop-blur-lg bg-white/20 border-white/30 shadow-2xl animate-slide-up" style={{ position: 'relative', zIndex: 10 }}>
           <CardHeader>
             <CardTitle className="text-white text-center text-xl sm:text-2xl font-bold">
               Acesso
