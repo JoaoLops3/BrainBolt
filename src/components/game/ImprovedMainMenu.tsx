@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatCard } from "@/components/ui/StatCard";
@@ -17,7 +17,6 @@ import {
   Gamepad2,
   Crown,
   Sparkles,
-  TrendingUp,
   Award,
   School,
   GraduationCap,
@@ -55,7 +54,6 @@ export const ImprovedMainMenu = ({
 }: ImprovedMainMenuProps) => {
   const { stats, loading } = useStats();
   const { user, profile, signOut } = useAuth();
-  const [showStats, setShowStats] = useState(false);
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -66,13 +64,7 @@ export const ImprovedMainMenu = ({
     }
   };
 
-  // Auto-hide stats after 3 seconds
-  useEffect(() => {
-    if (showStats) {
-      const timer = setTimeout(() => setShowStats(false), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [showStats]);
+  // Estatísticas rápidas removidas
 
   if (loading) {
     return (
@@ -126,55 +118,12 @@ export const ImprovedMainMenu = ({
                   Nível {stats ? Math.floor(stats.totalScore / 1000) + 1 : 1}
                 </p>
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setShowStats(!showStats)}
-                className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10"
-              >
-                <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
-              </Button>
+              {/** Botão de estatísticas rápidas removido **/}
             </div>
           </CardHeader>
         </Card>
 
-        {/* Estatísticas rápidas (aparecem ao clicar no ícone) */}
-        {showStats && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 animate-in fade-in-0 slide-in-from-top-2">
-            <StatCard
-              icon={<Trophy className="h-5 w-5 text-yellow-400" />}
-              label="Pontuação"
-              value={stats?.totalScore || 0}
-              subtitle="Total"
-              animation="scale"
-              delay={0}
-            />
-            <StatCard
-              icon={<Target className="h-5 w-5 text-green-400" />}
-              label="Precisão"
-              value={`${Math.round(stats?.winPercentage || 0)}%`}
-              subtitle="Taxa de acerto"
-              animation="scale"
-              delay={100}
-            />
-            <StatCard
-              icon={<Gamepad2 className="h-5 w-5 text-blue-400" />}
-              label="Jogos"
-              value={stats?.gamesPlayed || 0}
-              subtitle="Total jogados"
-              animation="scale"
-              delay={200}
-            />
-            <StatCard
-              icon={<Crown className="h-5 w-5 text-purple-400" />}
-              label="Sequência"
-              value={stats?.bestStreak || 0}
-              subtitle="Melhor streak"
-              animation="scale"
-              delay={300}
-            />
-          </div>
-        )}
+        {/** Estatísticas rápidas removidas **/}
 
         {/* Modos de jogo */}
         <Card className="backdrop-blur-lg bg-white/20 border-white/30 shadow-2xl animate-in fade-in-0 slide-in-from-bottom-4">
