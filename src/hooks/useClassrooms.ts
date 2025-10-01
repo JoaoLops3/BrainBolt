@@ -20,8 +20,10 @@ export const useClassrooms = () => {
   const [myClassrooms, setMyClassrooms] = useState<ClassroomWithDetails[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Ajuste de tipagem: usar instância sem tipos fortes para tabelas recém-criadas
+  const sb: any = supabase;
 
-  // Fetch classrooms where user is teacher
+  // Buscar salas em que o usuário é professor
   const fetchTeacherClassrooms = useCallback(async () => {
     if (!user) return;
 
@@ -29,12 +31,14 @@ export const useClassrooms = () => {
     setError(null);
 
     try {
-      const { data, error: fetchError } = await supabase
+      const { data, error: fetchError } = await sb
         .from("classrooms")
-        .select(`
+        .select(
+          `
           *,
           classroom_students!inner(count)
-        `)
+        `
+        )
         .eq("teacher_id", user.id)
         .order("created_at", { ascending: false });
 
@@ -61,7 +65,7 @@ export const useClassrooms = () => {
     }
   }, [user, toast]);
 
-  // Fetch classrooms where user is student
+  // Buscar salas em que o usuário é aluno
   const fetchStudentClassrooms = useCallback(async () => {
     if (!user) return;
 
@@ -69,12 +73,14 @@ export const useClassrooms = () => {
     setError(null);
 
     try {
-      const { data, error: fetchError } = await supabase
+      const { data, error: fetchError } = await sb
         .from("classroom_students")
-        .select(`
+        .select(
+          `
           *,
           classrooms:classroom_id (*)
-        `)
+        `
+        )
         .eq("student_id", user.id)
         .eq("status", "active");
 
@@ -93,7 +99,7 @@ export const useClassrooms = () => {
     }
   }, [user, toast]);
 
-  // Create new classroom
+  // Criar nova sala de aula
   const createClassroom = useCallback(
     async (classroomData: CreateClassroomData) => {
       if (!user) {
@@ -110,7 +116,7 @@ export const useClassrooms = () => {
 
       try {
         // Generate unique class code
-        const { data: codeData, error: codeError } = await supabase.rpc(
+        const { data: codeData, error: codeError } = await sb.rpc(
           "generate_classroom_code"
         );
 
@@ -118,7 +124,7 @@ export const useClassrooms = () => {
 
         const classCode = codeData;
 
-        const { data, error: createError } = await supabase
+        const { data, error: createError } = await sb
           .from("classrooms")
           .insert([
             {
@@ -155,7 +161,7 @@ export const useClassrooms = () => {
     [user, toast, fetchTeacherClassrooms]
   );
 
-  // Update classroom
+  // Atualizar dados da sala
   const updateClassroom = useCallback(
     async (classroomId: string, updates: UpdateClassroomData) => {
       if (!user) return false;
@@ -164,7 +170,7 @@ export const useClassrooms = () => {
       setError(null);
 
       try {
-        const { error: updateError } = await supabase
+        const { error: updateError } = await sb
           .from("classrooms")
           .update(updates)
           .eq("id", classroomId)
@@ -195,7 +201,7 @@ export const useClassrooms = () => {
     [user, toast, fetchTeacherClassrooms]
   );
 
-  // Delete classroom
+  // Excluir sala de aula
   const deleteClassroom = useCallback(
     async (classroomId: string) => {
       if (!user) return false;
@@ -204,7 +210,7 @@ export const useClassrooms = () => {
       setError(null);
 
       try {
-        const { error: deleteError } = await supabase
+        const { error: deleteError } = await sb
           .from("classrooms")
           .delete()
           .eq("id", classroomId)
@@ -235,7 +241,7 @@ export const useClassrooms = () => {
     [user, toast, fetchTeacherClassrooms]
   );
 
-  // Join classroom with code
+  // Entrar na sala com código
   const joinClassroom = useCallback(
     async (classCode: string) => {
       if (!user) {
@@ -252,7 +258,7 @@ export const useClassrooms = () => {
 
       try {
         // Find classroom by code
-        const { data: classroom, error: findError } = await supabase
+        const { data: classroom, error: findError } = await sb
           .from("classrooms")
           .select("*")
           .eq("class_code", classCode.toUpperCase())
@@ -262,7 +268,7 @@ export const useClassrooms = () => {
         if (findError) throw new Error("Código de sala inválido");
 
         // Check if already a member
-        const { data: existing } = await supabase
+        const { data: existing } = await sb
           .from("classroom_students")
           .select("*")
           .eq("classroom_id", classroom.id)
@@ -279,7 +285,7 @@ export const useClassrooms = () => {
         }
 
         // Join classroom
-        const { error: joinError } = await supabase
+        const { error: joinError } = await sb
           .from("classroom_students")
           .insert([
             {
@@ -314,7 +320,7 @@ export const useClassrooms = () => {
     [user, toast, fetchStudentClassrooms]
   );
 
-  // Leave classroom
+  // Sair da sala
   const leaveClassroom = useCallback(
     async (classroomId: string) => {
       if (!user) return false;
@@ -323,7 +329,7 @@ export const useClassrooms = () => {
       setError(null);
 
       try {
-        const { error: leaveError } = await supabase
+        const { error: leaveError } = await sb
           .from("classroom_students")
           .update({ status: "inactive" })
           .eq("classroom_id", classroomId)
@@ -354,15 +360,23 @@ export const useClassrooms = () => {
     [user, toast, fetchStudentClassrooms]
   );
 
-  // Get classroom rankings
+  // Obter ranking da sala
   const getClassroomRankings = useCallback(
     async (classroomId: string): Promise<ClassroomRanking[]> => {
+      if (!classroomId) {
+        console.warn("No classroom ID provided");
+        return [];
+      }
+
       try {
-        const { data, error } = await supabase.rpc("get_classroom_rankings", {
+        const { data, error } = await sb.rpc("get_classroom_rankings", {
           p_classroom_id: classroomId,
         });
 
-        if (error) throw error;
+        if (error) {
+          console.error("RPC Error:", error);
+          throw error;
+        }
 
         return data || [];
       } catch (err: any) {
@@ -378,15 +392,23 @@ export const useClassrooms = () => {
     [toast]
   );
 
-  // Get classroom statistics
+  // Obter estatísticas da sala
   const getClassroomStatistics = useCallback(
     async (classroomId: string): Promise<ClassroomStatistics | null> => {
+      if (!classroomId) {
+        console.warn("No classroom ID provided for statistics");
+        return null;
+      }
+
       try {
-        const { data, error } = await supabase.rpc("get_classroom_statistics", {
+        const { data, error } = await sb.rpc("get_classroom_statistics", {
           p_classroom_id: classroomId,
         });
 
-        if (error) throw error;
+        if (error) {
+          console.error("RPC Error:", error);
+          throw error;
+        }
 
         return data?.[0] || null;
       } catch (err: any) {
@@ -406,12 +428,14 @@ export const useClassrooms = () => {
   const getClassroomStudents = useCallback(
     async (classroomId: string): Promise<ClassroomStudent[]> => {
       try {
-        const { data, error } = await supabase
+        const { data, error } = await sb
           .from("classroom_students")
-          .select(`
+          .select(
+            `
             *,
-            profiles:student_id (display_name, avatar_url)
-          `)
+            profiles:user_id (display_name, avatar_url)
+          `
+          )
           .eq("classroom_id", classroomId)
           .eq("status", "active");
 
@@ -432,7 +456,7 @@ export const useClassrooms = () => {
       if (!user) return false;
 
       try {
-        const { error } = await supabase
+        const { error } = await sb
           .from("classroom_students")
           .update({ status: "removed" })
           .eq("classroom_id", classroomId)
@@ -484,4 +508,3 @@ export const useClassrooms = () => {
     refreshMyClassrooms: fetchStudentClassrooms,
   };
 };
-

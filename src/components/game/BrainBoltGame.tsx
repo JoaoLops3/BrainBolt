@@ -119,7 +119,7 @@ export const BrainBoltGame = () => {
 
   const [gameStartTime, setGameStartTime] = useState<number>(0);
 
-  // Auto-solicitar permissão apenas se não passou pelo onboarding
+  // Solicitar permissão automática apenas se não passou pelo onboarding
   useEffect(() => {
     const hasCompletedOnboarding = localStorage.getItem(
       "brainbolt-onboarding-completed"
@@ -337,7 +337,7 @@ export const BrainBoltGame = () => {
     }
   };
 
-  // Handle timer events
+  // Manipular eventos do cronômetro
   const handleTimeUp = useCallback(() => {
     if (gameState.selectedAnswer === null) {
       handleAnswerSelect(-1); // Invalid answer index for timeout

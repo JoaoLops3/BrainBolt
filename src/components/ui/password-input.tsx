@@ -24,6 +24,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
           className={cn("pr-12", className)}
           ref={ref}
           {...props}
+          style={{ position: "relative", zIndex: 1 }}
         />
         <Button
           type="button"
@@ -31,7 +32,10 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
           size="sm"
           className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
           onClick={togglePasswordVisibility}
+          onMouseDown={(e) => e.preventDefault()}
           aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+          style={{ zIndex: 2, pointerEvents: "auto" }}
+          tabIndex={-1}
         >
           {showPassword ? (
             <EyeOff className="h-4 w-4 text-muted-foreground hover:text-foreground transition-colors" />

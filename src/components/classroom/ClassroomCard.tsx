@@ -1,4 +1,9 @@
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ClassroomWithDetails } from "@/types/classroom";
@@ -32,11 +37,44 @@ export const ClassroomCard = ({
   const { toast } = useToast();
 
   const copyClassCode = () => {
-    navigator.clipboard.writeText(classroom.class_code);
-    toast({
-      title: "✅ Código copiado!",
-      description: `Código ${classroom.class_code} copiado para a área de transferência.`,
-    });
+    try {
+      if (navigator && (navigator as any).clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(classroom.class_code).then(
+          () =>
+            toast({
+              title: "✅ Código copiado!",
+              description: `Código ${classroom.class_code} copiado para a área de transferência.`,
+            }),
+          () => {
+            throw new Error("Clipboard API falhou");
+          }
+        );
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = classroom.class_code;
+        textarea.style.position = "fixed";
+        textarea.style.left = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        const ok = document.execCommand("copy");
+        document.body.removeChild(textarea);
+        if (ok) {
+          toast({
+            title: "✅ Código copiado!",
+            description: `Código ${classroom.class_code} copiado para a área de transferência.`,
+          });
+        } else {
+          throw new Error("document.execCommand falhou");
+        }
+      }
+    } catch (error) {
+      toast({
+        title: "❌ Não foi possível copiar",
+        description: "Copie manualmente o código da sala.",
+        variant: "destructive",
+      });
+    }
   };
 
   const isActive = () => {
@@ -78,9 +116,12 @@ export const ClassroomCard = ({
 
   const getSubjectColor = () => {
     const colors: Record<string, string> = {
-      science: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100",
-      history: "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100",
-      geography: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100",
+      science:
+        "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100",
+      history:
+        "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100",
+      geography:
+        "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100",
       art: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-100",
       sports: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100",
       math: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100",
@@ -205,4 +246,3 @@ export const ClassroomCard = ({
     </Card>
   );
 };
-

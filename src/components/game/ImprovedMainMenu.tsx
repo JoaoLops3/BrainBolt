@@ -66,7 +66,7 @@ export const ImprovedMainMenu = ({
     }
   };
 
-  // Auto-hide stats after 3 seconds
+  // Ocultar estatísticas automaticamente após 3 segundos
   useEffect(() => {
     if (showStats) {
       const timer = setTimeout(() => setShowStats(false), 3000);

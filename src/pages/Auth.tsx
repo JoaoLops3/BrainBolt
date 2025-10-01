@@ -38,7 +38,7 @@ const Auth = () => {
     displayName: "",
   });
 
-  // Carregar email salvo quando o componente montar
+  // Carregar e-mail salvo quando o componente montar
   useEffect(() => {
     const loadRememberedEmail = async () => {
       try {
@@ -58,7 +58,7 @@ const Auth = () => {
     loadRememberedEmail();
   }, [getRememberedEmail]);
 
-  // Redirect if already authenticated
+  // Redirecionar se já estiver autenticado
   if (user && !loading) {
     return <Navigate to="/" replace />;
   }
