@@ -25,8 +25,8 @@ BEGIN
       COUNT(DISTINCT cgs.game_session_id) as total_games_played,
       COALESCE(AVG(gs.final_score), 0) as average_score,
       CASE 
-        WHEN SUM(gs.questions_answered) > 0 
-        THEN ROUND((SUM(gs.correct_answers)::numeric / SUM(gs.questions_answered) * 100), 2)
+        WHEN NULLIF(SUM(gs.questions_answered), 0) IS NOT NULL
+        THEN ROUND((SUM(LEAST(gs.correct_answers, gs.questions_answered))::numeric / NULLIF(SUM(gs.questions_answered), 0) * 100), 2)
         ELSE 0 
       END as average_accuracy
     FROM public.classroom_students cs
@@ -103,8 +103,8 @@ BEGIN
       COUNT(gs.id) AS games_played,
       COALESCE(SUM(gs.correct_answers), 0) AS correct_answers,
       CASE 
-        WHEN SUM(gs.questions_answered) > 0 
-        THEN ROUND((SUM(gs.correct_answers)::numeric / SUM(gs.questions_answered) * 100), 2)
+        WHEN NULLIF(SUM(gs.questions_answered), 0) IS NOT NULL
+        THEN ROUND((SUM(LEAST(gs.correct_answers, gs.questions_answered))::numeric / NULLIF(SUM(gs.questions_answered), 0) * 100), 2)
         ELSE 0 
       END AS accuracy_percentage,
       COALESCE(MAX(gs.max_streak), 0) AS best_streak
