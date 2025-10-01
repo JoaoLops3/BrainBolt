@@ -3,6 +3,7 @@ import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { getBadgeClassesFromLabel } from "@/lib/badge-colors";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -206,8 +207,9 @@ export const AchievementsModal = ({
               </div>
             </div>
             <Badge
-              variant={getBadgeVariant(achievement.badge_color)}
-              className="text-xs"
+              className={`text-xs ${getBadgeClassesFromLabel(
+                achievement.badge_color
+              )}`}
             >
               {achievement.badge_color}
             </Badge>

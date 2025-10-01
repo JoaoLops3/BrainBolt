@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
@@ -11,6 +12,7 @@ interface ResponsiveDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   title?: string;
+  description?: string;
   children: ReactNode;
   className?: string;
   maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "4xl" | "6xl" | "full";
@@ -30,6 +32,7 @@ export const ResponsiveDialog = ({
   open,
   onOpenChange,
   title,
+  description,
   children,
   className,
   maxWidth = "4xl",
@@ -69,11 +72,14 @@ export const ResponsiveDialog = ({
           className
         )}
       >
-        {title && (
-          <DialogHeader>
-            <DialogTitle className="text-lg sm:text-xl">{title}</DialogTitle>
-          </DialogHeader>
-        )}
+        <DialogHeader>
+          <DialogTitle className={title ? "text-lg sm:text-xl" : "sr-only"}>
+            {title || "Janela"}
+          </DialogTitle>
+          <DialogDescription className={description ? undefined : "sr-only"}>
+            {description || "Conteúdo da janela"}
+          </DialogDescription>
+        </DialogHeader>
         {children}
       </DialogContent>
     </Dialog>

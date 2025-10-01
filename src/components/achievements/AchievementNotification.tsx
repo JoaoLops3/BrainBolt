@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { getBadgeClassesFromLabel } from "@/lib/badge-colors";
 import { Button } from "@/components/ui/button";
 import {
   Trophy,
@@ -62,7 +63,10 @@ const getIconComponent = (iconName: string) => {
   return iconMap[iconName as keyof typeof iconMap] || Trophy;
 };
 
-export const AchievementNotification = ({ notification, onClose }: AchievementNotificationProps) => {
+export const AchievementNotification = ({
+  notification,
+  onClose,
+}: AchievementNotificationProps) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -89,27 +93,31 @@ export const AchievementNotification = ({ notification, onClose }: AchievementNo
 
   return (
     <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-top-2">
-      <Card 
+      <Card
         className={`
           w-80 border-l-4 shadow-lg transition-all duration-300 
-          ${type === 'achievement' 
-            ? 'border-l-yellow-500 bg-gradient-to-r from-yellow-50 to-amber-50' 
-            : 'border-l-purple-500 bg-gradient-to-r from-purple-50 to-pink-50'
+          ${
+            type === "achievement"
+              ? "border-l-yellow-500 bg-gradient-to-r from-yellow-50 to-amber-50"
+              : "border-l-purple-500 bg-gradient-to-r from-purple-50 to-pink-50"
           }
-          ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}
+          ${isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"}
         `}
       >
         <CardContent className="p-4">
           <div className="flex items-start justify-between">
             <div className="flex items-start gap-3 flex-1">
-              <div className={`
+              <div
+                className={`
                 p-2 rounded-full 
-                ${type === 'achievement' 
-                  ? 'bg-yellow-500 text-white' 
-                  : 'bg-purple-500 text-white'
+                ${
+                  type === "achievement"
+                    ? "bg-yellow-500 text-white"
+                    : "bg-purple-500 text-white"
                 }
-              `}>
-                {type === 'achievement' && achievement ? (
+              `}
+              >
+                {type === "achievement" && achievement ? (
                   (() => {
                     const IconComponent = getIconComponent(achievement.icon);
                     return <IconComponent className="h-5 w-5" />;
@@ -118,40 +126,44 @@ export const AchievementNotification = ({ notification, onClose }: AchievementNo
                   <Users className="h-5 w-5" />
                 )}
               </div>
-              
+
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <h4 className="font-semibold text-sm">
-                    {type === 'achievement' ? 'Conquista Desbloqueada!' : 'Personagem Coletado!'}
+                    {type === "achievement"
+                      ? "Conquista Desbloqueada!"
+                      : "Personagem Coletado!"}
                   </h4>
-                  {type === 'achievement' && achievement && (
-                    <Badge variant="outline" className="text-xs">
+                  {type === "achievement" && achievement && (
+                    <Badge
+                      className={`text-xs ${getBadgeClassesFromLabel(
+                        achievement.badge_color
+                      )}`}
+                    >
                       {achievement.badge_color}
                     </Badge>
                   )}
-                  {type === 'character' && character && (
+                  {type === "character" && character && (
                     <Badge variant="outline" className="text-xs capitalize">
                       {character.rarity}
                     </Badge>
                   )}
                 </div>
-                
+
                 <p className="font-medium text-sm mb-1">
-                  {type === 'achievement' && achievement 
-                    ? achievement.name 
-                    : character?.name
-                  }
+                  {type === "achievement" && achievement
+                    ? achievement.name
+                    : character?.name}
                 </p>
-                
+
                 <p className="text-xs text-muted-foreground">
-                  {type === 'achievement' && achievement 
+                  {type === "achievement" && achievement
                     ? achievement.description
-                    : `Novo personagem de ${character?.category} adicionado à sua coleção!`
-                  }
+                    : `Novo personagem de ${character?.category} adicionado à sua coleção!`}
                 </p>
               </div>
             </div>
-            
+
             <Button
               variant="ghost"
               size="sm"
