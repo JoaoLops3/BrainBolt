@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,10 +16,14 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, Mail, Lock, User } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
+import { PasswordInput } from "@/components/ui/password-input";
+import { useLoginStorage } from "@/hooks/useSecureStorage";
 
 const Auth = () => {
   const { user, loading, signIn, signUp, signInWithOAuth } = useAuth();
   const { toast } = useToast();
+  const { saveRememberedEmail, getRememberedEmail, clearRememberedEmail } =
+    useLoginStorage();
   const [isLoading, setIsLoading] = useState(false);
 
   const [loginForm, setLoginForm] = useState({
@@ -33,6 +37,26 @@ const Auth = () => {
     password: "",
     displayName: "",
   });
+
+  // Carregar email salvo quando o componente montar
+  useEffect(() => {
+    const loadRememberedEmail = async () => {
+      try {
+        const rememberedEmail = await getRememberedEmail();
+        if (rememberedEmail) {
+          setLoginForm((prev) => ({
+            ...prev,
+            email: rememberedEmail,
+            rememberMe: true,
+          }));
+        }
+      } catch (error) {
+        console.error("Erro ao carregar email salvo:", error);
+      }
+    };
+
+    loadRememberedEmail();
+  }, [getRememberedEmail]);
 
   // Redirect if already authenticated
   if (user && !loading) {
@@ -51,18 +75,34 @@ const Auth = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    const { error } = await signIn(loginForm.email, loginForm.password);
+    try {
+      const { error } = await signIn(loginForm.email, loginForm.password);
 
-    if (error) {
+      if (error) {
+        toast({
+          title: "Erro ao fazer login",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        // Gerenciar "Lembrar-me"
+        if (loginForm.rememberMe) {
+          await saveRememberedEmail(loginForm.email);
+        } else {
+          await clearRememberedEmail();
+        }
+
+        toast({
+          title: "Login realizado com sucesso!",
+          description: "Bem-vindo de volta ao Brain Bolt!",
+        });
+      }
+    } catch (error) {
+      console.error("Erro durante o login:", error);
       toast({
         title: "Erro ao fazer login",
-        description: error.message,
+        description: "Ocorreu um erro inesperado. Tente novamente.",
         variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Login realizado com sucesso!",
-        description: "Bem-vindo de volta ao Brain Bolt!",
       });
     }
 
@@ -248,10 +288,9 @@ const Auth = () => {
                       Senha
                     </Label>
                     <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
+                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
+                      <PasswordInput
                         id="password"
-                        type="password"
                         placeholder="••••••••"
                         value={loginForm.password}
                         onChange={(e) =>
@@ -417,10 +456,9 @@ const Auth = () => {
                       Senha
                     </Label>
                     <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
+                      <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
+                      <PasswordInput
                         id="signup-password"
-                        type="password"
                         placeholder="••••••••"
                         value={signupForm.password}
                         onChange={(e) =>
