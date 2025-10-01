@@ -23,7 +23,7 @@ export interface GameState {
   score: number;
   questionsAnswered: number;
   categories: CategoryInfo[];
-  gamePhase: 'menu' | 'mode-selection' | 'playing' | 'results' | 'multiplayer';
+  gamePhase: 'menu' | 'mode-selection' | 'playing' | 'results' | 'multiplayer' | 'teacherClassrooms' | 'studentClassrooms';
   selectedAnswer: number | null;
   showAnswer: boolean;
   currentStreak: number;

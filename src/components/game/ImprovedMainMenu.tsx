@@ -19,6 +19,8 @@ import {
   Sparkles,
   TrendingUp,
   Award,
+  School,
+  GraduationCap,
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { LogOut } from "lucide-react";
@@ -35,6 +37,8 @@ interface ImprovedMainMenuProps {
   onOpenFriends: () => void;
   onViewAchievements: () => void;
   onViewCharacters: () => void;
+  onViewTeacherClassrooms: () => void;
+  onViewStudentClassrooms: () => void;
 }
 
 export const ImprovedMainMenu = ({
@@ -46,6 +50,8 @@ export const ImprovedMainMenu = ({
   onOpenFriends,
   onViewAchievements,
   onViewCharacters,
+  onViewTeacherClassrooms,
+  onViewStudentClassrooms,
 }: ImprovedMainMenuProps) => {
   const { stats, loading } = useStats();
   const { user, profile, signOut } = useAuth();
@@ -220,6 +226,36 @@ export const ImprovedMainMenu = ({
           className="w-full h-auto py-6 animate-in fade-in-0 slide-in-from-bottom-2"
           animation="scaleIn"
         />
+
+        {/* Salas Educacionais */}
+        <Card className="backdrop-blur-lg bg-white/20 border-white/30 shadow-2xl animate-in fade-in-0 slide-in-from-bottom-3">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-white text-center flex items-center justify-center gap-2">
+              <School className="h-5 w-5" />
+              Salas Educacionais
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <StatButton
+                icon={<GraduationCap className="h-5 w-5" />}
+                label="Sou Professor"
+                onClick={onViewTeacherClassrooms}
+                className="h-auto py-5 bg-gradient-to-r from-purple-500/20 to-pink-500/20 hover:from-purple-500/30 hover:to-pink-500/30"
+                showStat={false}
+                animation="scaleIn"
+              />
+              <StatButton
+                icon={<School className="h-5 w-5" />}
+                label="Sou Aluno"
+                onClick={onViewStudentClassrooms}
+                className="h-auto py-5 bg-gradient-to-r from-blue-500/20 to-green-500/20 hover:from-blue-500/30 hover:to-green-500/30"
+                showStat={false}
+                animation="scaleIn"
+              />
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Menu secundário */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">

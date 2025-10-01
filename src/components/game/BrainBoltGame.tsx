@@ -21,6 +21,8 @@ import { ImprovedFriendsModal } from "../friends/ImprovedFriendsModal";
 import { AchievementsModal } from "@/components/achievements/AchievementsModal";
 import { CharactersModal } from "@/components/achievements/CharactersModal";
 import { AchievementNotification } from "@/components/achievements/AchievementNotification";
+import { TeacherDashboard } from "@/components/classroom/TeacherDashboard";
+import { StudentDashboard } from "@/components/classroom/StudentDashboard";
 import { useAchievements } from "@/hooks/useAchievements";
 import { useRetentionNotifications } from "@/hooks/useRetentionNotifications";
 import { useNativeNotifications } from "@/hooks/useNativeNotifications";
@@ -364,6 +366,14 @@ export const BrainBoltGame = () => {
     setMultiplayerPhase("game");
   };
 
+  const viewTeacherClassrooms = () => {
+    setGameState((prev) => ({ ...prev, gamePhase: "teacherClassrooms" }));
+  };
+
+  const viewStudentClassrooms = () => {
+    setGameState((prev) => ({ ...prev, gamePhase: "studentClassrooms" }));
+  };
+
   if (gameState.gamePhase === "menu") {
     return (
       <>
@@ -376,6 +386,8 @@ export const BrainBoltGame = () => {
           onOpenFriends={() => setFriendsOpen(true)}
           onViewAchievements={() => setAchievementsOpen(true)}
           onViewCharacters={() => setCharactersOpen(true)}
+          onViewTeacherClassrooms={viewTeacherClassrooms}
+          onViewStudentClassrooms={viewStudentClassrooms}
         />
 
         <SettingsModal open={settingsOpen} onOpenChange={setSettingsOpen} />
@@ -408,6 +420,14 @@ export const BrainBoltGame = () => {
         />
       </>
     );
+  }
+
+  if (gameState.gamePhase === "teacherClassrooms") {
+    return <TeacherDashboard onBack={backToMenu} />;
+  }
+
+  if (gameState.gamePhase === "studentClassrooms") {
+    return <StudentDashboard onBack={backToMenu} />;
   }
 
   if (gameState.gamePhase === "multiplayer") {
