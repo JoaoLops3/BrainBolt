@@ -30,7 +30,7 @@ interface UserSearchModalProps {
 }
 
 interface SearchResult {
-  id: string;
+  user_id: string;
   display_name: string | null;
   username: string | null;
   email: string | null;
@@ -53,6 +53,9 @@ export const UserSearchModal = ({
   const [friendshipStatus, setFriendshipStatus] = useState<
     Record<string, "accepted" | "pending" | "none">
   >({});
+  const [pendingDirection, setPendingDirection] = useState<
+    Record<string, "sent" | "received" | null>
+  >({});
 
   const searchUsers = async (query: string) => {
     if (!query.trim() || query.length < 2) {
@@ -62,17 +65,25 @@ export const UserSearchModal = ({
 
     setLoading(true);
     try {
-      const { data, error } = await supabase.rpc("search_users", {
-        search_term: query.trim(),
-      });
+      // Buscar direto da tabela profiles para garantir user_id
+      const { data, error } = await supabase
+        .from("profiles")
+        .select(
+          "user_id, display_name, username, email, avatar_url, games_played, total_score"
+        )
+        .or(
+          `display_name.ilike.%${query.trim()}%,username.ilike.%${query.trim()}%,email.ilike.%${query.trim()}%`
+        )
+        .neq("user_id", user?.id || "")
+        .limit(20);
 
       if (error) throw error;
-      const results = data || [];
+      const results = (data || []) as SearchResult[];
       setSearchResults(results);
 
       // Após obter resultados, buscar status de amizade para cada usuário listado
       if (results.length > 0 && user) {
-        const ids = results.map((r: SearchResult) => r.id);
+        const ids = results.map((r: SearchResult) => r.user_id);
         try {
           const inList = ids.join(",");
           const { data: rels, error: relsError } = await supabase
@@ -85,7 +96,9 @@ export const UserSearchModal = ({
           if (relsError) throw relsError;
 
           const statusMap: Record<string, "accepted" | "pending" | "none"> = {};
+          const directionMap: Record<string, "sent" | "received" | null> = {};
           ids.forEach((id) => (statusMap[id] = "none"));
+          ids.forEach((id) => (directionMap[id] = null));
 
           (rels || []).forEach((rel) => {
             const otherId =
@@ -93,25 +106,31 @@ export const UserSearchModal = ({
             // Priorizar accepted sobre pending
             if (rel.status === "accepted") {
               statusMap[otherId] = "accepted";
+              directionMap[otherId] = null;
             } else if (
               rel.status === "pending" &&
               statusMap[otherId] !== "accepted"
             ) {
               statusMap[otherId] = "pending";
+              directionMap[otherId] =
+                rel.user_id === user.id ? "sent" : "received";
             }
           });
 
           // Incluir os recém enviados nesta sessão
           sentRequests.forEach((id) => {
             if (statusMap[id] !== "accepted") statusMap[id] = "pending";
+            directionMap[id] = "sent";
           });
 
           setFriendshipStatus(statusMap);
+          setPendingDirection(directionMap);
         } catch (e) {
           console.error("Error fetching friendship status:", e);
         }
       } else {
         setFriendshipStatus({});
+        setPendingDirection({});
       }
     } catch (error) {
       console.error("Error searching users:", error);
@@ -170,6 +189,7 @@ export const UserSearchModal = ({
 
       setSentRequests((prev) => new Set(prev).add(targetUserId));
       setFriendshipStatus((prev) => ({ ...prev, [targetUserId]: "pending" }));
+      setPendingDirection((prev) => ({ ...prev, [targetUserId]: "sent" }));
 
       toast({
         title: "Sucesso!",
@@ -182,6 +202,40 @@ export const UserSearchModal = ({
       toast({
         title: "Erro",
         description: "Não foi possível enviar o pedido",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const cancelFriendRequest = async (targetUserId: string) => {
+    if (!user) return;
+    try {
+      const { error } = await supabase
+        .from("friendships")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("friend_id", targetUserId)
+        .eq("status", "pending");
+
+      if (error) throw error;
+
+      setSentRequests((prev) => {
+        const next = new Set(prev);
+        next.delete(targetUserId);
+        return next;
+      });
+      setFriendshipStatus((prev) => ({ ...prev, [targetUserId]: "none" }));
+      setPendingDirection((prev) => ({ ...prev, [targetUserId]: null }));
+
+      toast({
+        title: "Pedido cancelado",
+        description: "Seu pedido de amizade foi cancelado",
+      });
+    } catch (error) {
+      console.error("Error canceling friend request:", error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível cancelar o pedido",
         variant: "destructive",
       });
     }
@@ -253,7 +307,7 @@ export const UserSearchModal = ({
               </p>
 
               {searchResults.map((result) => (
-                <Card key={result.id} className="p-4">
+                <Card key={result.user_id} className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <Avatar className="h-12 w-12">
@@ -274,12 +328,12 @@ export const UserSearchModal = ({
                               {result.username}
                             </Badge>
                           )}
-                          {friendshipStatus[result.id] === "accepted" && (
+                          {friendshipStatus[result.user_id] === "accepted" && (
                             <Badge className="text-xs bg-green-500/20 text-green-300 border-green-400/30">
                               Amigo
                             </Badge>
                           )}
-                          {friendshipStatus[result.id] === "pending" && (
+                          {friendshipStatus[result.user_id] === "pending" && (
                             <Badge className="text-xs bg-yellow-500/20 text-yellow-300 border-yellow-400/30">
                               Pendente
                             </Badge>
@@ -306,18 +360,32 @@ export const UserSearchModal = ({
                       </div>
                     </div>
 
-                    {friendshipStatus[result.id] === "accepted" ? (
+                    {friendshipStatus[result.user_id] === "accepted" ? (
                       <Button size="sm" className="gap-2" disabled>
                         Amigo
                       </Button>
-                    ) : friendshipStatus[result.id] === "pending" ||
-                      sentRequests.has(result.id) ? (
+                    ) : friendshipStatus[result.user_id] === "pending" &&
+                      pendingDirection[result.user_id] === "sent" ? (
+                      <div className="flex items-center gap-2">
+                        <Button size="sm" className="gap-2" disabled>
+                          Já enviado
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => cancelFriendRequest(result.user_id)}
+                        >
+                          Cancelar
+                        </Button>
+                      </div>
+                    ) : friendshipStatus[result.user_id] === "pending" &&
+                      pendingDirection[result.user_id] === "received" ? (
                       <Button size="sm" className="gap-2" disabled>
-                        Já enviado
+                        Pendente
                       </Button>
                     ) : (
                       <Button
-                        onClick={() => sendFriendRequest(result.id)}
+                        onClick={() => sendFriendRequest(result.user_id)}
                         size="sm"
                         className="gap-2"
                       >

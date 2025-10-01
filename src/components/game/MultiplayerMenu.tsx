@@ -74,16 +74,23 @@ export const MultiplayerMenu = ({
     setLoading(true);
     try {
       // First, check if room exists and is available
-      const { data: room, error: fetchError } = await supabase
+      const { data: rooms, error: fetchError } = await supabase
         .from("multiplayer_rooms")
         .select("*")
         .eq("room_code", roomCode.trim())
         .eq("game_status", "waiting")
         .is("guest_id", null)
-        .single();
+        .limit(1);
+
+      const room = rooms && Array.isArray(rooms) ? rooms[0] : null;
 
       if (fetchError || !room) {
-        throw new Error("Sala não encontrada ou já ocupada");
+        toast({
+          title: "Sala indisponível",
+          description: "Código inválido, sala cheia ou já iniciada",
+          variant: "destructive",
+        });
+        return;
       }
 
       // Join the room
