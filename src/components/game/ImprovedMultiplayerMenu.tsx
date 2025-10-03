@@ -275,22 +275,22 @@ export const ImprovedMultiplayerMenu = ({
   if (currentRoom) {
     return (
       <div className="min-h-screen bg-gradient-primary p-4 safe-top safe-bottom overflow-hidden relative">
-        {/* Elementos de background animados */}
+        {/* Elementos de background animados - Responsivos */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 left-10 w-32 h-32 bg-blue-500/20 rounded-full blur-xl animate-pulse"></div>
+          <div className="absolute top-10 sm:top-20 left-4 sm:left-10 w-16 h-16 sm:w-32 sm:h-32 bg-blue-500/10 sm:bg-blue-500/20 rounded-full blur-xl animate-pulse"></div>
           <div
-            className="absolute top-40 right-20 w-24 h-24 bg-purple-500/20 rounded-full blur-xl animate-pulse"
+            className="absolute top-20 sm:top-40 right-4 sm:right-20 w-12 h-12 sm:w-24 sm:h-24 bg-purple-500/10 sm:bg-purple-500/20 rounded-full blur-xl animate-pulse"
             style={{ animationDelay: "1s" }}
           ></div>
           <div
-            className="absolute bottom-40 left-20 w-40 h-40 bg-green-500/20 rounded-full blur-xl animate-pulse"
+            className="absolute bottom-20 sm:bottom-40 left-4 sm:left-20 w-20 h-20 sm:w-40 sm:h-40 bg-green-500/10 sm:bg-green-500/20 rounded-full blur-xl animate-pulse"
             style={{ animationDelay: "2s" }}
           ></div>
         </div>
 
-        <div className="relative z-10 flex flex-col h-full max-w-2xl mx-auto justify-between min-h-[90vh]">
+        <div className="relative z-10 flex flex-col h-full max-w-2xl mx-auto justify-center px-4 sm:px-0">
           {/* Cabeçalho com botão voltar e status da sala */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-6">
             {/* Botão para voltar ao menu principal */}
             <Button
               variant="ghost"
@@ -309,31 +309,31 @@ export const ImprovedMultiplayerMenu = ({
           </div>
 
           {/* Card principal da sala */}
-          <Card className="bg-white/20 backdrop-blur-xl border-white/30 shadow-2xl mb-4">
-            <CardHeader className="text-center pb-4">
+          <Card className="bg-white/20 backdrop-blur-xl border-white/30 shadow-2xl mb-6 max-w-lg mx-auto">
+            <CardHeader className="text-center pb-4 px-4 sm:px-6">
               {/* Ícone decorativo da sala */}
-              <div className="mx-auto mb-4 p-4 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl w-fit">
-                <Users className="h-12 w-12 text-white" />
+              <div className="mx-auto mb-2 p-2 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl w-fit">
+                <Users className="h-8 w-8 text-white" />
               </div>
               {/* Título e descrição da sala */}
-              <CardTitle className="text-2xl font-bold text-white">
+              <CardTitle className="text-xl font-bold text-white">
                 Sala Multiplayer
               </CardTitle>
-              <CardDescription className="text-white/80 text-lg">
+              <CardDescription className="text-white/80 text-sm">
                 Compartilhe o código com seus amigos
               </CardDescription>
             </CardHeader>
 
-            <CardContent className="space-y-8">
+            <CardContent className="space-y-6 px-4 sm:px-6">
               {/* Exibição do código da sala */}
               <div className="text-center">
-                <div className="relative mb-6">
+                <div className="relative mb-4">
                   {/* Card destacado com o código da sala */}
-                  <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-8 rounded-3xl shadow-2xl transform hover:scale-105 transition-all duration-300">
+                  <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-300">
                     <div className="flex items-center justify-center gap-4">
                       <QrCode className="h-8 w-8 text-white/60" />
                       {/* Código da sala em fonte monospace */}
-                      <div className="text-4xl font-black text-white tracking-wider font-mono">
+                      <div className="text-2xl font-black text-white tracking-wider font-mono">
                         {currentRoom.room_code}
                       </div>
                       <div
@@ -353,13 +353,14 @@ export const ImprovedMultiplayerMenu = ({
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-3 justify-center">
+                <div className="flex flex-row gap-3 justify-center">
                   <Button
                     onClick={copyRoomCode}
-                    size="lg"
+                    size="sm"
+                    variant="outline"
                     className={cn(
-                      "gap-3 px-6 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700",
-                      copied && "from-emerald-600 to-teal-600"
+                      "gap-2 px-3 sm:px-4 text-white border-white/70 bg-white/10 hover:bg-white/30 hover:border-white/90 shadow-lg text-sm",
+                      copied && "bg-emerald-600/20 border-emerald-400/70"
                     )}
                   >
                     {copied ? (
@@ -371,20 +372,10 @@ export const ImprovedMultiplayerMenu = ({
                   </Button>
 
                   <Button
-                    onClick={shareRoom}
-                    variant="outline"
-                    size="lg"
-                    className="gap-3 px-6 text-white border-white/50 hover:bg-white/30 hover:border-white/70"
-                  >
-                    <Share2 className="h-5 w-5" />
-                    Compartilhar
-                  </Button>
-
-                  <Button
                     onClick={regenerateRoomCode}
+                    size="sm"
                     variant="outline"
-                    size="lg"
-                    className="gap-2 px-4 text-white border-white/50 hover:bg-white/30 hover:border-white/70"
+                    className="gap-2 px-3 sm:px-4 text-white border-white/70 bg-white/10 hover:bg-white/30 hover:border-white/90 shadow-lg text-sm"
                   >
                     <RefreshCw className="h-4 w-4" />
                   </Button>
@@ -398,8 +389,8 @@ export const ImprovedMultiplayerMenu = ({
                     className={cn(
                       "px-4 py-2 rounded-full transition-all duration-300",
                       currentRoom.guest_id
-                        ? "bg-green-500/30 text-white border border-green-400/50"
-                        : "bg-orange-500/30 text-white border border-orange-400/50 animate-pulse"
+                        ? "bg-white/20 text-white border border-white/50"
+                        : "bg-white/20 text-white border border-white/50 animate-pulse"
                     )}
                   >
                     <div className="flex items-center gap-2">
@@ -407,8 +398,8 @@ export const ImprovedMultiplayerMenu = ({
                         className={cn(
                           "w-2 h-2 rounded-full",
                           currentRoom.guest_id
-                            ? "bg-green-400"
-                            : "bg-orange-400 animate-ping"
+                            ? "bg-green-500"
+                            : "bg-orange-500 animate-ping"
                         )}
                       />
                       {currentRoom.guest_id
@@ -423,7 +414,7 @@ export const ImprovedMultiplayerMenu = ({
                   <Button
                     onClick={startGame}
                     size="lg"
-                    className="w-full h-14 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-lg font-bold transform hover:scale-105 transition-all duration-300 shadow-xl"
+                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-base font-bold transform hover:scale-105 transition-all duration-300 shadow-xl"
                   >
                     <div className="flex items-center gap-3">
                       <Gamepad2 className="h-6 w-6" />
@@ -446,23 +437,6 @@ export const ImprovedMultiplayerMenu = ({
               </div>
             </CardContent>
           </Card>
-
-          {/* Tips Card */}
-          <Card className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border-yellow-400/30">
-            <CardContent className="p-4">
-              <div className="flex items-start gap-3">
-                <Trophy className="h-5 w-5 text-yellow-400 mt-0.5" />
-                <div className="space-y-1">
-                  <h4 className="text-white font-medium">Dica:</h4>
-                  <p className="text-white/90 text-sm">
-                    Compartilhe o código através de WhatsApp, Discord ou
-                    qualquer app de mensagem. Seus amigos só precisam colar o
-                    código aqui!
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </div>
     );
@@ -471,39 +445,41 @@ export const ImprovedMultiplayerMenu = ({
   // Renderização do menu principal (quando não há sala ativa)
   return (
     <div className="min-h-screen bg-gradient-primary p-4 safe-top safe-bottom overflow-hidden relative">
-      {/* Elementos de background animados */}
+      {/* Elementos de background animados - Responsivos */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-10 sm:top-20 left-4 sm:left-10 w-20 h-20 sm:w-40 sm:h-40 bg-blue-500/5 sm:bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div
-          className="absolute top-60 right-10 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl animate-pulse"
+          className="absolute top-30 sm:top-60 right-4 sm:right-10 w-16 h-16 sm:w-32 sm:h-32 bg-purple-500/5 sm:bg-purple-500/10 rounded-full blur-3xl animate-pulse"
           style={{ animationDelay: "2s" }}
         ></div>
         <div
-          className="absolute bottom-40 left-1/3 w-48 h-48 bg-green-500/10 rounded-full blur-3xl animate-pulse"
+          className="absolute bottom-20 sm:bottom-40 left-1/4 sm:left-1/3 w-24 h-24 sm:w-48 sm:h-48 bg-green-500/5 sm:bg-green-500/10 rounded-full blur-3xl animate-pulse"
           style={{ animationDelay: "4s" }}
         ></div>
       </div>
 
-      <div className="relative z-10 flex flex-col h-full justify-center max-w-md mx-auto">
+      <div className="relative z-10 flex flex-col h-full justify-center max-w-md mx-auto min-h-[90vh] px-4 sm:px-0">
         {/* Cabeçalho principal do menu */}
-        <div className="text-center mb-12">
-          {/* Ícone principal do multiplayer */}
-          <div className="mx-auto mb-6 p-6 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-3xl w-fit backdrop-blur-xl">
-            <Users className="h-16 w-16 text-white" />
+        <div className="flex-1">
+          <div className="text-center mb-6">
+            {/* Ícone principal do multiplayer */}
+            <div className="mx-auto mb-4 p-3 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl w-fit backdrop-blur-xl">
+              <Users className="h-10 w-10 text-white" />
+            </div>
+            {/* Título principal */}
+            <h1 className="text-3xl font-bold text-white mb-2">
+              Modo Multiplayer
+            </h1>
+            {/* Descrição do modo */}
+            <p className="text-white/80 text-base">
+              Jogue com seus amigos em tempo real
+            </p>
           </div>
-          {/* Título principal */}
-          <h1 className="text-4xl font-bold text-white mb-4">
-            Modo Multiplayer
-          </h1>
-          {/* Descrição do modo */}
-          <p className="text-white/80 text-lg max-w-sm mx-auto">
-            Jogue com seus amigos em tempo real em dispositivos diferentes
-          </p>
         </div>
 
         {/* Main Options */}
-        <Card className="bg-white/20 backdrop-blur-xl border-white/30 shadow-2xl mb-8">
-          <CardContent className="p-8 space-y-8">
+        <Card className="bg-white/20 backdrop-blur-xl border-white/30 shadow-2xl mb-4">
+          <CardContent className="p-4 sm:p-6 space-y-4 sm:space-y-6">
             {/* Create Room */}
             <div className="space-y-6">
               <div className="text-center">
@@ -519,7 +495,7 @@ export const ImprovedMultiplayerMenu = ({
                 onClick={createRoom}
                 disabled={loading}
                 size="lg"
-                className="w-full h-16 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg font-bold transform hover:scale-105 transition-all duration-300 shadow-xl"
+                className="w-full h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-base font-bold transform hover:scale-105 transition-all duration-300 shadow-xl"
               >
                 <div className="flex items-center gap-3">
                   <Plus className="h-6 w-6" />
@@ -534,7 +510,7 @@ export const ImprovedMultiplayerMenu = ({
                 <div className="w-full border-t border-white/20"></div>
               </div>
               <div className="relative flex justify-center">
-                <span className="bg-gradient-primary px-4 text-white/60 text-sm font-medium">
+                <span className="bg-white/20 backdrop-blur-lg px-4 py-1 rounded-full text-white/80 text-sm font-medium border border-white/30">
                   OU
                 </span>
               </div>
@@ -558,7 +534,7 @@ export const ImprovedMultiplayerMenu = ({
                     placeholder="Código da sala (ex: ABC123)"
                     value={roomCode}
                     onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
-                    className="pl-12 text-center text-xl font-bold h-14 bg-white/10 border-white/30 text-white placeholder:text-white/50 focus:bg-white/20"
+                    className="pl-12 text-center text-lg font-bold h-12 bg-white/10 border-white/30 text-white placeholder:text-white/50 focus:bg-white/20"
                     maxLength={6}
                   />
                 </div>
@@ -568,7 +544,7 @@ export const ImprovedMultiplayerMenu = ({
                   disabled={loading || !roomCode.trim()}
                   size="lg"
                   variant="outline"
-                  className="w-full h-14 text-white border-white/50 hover:bg-white/30 hover:border-white/70 text-lg font-bold transform hover:scale-105 transition-all duration-300 shadow-lg"
+                  className="w-full h-12 text-white border-white/50 bg-white/20 hover:bg-white/30 hover:border-white/70 text-base font-bold transform hover:scale-105 transition-all duration-300 shadow-lg"
                 >
                   <div className="flex items-center gap-3">
                     <UserPlus className="h-5 w-5" />
@@ -581,8 +557,8 @@ export const ImprovedMultiplayerMenu = ({
         </Card>
 
         {/* Features Info */}
-        <Card className="bg-white/20 backdrop-blur-xl border-white/30 shadow-2xl mb-8">
-          <CardContent className="p-6">
+        <Card className="bg-white/20 backdrop-blur-xl border-white/30 shadow-2xl mb-4">
+          <CardContent className="p-4">
             <div className="grid grid-cols-3 gap-4 text-center">
               <div className="space-y-2">
                 <div className="mx-auto w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
