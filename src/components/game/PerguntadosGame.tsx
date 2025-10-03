@@ -15,7 +15,7 @@ import { GameTimer } from "./GameTimer";
 import { SettingsModal } from "./SettingsModal";
 import { StatsModal } from "./StatsModal";
 import { AdvancedStatsModal } from "@/components/stats/AdvancedStatsModal";
-import { MultiplayerMenu } from "./MultiplayerMenu";
+import { ImprovedMultiplayerMenu } from "./ImprovedMultiplayerMenu";
 import { MultiplayerGame } from "./MultiplayerGame";
 import { ImprovedFriendsModal } from "../friends/ImprovedFriendsModal";
 import { AchievementsModal } from "@/components/achievements/AchievementsModal";
@@ -381,7 +381,7 @@ export const BrainBoltGame = () => {
   if (gameState.gamePhase === "multiplayer") {
     if (multiplayerPhase === "menu") {
       return (
-        <MultiplayerMenu
+        <ImprovedMultiplayerMenu
           onStartMultiplayer={handleMultiplayerStart}
           onBackToMenu={backToMenu}
         />
