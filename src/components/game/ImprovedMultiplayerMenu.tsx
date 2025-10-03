@@ -45,7 +45,7 @@ export const ImprovedMultiplayerMenu = ({
   // Hooks principais
   const { user } = useAuth(); // Usuário logado
   const { toast } = useToast(); // Sistema de notificações toast
-  
+
   // Estados locais da interface
   const [roomCode, setRoomCode] = useState(""); // Código da sala para entrar
   const [loading, setLoading] = useState(false); // Carregamento de operações
@@ -57,7 +57,8 @@ export const ImprovedMultiplayerMenu = ({
   const generateRoomCode = () => {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; // Caracteres permitidos
     let result = "";
-    for (let i = 0; i < 6; i++) { // 6 caracteres de tamanho
+    for (let i = 0; i < 6; i++) {
+      // 6 caracteres de tamanho
       result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return result;
