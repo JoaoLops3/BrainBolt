@@ -7,12 +7,9 @@
 
 import { WebSocketServer, WebSocket } from "ws";
 import { createServer } from "http";
-import { supabase } from "../src/integrations/supabase/client";
+import { supabaseServer as supabase } from "./supabase-server";
 
-// ============================================
 // TYPES
-// ============================================
-
 interface Device {
   id: string;
   ws: WebSocket;
@@ -50,16 +47,12 @@ interface QuestionMessage {
   category: string;
 }
 
-// ============================================
 // STATE
-// ============================================
 
 const devices = new Map<string, Device>();
 const rooms = new Map<string, PhysicalRoom>();
 
-// ============================================
 // WEBSOCKET SERVER
-// ============================================
 
 const httpServer = createServer();
 const wss = new WebSocketServer({
@@ -70,9 +63,7 @@ const wss = new WebSocketServer({
 console.log("🚀 Brain Bolt Hardware WebSocket Server");
 console.log("=========================================\n");
 
-// ============================================
 // CONNECTION HANDLER
-// ============================================
 
 wss.on("connection", (ws: WebSocket, req) => {
   const clientIP = req.socket.remoteAddress;
@@ -105,9 +96,7 @@ wss.on("connection", (ws: WebSocket, req) => {
   });
 });
 
-// ============================================
 // MESSAGE HANDLERS
-// ============================================
 
 async function handleMessage(ws: WebSocket, message: any) {
   console.log("📨 Mensagem recebida:", message.type);
@@ -142,9 +131,7 @@ async function handleMessage(ws: WebSocket, message: any) {
   }
 }
 
-// ============================================
 // REGISTER DEVICE
-// ============================================
 
 async function handleRegister(ws: WebSocket, message: any) {
   const { device, mac } = message;
@@ -367,9 +354,7 @@ async function handleEndGame(ws: WebSocket, message: any) {
   }, 60000);
 }
 
-// ============================================
 // UTILITY FUNCTIONS
-// ============================================
 
 function findDeviceByWs(ws: WebSocket): Device | undefined {
   for (const device of devices.values()) {
@@ -492,9 +477,7 @@ async function checkAnswer(
   return data.correct_answer === buttonIndex;
 }
 
-// ============================================
 // HEARTBEAT
-// ============================================
 
 setInterval(() => {
   wss.clients.forEach((ws) => {
@@ -504,9 +487,7 @@ setInterval(() => {
   });
 }, 30000);
 
-// ============================================
 // CLEANUP
-// ============================================
 
 setInterval(() => {
   const now = new Date();
@@ -533,9 +514,7 @@ setInterval(() => {
   }
 }, 60000);
 
-// ============================================
 // START SERVER
-// ============================================
 
 const PORT = process.env.WS_PORT || 8080;
 

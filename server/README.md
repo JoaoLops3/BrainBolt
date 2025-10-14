@@ -277,7 +277,7 @@ O servidor se conecta ao Supabase para:
 - Buscar perguntas customizadas
 - Registrar estatísticas de uso
 
-Configure as credenciais do Supabase em `../src/integrations/supabase/client.ts`.
+O servidor utiliza um cliente Supabase configurado especificamente para ambiente Node.js (`supabase-server.ts`), sem dependências de APIs do navegador como `localStorage`. Isso garante compatibilidade total com o ambiente de servidor.
 
 ## 🤝 Contribuindo
 
