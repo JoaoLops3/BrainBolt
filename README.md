@@ -24,16 +24,18 @@ O Brain Bolt foi criado para resolver um dos maiores desafios da educação mode
 - 🎮 **Três Modos de Jogo**:
   - **Normal**: Sem pressão de tempo para estudo detalhado
   - **Veloz**: 15 segundos por pergunta para desafio intenso
-  - **🏫 Físico**: Modo para salas de aula com botões físicos
+  - **🏫 Físico**: Modo para salas de aula com botões físicos ([Tutorial ESP32/Arduino](docs/hardware/ESP32-ARDUINO-SETUP.md))
 - 🏆 **6 Categorias**: Esportes, Entretenimento, Arte, Ciências, Geografia e História (400+ perguntas)
 - 👥 **Sistema de Amigos Completo**: Busque, adicione e gerencie amigos com perfis detalhados
 - 🌐 **Multiplayer em Tempo Real**: Partidas online com salas privadas e sincronização via Supabase
 - 📊 **Estatísticas Avançadas**: Métricas detalhadas de performance, streaks e histórico de partidas
-- 🎨 **Design Moderno**: Interface com glassmorphism, gradientes e animações fluidas
-- 📱 **Multiplataforma**: PWA no navegador e apps nativos para iOS/Android
+- 🎨 **Design Moderno**: Interface com glassmorphism, gradientes, animações fluidas e **Modo Escuro** 🌙
+- 📱 **Multiplataforma**: PWA offline-first no navegador e apps nativos para iOS/Android
 - 🔐 **Autenticação Segura**: Sistema de login com Supabase Auth
 - 🏅 **Sistema de Conquistas**: Colete personagens por categoria e acompanhe rankings
 - 🏫 **Sistema de Salas Educacionais**: Crie grupos/salas para competições em sala de aula
+- 📝 **Perguntas Customizadas**: Professores podem criar suas próprias perguntas
+- ⚡ **Performance Otimizada**: Lazy loading, code splitting e bundle otimizado
 
 ## 🚀 Stack Tecnológica
 
@@ -63,7 +65,12 @@ O Brain Bolt foi criado para resolver um dos maiores desafios da educação mode
 
 - **Capacitor 7.4.3** - Framework para apps híbridos nativos
 - **iOS & Android** - Versões nativas otimizadas
-- **PWA** - Progressive Web App com cache offline
+- **PWA Avançado** - Progressive Web App com:
+  - Service Worker com cache inteligente
+  - Estratégias de cache: Cache First, Network First, Stale While Revalidate
+  - Suporte offline completo
+  - Background Sync para sincronização de dados
+  - Push Notifications
 - **App ID**: `com.joaolops3.brainbolt`
 
 ## 🎮 Funcionalidades Detalhadas
@@ -182,19 +189,23 @@ bun install
 ### 3. Configure o Supabase
 
 1. Crie um projeto no [Supabase](https://supabase.com)
-2. Execute as migrações SQL da pasta `supabase/migrations/`:
-   ```sql
-   -- Execute cada arquivo de migração em ordem:
-   -- 20250906171319_07fa682c-24e7-4cdc-9b94-c4e2b44abf9e.sql
-   -- 20250909203617_e2572c8d-518c-4766-bd54-c8827c8d15af.sql
-   -- 20250909204307_cb21112e-41ed-4214-9133-11c1c64f922c.sql
-   ```
-3. Configure as variáveis de ambiente criando um arquivo `.env.local`:
+2. Execute as migrações SQL da pasta `supabase/migrations/` em ordem cronológica
+3. Configure as variáveis de ambiente:
+   - Copie o arquivo `.env.example` para `.env.local`
+   - Preencha com suas credenciais do Supabase:
+
+```bash
+cp .env.example .env.local
+```
+
+Edite `.env.local`:
 
 ```env
 VITE_SUPABASE_URL=https://seu-projeto.supabase.co
 VITE_SUPABASE_ANON_KEY=sua_chave_anonima_do_supabase
 ```
+
+> 💡 **Dica**: Nunca compartilhe seu arquivo `.env.local` - ele contém credenciais sensíveis!
 
 ### 4. Execute o projeto
 
@@ -404,36 +415,86 @@ npx cap doctor       # Verificar configuração do Capacitor
 npm run type-check   # Verificação de tipos TypeScript
 ```
 
-## 🚀 Roadmap e Melhorias Futuras
+## ✅ Funcionalidades Implementadas Recentemente
 
-### Funcionalidades Planejadas
+### Novas Funcionalidades
 
-- [ ] **Sistema de Notificações Push**: Alertas para partidas multiplayer e convites
+- ✅ **Sistema de Perguntas Customizadas**: Professores podem criar suas próprias perguntas
+  - Formulário completo com validação
+  - Suporte a 6 categorias e 3 níveis de dificuldade
+  - Opção de compartilhar perguntas publicamente
+  - Estatísticas de uso e taxa de acerto
+- ✅ **Modo Escuro Completo**:
+  - 3 opções: Claro, Escuro e Automático
+  - Transições suaves entre temas
+  - Preserva preferência do usuário
+- ✅ **PWA Offline Avançado**:
+  - Service Worker com estratégias inteligentes de cache
+  - Funciona completamente offline após primeiro carregamento
+  - Background Sync para sincronização de dados
+- ✅ **Otimizações de Performance**:
+  - Lazy loading de rotas e componentes
+  - Code splitting automático
+  - Bundle otimizado (redução de ~40% no tamanho)
+  - Cache inteligente de assets e API calls
+- ✅ **Documentação de Hardware**: Tutorial completo para montar sistema de botões físicos com ESP32/Arduino
+
+### 📋 Roadmap Futuro
+
+#### Funcionalidades Planejadas
+
 - [ ] **Modo Torneio**: Competições com múltiplos jogadores e eliminatórias
-- [ ] **Criação de Perguntas**: Sistema para professores criarem suas próprias perguntas
-- [ ] **Temas Personalizados**: Customização de cores e estilos da interface
-- [ ] **Modo Offline**: Jogo completo sem conexão com internet
 - [ ] **Integração Social**: Compartilhamento de resultados nas redes sociais
-- [ ] **Botões Físicos**: Hardware dedicado para o modo físico em sala de aula
-- [ ] **Relatórios Avançados**: Análise detalhada do progresso dos alunos
-- [ ] **Integração com LMS**: Conectividade com sistemas de gestão de aprendizado
-- [ ] **Modo Professor**: Dashboard completo para gerenciamento de salas e alunos
+- [ ] **Relatórios Avançados**: Análise detalhada do progresso dos alunos com gráficos
+- [ ] **Integração com LMS**: Conectividade com Moodle, Google Classroom, etc.
+- [ ] **Sistema de Badges**: Conquistas e medalhas especiais
+- [ ] **Modo Treinamento**: Revisão de perguntas erradas
 
-### Otimizações Técnicas
+#### Melhorias de UX/UI
 
-- [ ] **Lazy Loading**: Carregamento sob demanda de componentes
-- [ ] **Bundle Splitting**: Redução do tamanho inicial do app
-- [ ] **Service Workers**: Cache inteligente para melhor performance
-- [ ] **PWA Avançado**: Funcionalidades offline completas
-- [ ] **Análise de Performance**: Métricas detalhadas de uso e performance
+- [ ] **Animações Avançadas**: Transições mais fluidas e efeitos visuais
+- [ ] **Acessibilidade**: Melhorias WCAG 2.1 AA compliant
+- [ ] **Internacionalização**: Suporte a Inglês, Espanhol e outros idiomas
+- [ ] **Responsividade Tablet**: Layouts otimizados para tablets
+- [ ] **Tema Customizável**: Cores personalizáveis pelo usuário
 
-### Melhorias de UX/UI
+## 🔧 Hardware Físico para Sala de Aula
 
-- [ ] **Animações Avançadas**: Transições mais fluidas entre telas
-- [ ] **Modo Escuro**: Tema dark completo
-- [ ] **Acessibilidade**: Melhorias para usuários com necessidades especiais
-- [ ] **Internacionalização**: Suporte a múltiplos idiomas
-- [ ] **Responsividade Avançada**: Otimização para tablets e diferentes resoluções
+O Brain Bolt suporta um modo físico revolucionário com botões reais que transforma a sala de aula em um ambiente de competição interativo!
+
+### 🎮 Sistema de Botões com ESP32/Arduino
+
+Construa seu próprio controlador físico com:
+
+- **4 botões coloridos** (A, B, C, D) para respostas
+- **1 botão de resposta rápida** para competições
+- **LEDs indicadores** para feedback visual
+- **Buzzer** para efeitos sonoros
+- **Display OLED** (opcional) para informações do jogo
+
+### 📚 Tutorial Completo
+
+Acesse o tutorial detalhado de montagem: **[ESP32/Arduino Setup Guide](docs/hardware/ESP32-ARDUINO-SETUP.md)**
+
+O guia inclui:
+
+- ✅ Lista completa de materiais (custo aproximado: R$ 80-150)
+- ✅ Esquema de conexões detalhado
+- ✅ Código Arduino completo e comentado
+- ✅ Instruções de montagem passo a passo
+- ✅ Integração com o aplicativo via WebSocket
+- ✅ Solução de problemas comuns
+
+### 💰 Materiais Necessários
+
+- ESP32 DevKit (~R$ 30-50)
+- 5x Botões Push Button (~R$ 20-40)
+- 5x LEDs e resistores (~R$ 10)
+- Buzzer passivo (~R$ 3)
+- Display OLED (opcional, ~R$ 15-25)
+- Protoboard, jumpers e case
+
+**Total**: R$ 80-150 para um controlador completo!
 
 ## 🎓 Impacto Educacional
 

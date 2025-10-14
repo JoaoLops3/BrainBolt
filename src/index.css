@@ -2,14 +2,14 @@
 @import './styles/animations.css';
 @import './styles/animations-fix.css';
 @import './styles/global-animations.css';
+@import './styles/theme.css';
+@import './styles/responsive.css';
+@import './styles/tablet.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
 
 @layer base {
   :root {

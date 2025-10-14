@@ -1,310 +1,418 @@
-const CACHE_NAME = 'perguntados-v1.0.0';
-const STATIC_CACHE = 'perguntados-static-v1.0.0';
-const DYNAMIC_CACHE = 'perguntados-dynamic-v1.0.0';
+/**
+ * BRAIN BOLT - Service Worker Avançado
+ * PWA Offline-First com Cache Inteligente
+ */
 
-// Assets to cache for offline functionality
+const VERSION = '2.0.0';
+const CACHE_PREFIX = 'brainbolt';
+const CACHE_NAME = `${CACHE_PREFIX}-v${VERSION}`;
+const STATIC_CACHE = `${CACHE_PREFIX}-static-v${VERSION}`;
+const DYNAMIC_CACHE = `${CACHE_PREFIX}-dynamic-v${VERSION}`;
+const IMAGE_CACHE = `${CACHE_PREFIX}-images-v${VERSION}`;
+const API_CACHE = `${CACHE_PREFIX}-api-v${VERSION}`;
+
+// Cache duration (in milliseconds)
+const CACHE_DURATION = {
+  static: 30 * 24 * 60 * 60 * 1000,  // 30 dias
+  dynamic: 7 * 24 * 60 * 60 * 1000,   // 7 dias
+  api: 5 * 60 * 1000,                 // 5 minutos
+  images: 30 * 24 * 60 * 60 * 1000,  // 30 dias
+};
+
+// Assets estáticos críticos para cache
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/Brain-Bolt-Logo.png',
   '/manifest.json',
-  '/src/main.tsx',
-  '/src/App.tsx',
-  '/src/index.css'
+  '/placeholder.svg',
 ];
 
-// API endpoints to cache
-const API_CACHE_PATTERNS = [
-  /\/api\/questions/,
-  /\/api\/profiles/,
-  /\/api\/game-sessions/,
-  /\/api\/multiplayer/
+// Rotas da API para cache
+const API_ROUTES = [
+  '/api/profiles',
+  '/api/questions',
+  '/api/game-sessions',
+  '/api/classrooms',
 ];
 
-// Install event - cache static assets
+// ==================================================
+// INSTALL - Cachear assets essenciais
+// ==================================================
 self.addEventListener('install', (event) => {
-  console.log('Service Worker: Installing...');
-  
+  console.log(`[SW] Installing version ${VERSION}...`);
+
   event.waitUntil(
     caches.open(STATIC_CACHE)
       .then((cache) => {
-        console.log('Service Worker: Caching static assets');
+        console.log('[SW] Caching static assets');
         return cache.addAll(STATIC_ASSETS);
       })
       .then(() => {
-        console.log('Service Worker: Static assets cached');
+        console.log('[SW] Static assets cached successfully');
         return self.skipWaiting();
       })
       .catch((error) => {
-        console.error('Service Worker: Failed to cache static assets', error);
+        console.error('[SW] Failed to cache static assets:', error);
       })
   );
 });
 
-// Activate event - clean up old caches
+// ==================================================
+// ACTIVATE - Limpar caches antigas
+// ==================================================
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker: Activating...');
-  
+  console.log('[SW] Activating...');
+
   event.waitUntil(
     caches.keys()
       .then((cacheNames) => {
         return Promise.all(
-          cacheNames.map((cacheName) => {
-            if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
-              console.log('Service Worker: Deleting old cache', cacheName);
-              return caches.delete(cacheName);
-            }
-          })
+          cacheNames
+            .filter((name) => name.startsWith(CACHE_PREFIX) && name !== STATIC_CACHE && name !== DYNAMIC_CACHE && name !== IMAGE_CACHE && name !== API_CACHE)
+            .map((name) => {
+              console.log('[SW] Deleting old cache:', name);
+              return caches.delete(name);
+            })
         );
       })
       .then(() => {
-        console.log('Service Worker: Activated');
+        console.log('[SW] Activated');
         return self.clients.claim();
       })
   );
 });
 
-// Fetch event - serve from cache or network
+// ==================================================
+// FETCH - Estratégias de cache
+// ==================================================
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip non-GET requests
+  // Ignorar requests não-GET
   if (request.method !== 'GET') {
     return;
   }
 
-  // Handle different types of requests
-  if (isStaticAsset(request)) {
-    event.respondWith(handleStaticAsset(request));
-  } else if (isAPIRequest(request)) {
-    event.respondWith(handleAPIRequest(request));
-  } else if (isPageRequest(request)) {
-    event.respondWith(handlePageRequest(request));
+  // Ignorar chrome extensions e requests externos específicos
+  if (url.protocol === 'chrome-extension:' || url.hostname === 'localhost') {
+    return;
+  }
+
+  // Determinar estratégia baseada no tipo de request
+  if (isImageRequest(url)) {
+    event.respondWith(cacheFirstStrategy(request, IMAGE_CACHE));
+  } else if (isStaticAsset(url)) {
+    event.respondWith(cacheFirstStrategy(request, STATIC_CACHE));
+  } else if (isAPIRequest(url)) {
+    event.respondWith(networkFirstStrategy(request, API_CACHE));
+  } else if (isNavigationRequest(request)) {
+    event.respondWith(networkFirstStrategy(request, DYNAMIC_CACHE));
   } else {
-    event.respondWith(handleOtherRequest(request));
+    event.respondWith(staleWhileRevalidateStrategy(request, DYNAMIC_CACHE));
   }
 });
 
-// Check if request is for static assets
-function isStaticAsset(request) {
-  const url = new URL(request.url);
-  return url.pathname.match(/\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/);
-}
+// ==================================================
+// ESTRATÉGIAS DE CACHE
+// ==================================================
 
-// Check if request is for API
-function isAPIRequest(request) {
-  const url = new URL(request.url);
-  return API_CACHE_PATTERNS.some(pattern => pattern.test(url.pathname));
-}
-
-// Check if request is for a page
-function isPageRequest(request) {
-  const url = new URL(request.url);
-  return url.pathname === '/' || url.pathname.endsWith('.html');
-}
-
-// Handle static assets
-async function handleStaticAsset(request) {
+/**
+ * Cache First - Tenta cache primeiro, depois network
+ * Ideal para: Imagens, fontes, CSS, JS
+ */
+async function cacheFirstStrategy(request, cacheName) {
   try {
-    const cache = await caches.open(STATIC_CACHE);
-    const cachedResponse = await cache.match(request);
+    const cachedResponse = await caches.match(request);
     
     if (cachedResponse) {
-      return cachedResponse;
-    }
-    
-    const networkResponse = await fetch(request);
-    
-    if (networkResponse.ok) {
-      cache.put(request, networkResponse.clone());
-    }
-    
-    return networkResponse;
-  } catch (error) {
-    console.error('Service Worker: Error handling static asset', error);
-    return new Response('Asset not available offline', { status: 404 });
-  }
-}
-
-// Handle API requests
-async function handleAPIRequest(request) {
-  try {
-    const cache = await caches.open(DYNAMIC_CACHE);
-    const cachedResponse = await cache.match(request);
-    
-    // Try network first for API requests
-    try {
-      const networkResponse = await fetch(request);
+      // Verificar se o cache ainda é válido
+      const cachedDate = new Date(cachedResponse.headers.get('date'));
+      const now = new Date();
+      const age = now - cachedDate;
       
-      if (networkResponse.ok) {
-        // Cache successful responses
-        cache.put(request, networkResponse.clone());
-        return networkResponse;
+      if (age < CACHE_DURATION.static) {
+        return cachedResponse;
       }
-    } catch (networkError) {
-      console.log('Service Worker: Network failed, trying cache', networkError);
     }
-    
-    // Fallback to cache if network fails
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-    
-    // Return offline response for API requests
-    return new Response(JSON.stringify({
-      error: 'Offline',
-      message: 'This feature requires an internet connection'
-    }), {
-      status: 503,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  } catch (error) {
-    console.error('Service Worker: Error handling API request', error);
-    return new Response('API not available offline', { status: 503 });
-  }
-}
 
-// Handle page requests
-async function handlePageRequest(request) {
-  try {
-    const cache = await caches.open(STATIC_CACHE);
-    const cachedResponse = await cache.match(request);
-    
-    if (cachedResponse) {
-      return cachedResponse;
-    }
-    
+    // Se não há cache ou está expirado, buscar da rede
     const networkResponse = await fetch(request);
     
-    if (networkResponse.ok) {
+    if (networkResponse && networkResponse.status === 200) {
+      const cache = await caches.open(cacheName);
       cache.put(request, networkResponse.clone());
     }
     
     return networkResponse;
   } catch (error) {
-    console.error('Service Worker: Error handling page request', error);
-    // Return offline page
-    return caches.match('/index.html');
+    // Se falhar, tentar retornar do cache mesmo expirado
+    const cachedResponse = await caches.match(request);
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+    
+    // Retornar fallback se disponível
+    return getOfflineFallback(request);
   }
 }
 
-// Handle other requests
-async function handleOtherRequest(request) {
+/**
+ * Network First - Tenta network primeiro, depois cache
+ * Ideal para: API calls, dados dinâmicos
+ */
+async function networkFirstStrategy(request, cacheName) {
   try {
     const networkResponse = await fetch(request);
+    
+    if (networkResponse && networkResponse.status === 200) {
+      const cache = await caches.open(cacheName);
+      cache.put(request, networkResponse.clone());
+    }
+    
     return networkResponse;
   } catch (error) {
-    console.error('Service Worker: Error handling other request', error);
-    return new Response('Resource not available offline', { status: 404 });
+    const cachedResponse = await caches.match(request);
+    
+    if (cachedResponse) {
+      console.log('[SW] Serving from cache (offline):', request.url);
+      return cachedResponse;
+    }
+    
+    return getOfflineFallback(request);
   }
 }
 
-// Background sync for offline actions
-self.addEventListener('sync', (event) => {
-  console.log('Service Worker: Background sync', event.tag);
+/**
+ * Stale While Revalidate - Serve cache e atualiza em background
+ * Ideal para: Conteúdo que pode estar levemente desatualizado
+ */
+async function staleWhileRevalidateStrategy(request, cacheName) {
+  const cachedResponse = await caches.match(request);
   
-  if (event.tag === 'game-session-sync') {
-    event.waitUntil(syncGameSessions());
-  } else if (event.tag === 'multiplayer-sync') {
-    event.waitUntil(syncMultiplayerData());
+  const networkFetch = fetch(request)
+    .then((networkResponse) => {
+      if (networkResponse && networkResponse.status === 200) {
+        const cache = caches.open(cacheName);
+        cache.then((c) => c.put(request, networkResponse.clone()));
+      }
+      return networkResponse;
+    })
+    .catch(() => null);
+  
+  return cachedResponse || networkFetch;
+}
+
+// ==================================================
+// HELPERS
+// ==================================================
+
+function isImageRequest(url) {
+  return url.pathname.match(/\.(png|jpg|jpeg|gif|svg|webp|ico)$/i);
+}
+
+function isStaticAsset(url) {
+  return url.pathname.match(/\.(js|css|woff|woff2|ttf|eot|otf)$/i);
+}
+
+function isAPIRequest(url) {
+  return url.pathname.includes('/api/') || 
+         url.hostname.includes('supabase.co') ||
+         API_ROUTES.some(route => url.pathname.startsWith(route));
+}
+
+function isNavigationRequest(request) {
+  return request.mode === 'navigate';
+}
+
+async function getOfflineFallback(request) {
+  if (request.destination === 'document') {
+    const cache = await caches.open(STATIC_CACHE);
+    return cache.match('/index.html');
+  }
+  
+  if (isImageRequest(new URL(request.url))) {
+    const cache = await caches.open(STATIC_CACHE);
+    return cache.match('/placeholder.svg');
+  }
+  
+  return new Response('Offline', {
+    status: 503,
+    statusText: 'Service Unavailable',
+    headers: new Headers({
+      'Content-Type': 'text/plain',
+    }),
+  });
+}
+
+// ==================================================
+// BACKGROUND SYNC
+// ==================================================
+self.addEventListener('sync', (event) => {
+  console.log('[SW] Background sync:', event.tag);
+  
+  if (event.tag === 'sync-game-data') {
+    event.waitUntil(syncGameData());
+  } else if (event.tag === 'sync-profile') {
+    event.waitUntil(syncProfile());
   }
 });
 
-// Sync game sessions when back online
-async function syncGameSessions() {
+async function syncGameData() {
   try {
-    const cache = await caches.open(DYNAMIC_CACHE);
-    const requests = await cache.keys();
+    console.log('[SW] Syncing game data...');
     
-    for (const request of requests) {
-      if (request.url.includes('/api/game-sessions')) {
-        try {
-          await fetch(request);
-          await cache.delete(request);
-        } catch (error) {
-          console.error('Service Worker: Failed to sync game session', error);
-        }
+    // Buscar dados pendentes do IndexedDB
+    const pendingData = await getPendingData('game-sessions');
+    
+    if (pendingData && pendingData.length > 0) {
+      // Enviar para API
+      const response = await fetch('/api/game-sessions/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(pendingData),
+      });
+      
+      if (response.ok) {
+        await clearPendingData('game-sessions');
+        console.log('[SW] Game data synced successfully');
+        
+        // Notificar cliente
+        self.clients.matchAll().then((clients) => {
+          clients.forEach((client) => {
+            client.postMessage({
+              type: 'SYNC_COMPLETE',
+              data: 'game-data',
+            });
+          });
+        });
       }
     }
   } catch (error) {
-    console.error('Service Worker: Error syncing game sessions', error);
+    console.error('[SW] Failed to sync game data:', error);
   }
 }
 
-// Sync multiplayer data when back online
-async function syncMultiplayerData() {
+async function syncProfile() {
   try {
-    const cache = await caches.open(DYNAMIC_CACHE);
-    const requests = await cache.keys();
+    console.log('[SW] Syncing profile...');
+    const pendingData = await getPendingData('profile');
     
-    for (const request of requests) {
-      if (request.url.includes('/api/multiplayer')) {
-        try {
-          await fetch(request);
-          await cache.delete(request);
-        } catch (error) {
-          console.error('Service Worker: Failed to sync multiplayer data', error);
-        }
+    if (pendingData) {
+      const response = await fetch('/api/profiles/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(pendingData),
+      });
+      
+      if (response.ok) {
+        await clearPendingData('profile');
+        console.log('[SW] Profile synced successfully');
       }
     }
   } catch (error) {
-    console.error('Service Worker: Error syncing multiplayer data', error);
+    console.error('[SW] Failed to sync profile:', error);
   }
 }
 
-// Push notifications
+// ==================================================
+// PUSH NOTIFICATIONS
+// ==================================================
 self.addEventListener('push', (event) => {
-  console.log('Service Worker: Push received', event);
+  console.log('[SW] Push notification received');
+  
+  let data = {
+    title: 'Brain Bolt',
+    body: 'Nova notificação!',
+    icon: '/Brain-Bolt-Logo.png',
+  };
+  
+  if (event.data) {
+    try {
+      data = event.data.json();
+    } catch (e) {
+      data.body = event.data.text();
+    }
+  }
   
   const options = {
-    body: event.data ? event.data.text() : 'Nova notificação do Brain Bolt!',
-    icon: '/Brain-Bolt-Logo.png',
+    body: data.body,
+    icon: data.icon || '/Brain-Bolt-Logo.png',
     badge: '/Brain-Bolt-Logo.png',
     vibrate: [200, 100, 200],
-    data: {
-      dateOfArrival: Date.now(),
-      primaryKey: 1
-    },
+    data: data.data || {},
     actions: [
       {
-        action: 'explore',
-        title: 'Jogar Agora',
-        icon: '/Brain-Bolt-Logo.png'
+        action: 'open',
+        title: 'Abrir',
       },
       {
         action: 'close',
         title: 'Fechar',
-        icon: '/Brain-Bolt-Logo.png'
-      }
-    ]
+      },
+    ],
   };
   
   event.waitUntil(
-    self.registration.showNotification('Brain Bolt', options)
+    self.registration.showNotification(data.title, options)
   );
 });
 
-// Notification click
 self.addEventListener('notificationclick', (event) => {
-  console.log('Service Worker: Notification clicked', event);
-  
   event.notification.close();
   
-  if (event.action === 'explore') {
+  if (event.action === 'open' || !event.action) {
     event.waitUntil(
-      clients.openWindow('/')
+      clients.openWindow(event.notification.data.url || '/')
     );
   }
 });
 
-// Message handling
+// ==================================================
+// MESSAGE HANDLER
+// ==================================================
 self.addEventListener('message', (event) => {
-  console.log('Service Worker: Message received', event.data);
+  console.log('[SW] Message received:', event.data);
   
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
+  
+  if (event.data && event.data.type === 'CACHE_URLS') {
+    event.waitUntil(
+      caches.open(DYNAMIC_CACHE)
+        .then((cache) => cache.addAll(event.data.urls))
+    );
+  }
+  
+  if (event.data && event.data.type === 'CLEAR_CACHE') {
+    event.waitUntil(
+      caches.keys().then((names) => {
+        return Promise.all(
+          names.map((name) => {
+            if (name.startsWith(CACHE_PREFIX)) {
+              return caches.delete(name);
+            }
+          })
+        );
+      })
+    );
+  }
 });
 
-console.log('Service Worker: Loaded successfully');
+// ==================================================
+// INDEXEDDB HELPERS (para Background Sync)
+// ==================================================
+async function getPendingData(storeName) {
+  // TODO: Implementar leitura do IndexedDB
+  // Por enquanto retorna null
+  return null;
+}
+
+async function clearPendingData(storeName) {
+  // TODO: Implementar limpeza do IndexedDB
+  return;
+}
+
+console.log(`[SW] Brain Bolt Service Worker v${VERSION} loaded`);

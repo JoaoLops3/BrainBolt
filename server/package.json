@@ -1,0 +1,29 @@
+{
+  "name": "brainbolt-hardware-server",
+  "version": "1.0.0",
+  "description": "WebSocket server for Brain Bolt physical hardware (ESP32/Arduino)",
+  "main": "hardware-websocket.ts",
+  "scripts": {
+    "start": "tsx hardware-websocket.ts",
+    "dev": "tsx watch hardware-websocket.ts",
+    "build": "tsc"
+  },
+  "keywords": [
+    "websocket",
+    "esp32",
+    "arduino",
+    "education",
+    "quiz"
+  ],
+  "author": "João Gabriel Lopes Aguiar",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.16.5",
+    "@types/ws": "^8.5.13",
+    "tsx": "^4.19.2",
+    "typescript": "^5.8.3"
+  }
+}

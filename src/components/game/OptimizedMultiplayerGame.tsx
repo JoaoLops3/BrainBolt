@@ -14,7 +14,10 @@ import { useServerTimer } from "@/hooks/useServerTimer";
 import { useMultiplayerHeartbeat } from "@/hooks/useMultiplayerHeartbeat";
 import { useOfflineMultiplayer } from "@/hooks/useOfflineMultiplayer";
 import { useDebouncedUpdate } from "@/hooks/useDebouncedUpdate";
-import { useMultiplayerStore, multiplayerSelectors } from "@/stores/multiplayerStore";
+import {
+  useMultiplayerStore,
+  multiplayerSelectors,
+} from "@/stores/multiplayerStore";
 import { ConnectionStatus } from "@/components/ui/ConnectionStatus";
 import { multiplayerQueries } from "@/utils/supabaseOptimized";
 import { withRetry } from "@/utils/retryWrapper";
@@ -33,7 +36,7 @@ export const OptimizedMultiplayerGame = ({
 }: OptimizedMultiplayerGameProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
-  
+
   // Zustand store for state management
   const {
     room,
@@ -56,11 +59,11 @@ export const OptimizedMultiplayerGame = ({
   const { queueAction, isSyncing } = useOfflineMultiplayer(roomId);
 
   // Heartbeat for connection monitoring
-  const { 
-    isConnected: heartbeatConnected, 
+  const {
+    isConnected: heartbeatConnected,
     lastActivity,
     reconnectAttempts,
-    maxReconnectAttempts 
+    maxReconnectAttempts,
   } = useMultiplayerHeartbeat(roomId, {
     onDisconnect: () => setIsConnected(false),
     onReconnect: () => setIsConnected(true),
@@ -77,7 +80,11 @@ export const OptimizedMultiplayerGame = ({
 
   // Debounced score update to prevent spam
   const debouncedScoreUpdate = useDebouncedUpdate(
-    async (scoreData: { userId: string; isCorrect: boolean; questionId: string }) => {
+    async (scoreData: {
+      userId: string;
+      isCorrect: boolean;
+      questionId: string;
+    }) => {
       await multiplayerQueries.submitAnswer({
         room_id: roomId,
         user_id: scoreData.userId,
@@ -94,7 +101,7 @@ export const OptimizedMultiplayerGame = ({
   const fetchRoomData = async () => {
     try {
       const { data, error } = await multiplayerQueries.getRoomById(roomId);
-      
+
       if (error) throw error;
       if (!data) throw new Error("Room not found");
 
@@ -127,14 +134,14 @@ export const OptimizedMultiplayerGame = ({
           firstQuestion.id,
           0
         );
-        
+
         if (error) throw error;
         return data;
       });
 
       setCurrentQuestion(firstQuestion);
       setGamePhase("playing");
-      
+
       toast({
         title: "Jogo iniciado!",
         description: "A partida começou",
@@ -157,7 +164,7 @@ export const OptimizedMultiplayerGame = ({
     setShowAnswer(true);
 
     const isCorrect = currentQuestion.correct_answer === answerIndex;
-    
+
     // Queue answer for offline playback and immediate database update
     queueAction("answer", {
       userId: user.id,
@@ -206,7 +213,7 @@ export const OptimizedMultiplayerGame = ({
     if (!room || !isHost) return;
 
     const currentIndex = (room.current_question_index || 0) + 1;
-    
+
     // End game if last question
     if (currentIndex >= 24) {
       await endGame();
@@ -224,7 +231,7 @@ export const OptimizedMultiplayerGame = ({
           nextQuestionData.id,
           currentIndex
         );
-        
+
         if (error) throw error;
         return data;
       });
@@ -248,22 +255,24 @@ export const OptimizedMultiplayerGame = ({
     if (!room || !user) return;
 
     const winnerId = determineWinner();
-    
+
     try {
       await withRetry(async () => {
-        const { data, error } = await multiplayerQueries.finishGame(roomId, winnerId);
-        
+        const { data, error } = await multiplayerQueries.finishGame(
+          roomId,
+          winnerId
+        );
+
         if (error) throw error;
         return data;
       });
 
       setGamePhase("finished");
-      
+
       toast({
         title: winnerId === user.id ? "Você venceu!" : "Jogo finalizado",
-        description: winnerId === user.id 
-          ? "Parabéns pela vitória!" 
-          : "Boa partida!",
+        description:
+          winnerId === user.id ? "Parabéns pela vitória!" : "Boa partida!",
       });
     } catch (error) {
       console.error("Failed to end game:", error);
@@ -273,10 +282,10 @@ export const OptimizedMultiplayerGame = ({
   // Determine game winner
   const determineWinner = () => {
     if (!room) return null;
-    
+
     const hostScore = room.host_score || 0;
     const guestScore = room.guest_score || 0;
-    
+
     if (hostScore > guestScore) return room.host_id;
     if (guestScore > hostScore) return room.guest_id;
     return null; // Draw
@@ -303,8 +312,13 @@ export const OptimizedMultiplayerGame = ({
           updateRoomFromServer(updatedRoom);
 
           // Update current question if changed
-          if (updatedRoom.current_question_id && updatedRoom.current_question_id !== currentQuestion?.id) {
-            const question = questions.find(q => q.id === updatedRoom.current_question_id);
+          if (
+            updatedRoom.current_question_id &&
+            updatedRoom.current_question_id !== currentQuestion?.id
+          ) {
+            const question = questions.find(
+              (q) => q.id === updatedRoom.current_question_id
+            );
             if (question) {
               setCurrentQuestion(question);
               setSelectedAnswer(null);
@@ -332,9 +346,13 @@ export const OptimizedMultiplayerGame = ({
 
   // Get current question
   useEffect(() => {
-    if (!room?.current_question_id || currentQuestion?.id === room.current_question_id) return;
+    if (
+      !room?.current_question_id ||
+      currentQuestion?.id === room.current_question_id
+    )
+      return;
 
-    const question = questions.find(q => q.id === room.current_question_id);
+    const question = questions.find((q) => q.id === room.current_question_id);
     if (question) {
       setCurrentQuestion(question);
       setSelectedAnswer(null);
@@ -342,8 +360,8 @@ export const OptimizedMultiplayerGame = ({
     }
   }, [room?.current_question_id, currentQuestion?.id]);
 
-  const userScore = isHost ? (room?.host_score || 0) : (room?.guest_score || 0);
-  const opponentScore = isHost ? (room?.guest_score || 0) : (room?.host_score || 0);
+  const userScore = isHost ? room?.host_score || 0 : room?.guest_score || 0;
+  const opponentScore = isHost ? room?.guest_score || 0 : room?.host_score || 0;
 
   return (
     <div className="min-h-screen bg-gradient-primary p-4 safe-top safe-bottom">
@@ -358,7 +376,7 @@ export const OptimizedMultiplayerGame = ({
             <ArrowLeft className="h-4 w-4 mr-2" />
             Voltar
           </Button>
-          
+
           <ConnectionStatus
             isConnected={isConnected}
             isSyncing={isSyncing}
@@ -374,18 +392,24 @@ export const OptimizedMultiplayerGame = ({
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div className="text-center">
-                <Badge variant="secondary" className="mb-2">{isHost ? "Host" : "Guest"}</Badge>
+                <Badge variant="secondary" className="mb-2">
+                  {isHost ? "Host" : "Guest"}
+                </Badge>
                 <div className="text-2xl font-bold text-white">{userScore}</div>
               </div>
-              
+
               <div className="text-center">
                 <Trophy className="h-6 w-6 text-yellow-400 mx-auto" />
                 <div className="text-sm text-white/80 mt-1">vs</div>
               </div>
-              
+
               <div className="text-center">
-                <Badge variant="outline" className="mb-2">Oponente</Badge>
-                <div className="text-2xl font-bold text-white">{opponentScore}</div>
+                <Badge variant="outline" className="mb-2">
+                  Oponente
+                </Badge>
+                <div className="text-2xl font-bold text-white">
+                  {opponentScore}
+                </div>
               </div>
             </div>
           </CardContent>
@@ -417,7 +441,6 @@ export const OptimizedMultiplayerGame = ({
 
         {gamePhase === "waiting" && !isHost && (
           <Card className="bg-white/20 border-white/30 backdrop-blur-lg">
-            <CardContent modalOverlay-blur-lg">
             <CardContent className="p-6 text-center">
               <Users className="h-12 w-12 text-white/60 mx-auto mb-4" />
               <h3 className="text-xl font-bold text-white mb-2">
@@ -439,7 +462,7 @@ export const OptimizedMultiplayerGame = ({
               onAnswerSelect={handleAnswerSelect}
               disabled={selectedAnswer !== null || !timerActive}
             />
-            
+
             <GameTimer
               timeLeft={timeLeft}
               totalTime={15}
@@ -455,14 +478,17 @@ export const OptimizedMultiplayerGame = ({
             <CardContent className="p-6 text-center">
               <Trophy className="h-16 w-16 text-yellow-400 mx-auto mb-4" />
               <h3 className="text-2xl font-bold text-white mb-2">
-                {determineWinner() === user?.id ? "🎉 Você Venceu!" : "Jogo Finalizado"}
+                {determineWinner() === user?.id
+                  ? "🎉 Você Venceu!"
+                  : "Jogo Finalizado"}
               </h3>
               <p className="text-white/80 mb-4">
                 Seu placar: {userScore} • Oponente: {opponentScore}
               </p>
               <Button
                 onClick={onBackToMenu}
-                className="bg-primary hover:bg-primary/90">
+                className="bg-primary hover:bg-primary/90"
+              >
                 Voltar ao Menu
               </Button>
             </CardContent>

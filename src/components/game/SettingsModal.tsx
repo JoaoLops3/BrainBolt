@@ -9,6 +9,8 @@ import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { useNativeNotifications } from "@/hooks/useNativeNotifications";
+import { useTheme } from "@/contexts/ThemeContext";
+import { useTranslation } from "react-i18next";
 import {
   User,
   Save,
@@ -18,7 +20,12 @@ import {
   Trophy,
   Users,
   Gift,
+  Moon,
+  Sun,
+  Monitor,
+  Globe,
 } from "lucide-react";
+import { LanguageSelector } from "@/components/ui/language-selector";
 
 interface SettingsModalProps {
   open: boolean;
@@ -38,6 +45,7 @@ const avatarOptions = [
 export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
   const { profile, updateProfile } = useAuth();
   const { toast } = useToast();
+  const { theme, setTheme } = useTheme();
   const {
     permission,
     settings: notificationSettings,
@@ -158,6 +166,74 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
               maxLength={30}
               className="text-sm sm:text-base"
             />
+          </div>
+
+          <Separator className="my-4" />
+
+          {/* Theme Section */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <Sun className="h-4 w-4" />
+              <Label className="text-sm font-medium">Tema</Label>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2">
+              <Button
+                variant={theme === "light" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setTheme("light")}
+                className="flex flex-col gap-1 h-auto py-3"
+              >
+                <Sun className="h-4 w-4" />
+                <span className="text-xs">Claro</span>
+              </Button>
+
+              <Button
+                variant={theme === "dark" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setTheme("dark")}
+                className="flex flex-col gap-1 h-auto py-3"
+              >
+                <Moon className="h-4 w-4" />
+                <span className="text-xs">Escuro</span>
+              </Button>
+
+              <Button
+                variant={theme === "auto" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setTheme("auto")}
+                className="flex flex-col gap-1 h-auto py-3"
+              >
+                <Monitor className="h-4 w-4" />
+                <span className="text-xs">Auto</span>
+              </Button>
+            </div>
+
+            <p className="text-xs text-muted-foreground">
+              {theme === "auto"
+                ? "O tema será ajustado automaticamente de acordo com as configurações do seu sistema."
+                : `Tema ${theme === "light" ? "claro" : "escuro"} ativado.`}
+            </p>
+          </div>
+
+          <Separator className="my-4" />
+
+          {/* Language Section */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <Globe className="h-4 w-4" />
+              <Label className="text-sm font-medium">Idioma / Language</Label>
+            </div>
+
+            <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
+              <div className="flex-1">
+                <p className="text-sm font-medium">Selecione o idioma</p>
+                <p className="text-xs text-muted-foreground">
+                  Select your language
+                </p>
+              </div>
+              <LanguageSelector />
+            </div>
           </div>
 
           <Separator className="my-4" />
