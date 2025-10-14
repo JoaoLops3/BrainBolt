@@ -14,6 +14,39 @@ cd server
 npm install
 ```
 
+## ⚙️ Configuração
+
+### 1. Configurar Variáveis de Ambiente
+
+Crie um arquivo `.env` no diretório `server/` baseado no arquivo `env.example`:
+
+```bash
+cp env.example .env
+```
+
+### 2. Preencher Credenciais do Supabase
+
+Edite o arquivo `.env` e preencha com suas credenciais do Supabase:
+
+```env
+# Porta do servidor WebSocket
+WS_PORT=8080
+
+# Ambiente (development ou production)
+NODE_ENV=development
+
+# Credenciais do Supabase
+SUPABASE_URL=https://seu-projeto.supabase.co
+SUPABASE_ANON_KEY=sua-chave-publica-aqui
+```
+
+**⚠️ IMPORTANTE:**
+
+- **Nunca commite o arquivo `.env`** no Git (ele já está no `.gitignore`)
+- As credenciais podem ser encontradas no [dashboard do Supabase](https://supabase.com/dashboard) em: Settings → API
+- Use a **anon/public key** para operações básicas
+- Para produção com operações sensíveis, considere usar a **service_role_key**
+
 ## ▶️ Execução
 
 ### Desenvolvimento (com auto-reload)
@@ -230,14 +263,14 @@ O servidor exibe logs em tempo real:
 9. Repetir passos 6-8 para mais perguntas
 10. Host finaliza com `end_game`
 
-## 📝 Variáveis de Ambiente
+## 📝 Variáveis de Ambiente Disponíveis
 
-Crie um arquivo `.env` no diretório `server/`:
-
-```env
-WS_PORT=8080
-NODE_ENV=production
-```
+| Variável            | Descrição                   | Padrão        | Obrigatório |
+| ------------------- | --------------------------- | ------------- | ----------- |
+| `WS_PORT`           | Porta do servidor WebSocket | `8080`        | Não         |
+| `NODE_ENV`          | Ambiente de execução        | `development` | Não         |
+| `SUPABASE_URL`      | URL do projeto Supabase     | -             | **Sim**     |
+| `SUPABASE_ANON_KEY` | Chave pública do Supabase   | -             | **Sim**     |
 
 ## 🚀 Deploy em Produção
 
