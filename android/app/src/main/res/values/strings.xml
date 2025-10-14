@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">Brain Bolt</string>
     <string name="title_activity_main">Brain Bolt</string>
-    <string name="package_name">com.joaolops3.perguntados</string>
-    <string name="custom_url_scheme">com.joaolops3.perguntados</string>
+    <string name="package_name">com.joaolops3.brainbolt</string>
+    <string name="custom_url_scheme">com.joaolops3.brainbolt</string>
 </resources>

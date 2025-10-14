@@ -1,0 +1,221 @@
+/* ============================================
+   BRAIN BOLT - TEMA CLARO E ESCURO
+   ============================================ */
+
+:root {
+  /* Cores base - Light Mode */
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+  
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+  
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+  
+  --primary: 262.1 83.3% 57.8%;
+  --primary-foreground: 210 40% 98%;
+  
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 262.1 83.3% 57.8%;
+  
+  --radius: 0.5rem;
+
+  /* Cores personalizadas - Light */
+  --gradient-primary-from: 262.1 83.3% 57.8%;
+  --gradient-primary-to: 330.4 81.2% 60.4%;
+  --glass-bg: 0 0% 100%;
+  --glass-border: 214.3 31.8% 91.4%;
+  --shadow-color: 222.2 84% 4.9%;
+}
+
+.dark {
+  /* Cores base - Dark Mode */
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  
+  --card: 222.2 84% 8%;
+  --card-foreground: 210 40% 98%;
+  
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  
+  --primary: 262.1 83.3% 57.8%;
+  --primary-foreground: 210 40% 98%;
+  
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 262.1 83.3% 57.8%;
+
+  /* Cores personalizadas - Dark */
+  --gradient-primary-from: 262.1 83.3% 47.8%;
+  --gradient-primary-to: 330.4 81.2% 50.4%;
+  --glass-bg: 222.2 84% 8%;
+  --glass-border: 217.2 32.6% 20%;
+  --shadow-color: 0 0% 0%;
+}
+
+/* ============================================
+   GRADIENTES RESPONSIVOS AO TEMA
+   ============================================ */
+
+.bg-gradient-primary {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--gradient-primary-from)) 0%,
+    hsl(var(--gradient-primary-to)) 100%
+  );
+}
+
+.dark .bg-gradient-primary {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--gradient-primary-from)) 0%,
+    hsl(var(--gradient-primary-to)) 100%
+  );
+}
+
+/* ============================================
+   GLASSMORPHISM RESPONSIVO AO TEMA
+   ============================================ */
+
+.glass-card {
+  background: hsla(var(--glass-bg) / 0.2);
+  border: 1px solid hsla(var(--glass-border) / 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.dark .glass-card {
+  background: hsla(var(--glass-bg) / 0.3);
+  border: 1px solid hsla(var(--glass-border) / 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* ============================================
+   SOMBRAS RESPONSIVAS AO TEMA
+   ============================================ */
+
+.shadow-primary {
+  box-shadow: 0 10px 30px hsla(var(--shadow-color) / 0.1);
+}
+
+.dark .shadow-primary {
+  box-shadow: 0 10px 40px hsla(var(--shadow-color) / 0.5);
+}
+
+/* ============================================
+   ANIMAÇÕES E TRANSIÇÕES
+   ============================================ */
+
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* ============================================
+   AJUSTES ESPECÍFICOS PARA DARK MODE
+   ============================================ */
+
+.dark .text-gray-600 {
+  color: hsl(215 20.2% 65.1%);
+}
+
+.dark .text-gray-700 {
+  color: hsl(215 20.2% 55.1%);
+}
+
+.dark .text-gray-800 {
+  color: hsl(215 20.2% 45.1%);
+}
+
+.dark .bg-white {
+  background-color: hsl(222.2 84% 8%);
+}
+
+.dark .bg-gray-50 {
+  background-color: hsl(217.2 32.6% 17.5%);
+}
+
+.dark .bg-gray-100 {
+  background-color: hsl(217.2 32.6% 20%);
+}
+
+/* Melhorar contraste em dark mode */
+.dark .text-white {
+  color: hsl(210 40% 98%);
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: hsl(217.2 32.6% 17.5%);
+  border-color: hsl(217.2 32.6% 25%);
+  color: hsl(210 40% 98%);
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: hsl(215 20.2% 55.1%);
+}
+
+/* ============================================
+   COMPONENTES ESPECÍFICOS
+   ============================================ */
+
+/* Cards */
+.dark .bg-white\/20 {
+  background-color: hsla(222.2, 84%, 8%, 0.4);
+}
+
+.dark .bg-white\/10 {
+  background-color: hsla(222.2, 84%, 8%, 0.2);
+}
+
+.dark .border-white\/30 {
+  border-color: hsla(210, 40%, 98%, 0.2);
+}
+
+/* Hover states */
+.dark button:hover {
+  filter: brightness(1.2);
+}
+
+/* Scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: hsl(222.2 84% 8%);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: hsl(217.2 32.6% 25%);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: hsl(217.2 32.6% 35%);
+}
+

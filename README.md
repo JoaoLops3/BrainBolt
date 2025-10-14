@@ -21,34 +21,55 @@ O Brain Bolt foi criado para resolver um dos maiores desafios da educação mode
 
 ### ✨ Características Principais
 
-- 🎮 **Três Modos de Jogo**:
-  - **Normal**: Sem pressão de tempo para estudo detalhado
-  - **Veloz**: 15 segundos por pergunta para desafio intenso
-  - **🏫 Físico**: Modo para salas de aula com botões físicos
-- 🏆 **6 Categorias**: Esportes, Entretenimento, Arte, Ciências, Geografia e História (400+ perguntas)
-- 👥 **Sistema de Amigos Completo**: Busque, adicione e gerencie amigos com perfis detalhados
-- 🌐 **Multiplayer em Tempo Real**: Partidas online com salas privadas e sincronização via Supabase
-- 📊 **Estatísticas Avançadas**: Métricas detalhadas de performance, streaks e histórico de partidas
-- 🎨 **Design Moderno**: Interface com glassmorphism, gradientes e animações fluidas
-- 📱 **Multiplataforma**: PWA no navegador e apps nativos para iOS/Android
-- 🔐 **Autenticação Segura**: Sistema de login com Supabase Auth
-- 🏅 **Sistema de Conquistas**: Colete personagens por categoria e acompanhe rankings
-- 🏫 **Sistema de Salas Educacionais**: Crie grupos/salas para competições em sala de aula
+#### 🎮 Sistema de Jogo
+
+- **3 Modos**: Normal (sem tempo), Veloz (15s), Físico (botões hardware)
+- **400+ Perguntas** em 6 categorias: ⚽ Esportes, 🎬 Entretenimento, 🎨 Arte, 🔬 Ciências, 🌍 Geografia, 🏛️ História
+- **Sistema de Pontuação**: 100 pontos/acerto + bônus por streaks
+- **Personagens Colecionáveis**: Desbloqueie por categoria
+
+#### 👥 Social
+
+- **Multiplayer em Tempo Real**: Partidas 1v1 com salas privadas
+- **Sistema de Amigos**: Busque, adicione e desafie amigos
+- **Rankings Globais**: Compare estatísticas com outros jogadores
+
+#### 🏫 Educacional
+
+- **Salas de Aula**: Professores criam grupos para turmas
+- **Perguntas Customizadas**: Crie perguntas ilimitadas
+- **Competições**: Rankings e estatísticas por sala
+- **Hardware Físico**: Botões ESP32/Arduino ([Tutorial](docs/hardware/ESP32-ARDUINO-SETUP.md))
+
+#### 🎨 UX/UI
+
+- **Modo Escuro** 🌙: Claro, Escuro ou Automático
+- **Multilíngue** 🌍: Português 🇧🇷 e Inglês 🇺🇸
+- **Tutorial Interativo** 🎓: 6 passos para novos usuários
+- **Totalmente Responsivo** 📱: Mobile, Tablet, Desktop, iOS, Android
+- **Design Moderno**: Glassmorphism, gradientes, animações fluidas
+
+#### ⚡ Performance
+
+- **PWA Offline**: Funciona sem internet após 1º acesso
+- **Lazy Loading**: Carregamento otimizado de componentes
+- **Code Splitting**: Bundle reduzido em ~40%
+- **Cache Inteligente**: Service Worker avançado
 
 ## 🚀 Stack Tecnológica
 
 ### Frontend
 
-- **React 18.3.1** - Biblioteca de interface de usuário com hooks e contexto
-- **TypeScript 5.8.3** - Tipagem estática para desenvolvimento seguro
-- **Vite 5.4.19** - Build tool ultra-rápido com HMR
-- **Tailwind CSS 3.4.17** - Framework CSS utilitário com design system customizado
-- **shadcn/ui** - Componentes de interface modernos e acessíveis
-- **Radix UI** - Primitivos de UI headless para componentes complexos
-- **Lucide React** - Biblioteca de ícones SVG otimizados
-- **React Router DOM 6.30.1** - Roteamento client-side
-- **React Hook Form 7.61.1** - Gerenciamento de formulários performático
-- **TanStack Query 5.83.0** - Cache e sincronização de dados do servidor
+- **React 18.3.1** - UI library com hooks e contexto
+- **TypeScript 5.8.3** - Tipagem estática
+- **Vite 5.4.19** - Build tool ultra-rápido
+- **Tailwind CSS 3.4.17** - Framework CSS utilitário
+- **shadcn/ui + Radix UI** - Componentes modernos e acessíveis
+- **Lucide React** - Ícones SVG otimizados
+- **React Router DOM 6.30.1** - Roteamento
+- **TanStack Query 5.83.0** - Cache e sincronização
+- **i18next** - Internacionalização (PT-BR/EN)
+- **Zustand** - State management
 
 ### Backend & Database
 
@@ -63,7 +84,12 @@ O Brain Bolt foi criado para resolver um dos maiores desafios da educação mode
 
 - **Capacitor 7.4.3** - Framework para apps híbridos nativos
 - **iOS & Android** - Versões nativas otimizadas
-- **PWA** - Progressive Web App com cache offline
+- **PWA Avançado** - Progressive Web App com:
+  - Service Worker com cache inteligente
+  - Estratégias de cache: Cache First, Network First, Stale While Revalidate
+  - Suporte offline completo
+  - Background Sync para sincronização de dados
+  - Push Notifications
 - **App ID**: `com.joaolops3.brainbolt`
 
 ## 🎮 Funcionalidades Detalhadas
@@ -182,27 +208,48 @@ bun install
 ### 3. Configure o Supabase
 
 1. Crie um projeto no [Supabase](https://supabase.com)
-2. Execute as migrações SQL da pasta `supabase/migrations/`:
-   ```sql
-   -- Execute cada arquivo de migração em ordem:
-   -- 20250906171319_07fa682c-24e7-4cdc-9b94-c4e2b44abf9e.sql
-   -- 20250909203617_e2572c8d-518c-4766-bd54-c8827c8d15af.sql
-   -- 20250909204307_cb21112e-41ed-4214-9133-11c1c64f922c.sql
-   ```
-3. Configure as variáveis de ambiente criando um arquivo `.env.local`:
+2. Execute as migrações SQL da pasta `supabase/migrations/` em ordem cronológica
+3. Configure as variáveis de ambiente:
+   - Copie o arquivo `.env.example` para `.env.local`
+   - Preencha com suas credenciais do Supabase:
+
+```bash
+cp .env.example .env.local
+```
+
+Edite `.env.local`:
 
 ```env
 VITE_SUPABASE_URL=https://seu-projeto.supabase.co
 VITE_SUPABASE_ANON_KEY=sua_chave_anonima_do_supabase
 ```
 
-### 4. Execute o projeto
+> 💡 **Dica**: Nunca compartilhe seu arquivo `.env.local` - ele contém credenciais sensíveis!
+
+### 5. Execute o Projeto
 
 ```bash
+# Desenvolvimento (hot reload)
 npm run dev
+
+# Produção (preview)
+npm run build
+npm run preview
 ```
 
-O projeto estará disponível em `http://localhost:8080`
+Acesse: `http://localhost:8080`
+
+### 6. Servidor WebSocket para Hardware (Opcional)
+
+Se for usar botões físicos ESP32/Arduino:
+
+```bash
+cd server
+npm install
+npm run dev  # Porta 8080 (WebSocket)
+```
+
+Veja [Tutorial completo](docs/hardware/ESP32-ARDUINO-SETUP.md)
 
 ### 5. Configuração Mobile (Opcional)
 
@@ -385,55 +432,83 @@ O projeto pode ser deployado em qualquer plataforma que suporte aplicações Rea
 ## 📝 Scripts Disponíveis
 
 ```bash
-# Desenvolvimento Web
-npm run dev          # Servidor de desenvolvimento (localhost:8080)
-npm run build        # Build para produção
-npm run build:dev    # Build em modo desenvolvimento
-npm run preview      # Preview do build de produção
-npm run lint         # Linting do código com ESLint
+# Web
+npm run dev          # Dev server (localhost:8080)
+npm run build        # Build produção
+npm run preview      # Preview build
 
-# Desenvolvimento Mobile (Capacitor)
-npx cap sync         # Sincronizar com plataformas nativas
-npx cap open ios     # Abrir projeto iOS no Xcode
-npx cap open android # Abrir projeto Android no Android Studio
-npx cap run ios      # Executar no simulador iOS
-npx cap run android  # Executar no emulador Android
+# Mobile
+npx cap sync         # Sincronizar
+npx cap open ios     # Xcode
+npx cap open android # Android Studio
+
+# Hardware (ESP32/Arduino)
+cd server && npm run dev  # Servidor WebSocket
 
 # Utilitários
-npx cap doctor       # Verificar configuração do Capacitor
-npm run type-check   # Verificação de tipos TypeScript
+npm run lint         # ESLint
+npx cap doctor       # Verificar Capacitor
 ```
 
-## 🚀 Roadmap e Melhorias Futuras
+## 🆕 Versão 2.0.0 - Novas Funcionalidades
 
-### Funcionalidades Planejadas
+### ✅ Implementado Recentemente
 
-- [ ] **Sistema de Notificações Push**: Alertas para partidas multiplayer e convites
-- [ ] **Modo Torneio**: Competições com múltiplos jogadores e eliminatórias
-- [ ] **Criação de Perguntas**: Sistema para professores criarem suas próprias perguntas
-- [ ] **Temas Personalizados**: Customização de cores e estilos da interface
-- [ ] **Modo Offline**: Jogo completo sem conexão com internet
-- [ ] **Integração Social**: Compartilhamento de resultados nas redes sociais
-- [ ] **Botões Físicos**: Hardware dedicado para o modo físico em sala de aula
-- [ ] **Relatórios Avançados**: Análise detalhada do progresso dos alunos
-- [ ] **Integração com LMS**: Conectividade com sistemas de gestão de aprendizado
-- [ ] **Modo Professor**: Dashboard completo para gerenciamento de salas e alunos
+#### 🌍 Internacionalização
 
-### Otimizações Técnicas
+- **2 Idiomas**: 🇧🇷 Português e 🇺🇸 Inglês
+- Detecção automática do navegador
+- Seletor de idioma nas Configurações
+- 167 strings traduzidas por idioma
 
-- [ ] **Lazy Loading**: Carregamento sob demanda de componentes
-- [ ] **Bundle Splitting**: Redução do tamanho inicial do app
-- [ ] **Service Workers**: Cache inteligente para melhor performance
-- [ ] **PWA Avançado**: Funcionalidades offline completas
-- [ ] **Análise de Performance**: Métricas detalhadas de uso e performance
+#### 🌙 Modo Escuro Completo
 
-### Melhorias de UX/UI
+- **3 Opções**: ☀️ Claro, 🌙 Escuro, 🔄 Automático
+- Transições suaves (300ms)
+- Persistência de preferência
+- Variáveis CSS customizadas
 
-- [ ] **Animações Avançadas**: Transições mais fluidas entre telas
-- [ ] **Modo Escuro**: Tema dark completo
-- [ ] **Acessibilidade**: Melhorias para usuários com necessidades especiais
-- [ ] **Internacionalização**: Suporte a múltiplos idiomas
-- [ ] **Responsividade Avançada**: Otimização para tablets e diferentes resoluções
+#### 🎓 Tutorial Interativo
+
+- **6 Etapas** educativas
+- Totalmente responsivo
+- Botão flutuante (?) sempre disponível
+- Animações e ícones ilustrativos
+- Auto-exibição para novos usuários
+
+#### 📱 Responsividade Total
+
+- **Mobile**: iPhone SE a Pro Max
+- **Tablet**: iPad, iPad Pro, Android tablets
+- **Desktop**: 1280px+
+- **Safe Areas**: Notch, Dynamic Island
+- **Touch Targets**: 44px mínimo (iOS guidelines)
+- **Orientação**: Portrait e Landscape
+
+#### 📝 Perguntas Customizadas
+
+- Professores criam perguntas ilimitadas
+- 6 categorias + 3 dificuldades
+- Explicações educacionais
+- Compartilhamento público
+- Estatísticas de uso
+
+#### 🔧 Hardware Físico
+
+- Servidor WebSocket completo
+- Tutorial ESP32/Arduino (790 linhas)
+- Protocolo de comunicação documentado
+- Integração Supabase
+
+#### ⚡ Performance
+
+- Lazy loading de rotas
+- Code splitting otimizado
+- Bundle reduzido ~40%
+- Service Worker v2.0.0
+- Cache inteligente
+
+---
 
 ## 🎓 Impacto Educacional
 
@@ -463,18 +538,43 @@ npm run type-check   # Verificação de tipos TypeScript
 - **Competições Escolares**: Organize torneios entre turmas ou séries
 - **Diferencial Competitivo**: Atrai alunos e pais interessados em inovação
 
-## 📄 Licença
+## 📊 Estatísticas do Projeto
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+- **Arquivos TS/TSX**: 141
+- **Componentes**: 80+
+- **Linhas de código**: ~25.000+
+- **Bundle (gzip)**:
+  - CSS: 22 kB
+  - JS Total: ~250 kB
+- **Build time**: ~4s
+- **Idiomas**: 2
+- **Categorias**: 6
+- **Perguntas**: 400+ (fixas) + Ilimitadas (custom)
 
 ## 👨‍💻 Autor
 
+**João Gabriel Lopes Aguiar**
+
 - GitHub: [@JoaoLops3](https://github.com/JoaoLops3)
+- Projeto: Brain Bolt - Quiz Educacional
+- Versão: 2.0.0
 
 ## 🙏 Agradecimentos
 
-- [Supabase](https://supabase.com) pela infraestrutura backend
-- [shadcn/ui](https://ui.shadcn.com) pelos componentes de interface
-- [Lucide](https://lucide.dev) pelos ícones
-- [Tailwind CSS](https://tailwindcss.com) pelo framework CSS
-- **Educadores e Alunos** que inspiraram este projeto educacional
+- [Supabase](https://supabase.com) - Backend
+- [shadcn/ui](https://ui.shadcn.com) - Componentes UI
+- [Lucide](https://lucide.dev) - Ícones
+- [Tailwind CSS](https://tailwindcss.com) - Framework CSS
+- **Educadores e Alunos** - Inspiração
+
+## 📄 Licença
+
+Este projeto é de código aberto para fins educacionais.
+
+---
+
+<div align="center">
+  <b>🧠 Brain Bolt - Aprenda Brincando! ⚡</b>
+  <br><br>
+  Feito com ❤️ para educadores e alunos
+</div>

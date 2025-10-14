@@ -161,12 +161,15 @@ export const MultiplayerGame = ({
         gameResult = "draw";
       }
 
+      // Garantir valores válidos
+      const safeCorrectAnswers = Math.min(Math.floor(userScore / 100), 24);
+
       await supabase.from("game_sessions").insert({
         user_id: user.id,
         game_mode: "multiplayer",
         final_score: userScore,
         questions_answered: 24,
-        correct_answers: Math.floor(userScore / 100),
+        correct_answers: safeCorrectAnswers,
         categories_completed: [],
         max_streak: 0,
         time_spent: 360, // 24 questions * 15 seconds

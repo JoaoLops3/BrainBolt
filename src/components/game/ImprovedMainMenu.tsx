@@ -26,6 +26,7 @@ import { LogOut } from "lucide-react";
 import { useStats } from "@/contexts/StatsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { TutorialTrigger } from "@/components/tutorial/TutorialTrigger";
 
 interface ImprovedMainMenuProps {
   onSelectMode: (mode: "normal" | "speed") => void;
@@ -296,6 +297,9 @@ export const ImprovedMainMenu = ({
           </Button>
         </div>
       </ResponsiveContainer>
+
+      {/* Botão de Tutorial Flutuante */}
+      <TutorialTrigger />
     </div>
   );
 };

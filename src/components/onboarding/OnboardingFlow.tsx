@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { useNativeNotifications } from "@/hooks/useNativeNotifications";
 import { useToast } from "@/hooks/use-toast";
+import { InteractiveTutorial } from "@/components/tutorial/InteractiveTutorial";
 
 interface OnboardingFlowProps {
   onComplete: () => void;
@@ -43,6 +44,7 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   const { requestPermission, permission } = useNativeNotifications();
   const { toast } = useToast();
@@ -109,6 +111,18 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
     };
     localStorage.setItem("brainbolt-preferences", JSON.stringify(preferences));
 
+    // Mostrar tutorial interativo
+    setShowTutorial(true);
+  };
+
+  const handleTutorialComplete = () => {
+    localStorage.setItem("brainbolt-tutorial-completed", "true");
+    setShowTutorial(false);
+    onComplete();
+  };
+
+  const handleTutorialSkip = () => {
+    setShowTutorial(false);
     onComplete();
   };
 
@@ -469,36 +483,46 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
   };
 
   return (
-    <Dialog open={true} onOpenChange={() => {}}>
-      <DialogContent className="max-w-lg border-0 bg-transparent shadow-none p-4 sm:p-6">
-        <div className="min-h-[600px] flex items-center justify-center">
-          {stepContent[currentStep]()}
-        </div>
-
-        {/* Progress indicator */}
-        <div className="flex justify-center mt-4">
-          <div className="flex space-x-2">
-            {(isNative
-              ? ["welcome", "permissions", "features", "ready"]
-              : ["welcome", "terms", "permissions", "features", "ready"]
-            ).map((step, index) => {
-              const allSteps = isNative
-                ? ["welcome", "permissions", "features", "ready"]
-                : ["welcome", "terms", "permissions", "features", "ready"];
-              const currentIndex = allSteps.indexOf(currentStep);
-
-              return (
-                <div
-                  key={step}
-                  className={`w-2 h-2 rounded-full transition-colors ${
-                    currentIndex >= index ? "bg-primary" : "bg-gray-300"
-                  }`}
-                />
-              );
-            })}
+    <>
+      <Dialog open={true} onOpenChange={() => {}}>
+        <DialogContent className="max-w-lg border-0 bg-transparent shadow-none p-4 sm:p-6">
+          <div className="min-h-[600px] flex items-center justify-center">
+            {stepContent[currentStep]()}
           </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+
+          {/* Progress indicator */}
+          <div className="flex justify-center mt-4">
+            <div className="flex space-x-2">
+              {(isNative
+                ? ["welcome", "permissions", "features", "ready"]
+                : ["welcome", "terms", "permissions", "features", "ready"]
+              ).map((step, index) => {
+                const allSteps = isNative
+                  ? ["welcome", "permissions", "features", "ready"]
+                  : ["welcome", "terms", "permissions", "features", "ready"];
+                const currentIndex = allSteps.indexOf(currentStep);
+
+                return (
+                  <div
+                    key={step}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      currentIndex >= index ? "bg-primary" : "bg-gray-300"
+                    }`}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Tutorial Interativo */}
+      {showTutorial && (
+        <InteractiveTutorial
+          onComplete={handleTutorialComplete}
+          onSkip={handleTutorialSkip}
+        />
+      )}
+    </>
   );
 };

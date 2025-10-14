@@ -210,13 +210,11 @@ export const BrainBoltGame = () => {
 
           if (questionsAnswered >= gameQuestions.length) {
             // Game finished - save to database and calculate final stats
-            const correctAnswers =
-              gameQuestions.filter((q, index) => {
-                if (index < gameState.currentQuestionIndex) return true; // Assume previous were handled
-                if (index === gameState.currentQuestionIndex) return isCorrect;
-                return false;
-              }).length +
-              gameState.score / 100; // Add previous correct answers
+            // Cada resposta correta vale 100 pontos, então score / 100 = total de corretas
+            const correctAnswers = Math.min(
+              Math.floor(newScore / 100),
+              gameQuestions.length
+            );
 
             const finalStats = {
               totalQuestions: gameQuestions.length,
@@ -287,12 +285,18 @@ export const BrainBoltGame = () => {
           ? "win"
           : "loss";
 
+      // Garantir que correct_answers nunca seja maior que questions_answered
+      const safeCorrectAnswers = Math.min(
+        finalStats.correctAnswers,
+        finalStats.totalQuestions
+      );
+
       await supabase.from("game_sessions").insert({
         user_id: user.id,
         game_mode: finalStats.gameMode,
         final_score: finalStats.finalScore,
         questions_answered: finalStats.totalQuestions,
-        correct_answers: finalStats.correctAnswers,
+        correct_answers: safeCorrectAnswers,
         categories_completed: finalStats.categoriesCompleted,
         max_streak: finalStats.maxStreak,
         time_spent: finalStats.timeSpent,

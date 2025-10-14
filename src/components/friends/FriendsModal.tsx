@@ -592,8 +592,11 @@ export const FriendsModal = ({ open, onOpenChange }: FriendsModalProps) => {
                               <div className="flex items-center gap-4 text-sm text-muted-foreground">
                                 <span className="flex items-center gap-1">
                                   <Trophy className="h-3 w-3" />
-                                  {profile.win_percentage?.toFixed(1) || 0}%
-                                  vitórias
+                                  {Math.min(
+                                    profile.win_percentage || 0,
+                                    100
+                                  ).toFixed(1)}
+                                  % vitórias
                                 </span>
                                 <span className="flex items-center gap-1">
                                   <Target className="h-3 w-3" />
