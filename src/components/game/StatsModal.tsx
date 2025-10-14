@@ -90,7 +90,7 @@ export const StatsModal = ({ open, onOpenChange }: StatsModalProps) => {
     );
     const accuracy =
       totalQuestions > 0
-        ? Math.round((totalCorrect / totalQuestions) * 100)
+        ? Math.min(Math.round((totalCorrect / totalQuestions) * 100), 100)
         : 0;
     const bestStreak = Math.max(...sessions.map((s) => s.max_streak));
 
@@ -236,8 +236,11 @@ export const StatsModal = ({ open, onOpenChange }: StatsModalProps) => {
                             </Badge>
                           </div>
                           <div className="text-xs sm:text-sm text-muted-foreground">
-                            {session.correct_answers}/
-                            {session.questions_answered} corretas
+                            {Math.min(
+                              session.correct_answers,
+                              session.questions_answered
+                            )}
+                            /{session.questions_answered} corretas
                             {session.max_streak > 0 &&
                               ` • Sequência: ${session.max_streak}`}
                           </div>

@@ -108,9 +108,7 @@ export const ClassroomRankings = ({ classroomId }: ClassroomRankingsProps) => {
             {rankings.map((student) => (
               <Card
                 key={student.student_id}
-                className={`${
-                  student.rank <= 3 ? "border-2" : ""
-                } ${
+                className={`${student.rank <= 3 ? "border-2" : ""} ${
                   student.rank === 1
                     ? "border-yellow-500 bg-yellow-50 dark:bg-yellow-900/10"
                     : student.rank === 2
@@ -157,13 +155,18 @@ export const ClassroomRankings = ({ classroomId }: ClassroomRankingsProps) => {
                         <div className="flex items-center gap-1">
                           <Target className="h-3 w-3 text-green-600" />
                           <span className="font-bold">
-                            {student.accuracy_percentage.toFixed(1)}%
+                            {Math.min(student.accuracy_percentage, 100).toFixed(
+                              1
+                            )}
+                            %
                           </span>
                         </div>
 
                         <div className="flex items-center gap-1">
                           <Flame className="h-3 w-3 text-orange-600" />
-                          <span className="font-bold">{student.best_streak}</span>
+                          <span className="font-bold">
+                            {student.best_streak}
+                          </span>
                           <span className="text-muted-foreground">streak</span>
                         </div>
 
@@ -185,4 +188,3 @@ export const ClassroomRankings = ({ classroomId }: ClassroomRankingsProps) => {
     </Card>
   );
 };
-

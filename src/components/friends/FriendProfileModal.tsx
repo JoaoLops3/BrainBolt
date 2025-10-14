@@ -104,7 +104,7 @@ export const FriendProfileModal = ({
                 <div className="flex flex-col items-center">
                   <Trophy className="h-6 w-6 text-yellow-500 mb-2" />
                   <div className="text-2xl font-bold text-primary">
-                    {profile.win_percentage.toFixed(1)}%
+                    {Math.min(profile.win_percentage, 100).toFixed(1)}%
                   </div>
                   <div className="text-sm text-muted-foreground">
                     Taxa de Vitória

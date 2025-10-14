@@ -21,36 +21,55 @@ O Brain Bolt foi criado para resolver um dos maiores desafios da educação mode
 
 ### ✨ Características Principais
 
-- 🎮 **Três Modos de Jogo**:
-  - **Normal**: Sem pressão de tempo para estudo detalhado
-  - **Veloz**: 15 segundos por pergunta para desafio intenso
-  - **🏫 Físico**: Modo para salas de aula com botões físicos ([Tutorial ESP32/Arduino](docs/hardware/ESP32-ARDUINO-SETUP.md))
-- 🏆 **6 Categorias**: Esportes, Entretenimento, Arte, Ciências, Geografia e História (400+ perguntas)
-- 👥 **Sistema de Amigos Completo**: Busque, adicione e gerencie amigos com perfis detalhados
-- 🌐 **Multiplayer em Tempo Real**: Partidas online com salas privadas e sincronização via Supabase
-- 📊 **Estatísticas Avançadas**: Métricas detalhadas de performance, streaks e histórico de partidas
-- 🎨 **Design Moderno**: Interface com glassmorphism, gradientes, animações fluidas e **Modo Escuro** 🌙
-- 📱 **Multiplataforma**: PWA offline-first no navegador e apps nativos para iOS/Android
-- 🔐 **Autenticação Segura**: Sistema de login com Supabase Auth
-- 🏅 **Sistema de Conquistas**: Colete personagens por categoria e acompanhe rankings
-- 🏫 **Sistema de Salas Educacionais**: Crie grupos/salas para competições em sala de aula
-- 📝 **Perguntas Customizadas**: Professores podem criar suas próprias perguntas
-- ⚡ **Performance Otimizada**: Lazy loading, code splitting e bundle otimizado
+#### 🎮 Sistema de Jogo
+
+- **3 Modos**: Normal (sem tempo), Veloz (15s), Físico (botões hardware)
+- **400+ Perguntas** em 6 categorias: ⚽ Esportes, 🎬 Entretenimento, 🎨 Arte, 🔬 Ciências, 🌍 Geografia, 🏛️ História
+- **Sistema de Pontuação**: 100 pontos/acerto + bônus por streaks
+- **Personagens Colecionáveis**: Desbloqueie por categoria
+
+#### 👥 Social
+
+- **Multiplayer em Tempo Real**: Partidas 1v1 com salas privadas
+- **Sistema de Amigos**: Busque, adicione e desafie amigos
+- **Rankings Globais**: Compare estatísticas com outros jogadores
+
+#### 🏫 Educacional
+
+- **Salas de Aula**: Professores criam grupos para turmas
+- **Perguntas Customizadas**: Crie perguntas ilimitadas
+- **Competições**: Rankings e estatísticas por sala
+- **Hardware Físico**: Botões ESP32/Arduino ([Tutorial](docs/hardware/ESP32-ARDUINO-SETUP.md))
+
+#### 🎨 UX/UI
+
+- **Modo Escuro** 🌙: Claro, Escuro ou Automático
+- **Multilíngue** 🌍: Português 🇧🇷 e Inglês 🇺🇸
+- **Tutorial Interativo** 🎓: 6 passos para novos usuários
+- **Totalmente Responsivo** 📱: Mobile, Tablet, Desktop, iOS, Android
+- **Design Moderno**: Glassmorphism, gradientes, animações fluidas
+
+#### ⚡ Performance
+
+- **PWA Offline**: Funciona sem internet após 1º acesso
+- **Lazy Loading**: Carregamento otimizado de componentes
+- **Code Splitting**: Bundle reduzido em ~40%
+- **Cache Inteligente**: Service Worker avançado
 
 ## 🚀 Stack Tecnológica
 
 ### Frontend
 
-- **React 18.3.1** - Biblioteca de interface de usuário com hooks e contexto
-- **TypeScript 5.8.3** - Tipagem estática para desenvolvimento seguro
-- **Vite 5.4.19** - Build tool ultra-rápido com HMR
-- **Tailwind CSS 3.4.17** - Framework CSS utilitário com design system customizado
-- **shadcn/ui** - Componentes de interface modernos e acessíveis
-- **Radix UI** - Primitivos de UI headless para componentes complexos
-- **Lucide React** - Biblioteca de ícones SVG otimizados
-- **React Router DOM 6.30.1** - Roteamento client-side
-- **React Hook Form 7.61.1** - Gerenciamento de formulários performático
-- **TanStack Query 5.83.0** - Cache e sincronização de dados do servidor
+- **React 18.3.1** - UI library com hooks e contexto
+- **TypeScript 5.8.3** - Tipagem estática
+- **Vite 5.4.19** - Build tool ultra-rápido
+- **Tailwind CSS 3.4.17** - Framework CSS utilitário
+- **shadcn/ui + Radix UI** - Componentes modernos e acessíveis
+- **Lucide React** - Ícones SVG otimizados
+- **React Router DOM 6.30.1** - Roteamento
+- **TanStack Query 5.83.0** - Cache e sincronização
+- **i18next** - Internacionalização (PT-BR/EN)
+- **Zustand** - State management
 
 ### Backend & Database
 
@@ -207,13 +226,30 @@ VITE_SUPABASE_ANON_KEY=sua_chave_anonima_do_supabase
 
 > 💡 **Dica**: Nunca compartilhe seu arquivo `.env.local` - ele contém credenciais sensíveis!
 
-### 4. Execute o projeto
+### 5. Execute o Projeto
 
 ```bash
+# Desenvolvimento (hot reload)
 npm run dev
+
+# Produção (preview)
+npm run build
+npm run preview
 ```
 
-O projeto estará disponível em `http://localhost:8080`
+Acesse: `http://localhost:8080`
+
+### 6. Servidor WebSocket para Hardware (Opcional)
+
+Se for usar botões físicos ESP32/Arduino:
+
+```bash
+cd server
+npm install
+npm run dev  # Porta 8080 (WebSocket)
+```
+
+Veja [Tutorial completo](docs/hardware/ESP32-ARDUINO-SETUP.md)
 
 ### 5. Configuração Mobile (Opcional)
 
@@ -396,105 +432,83 @@ O projeto pode ser deployado em qualquer plataforma que suporte aplicações Rea
 ## 📝 Scripts Disponíveis
 
 ```bash
-# Desenvolvimento Web
-npm run dev          # Servidor de desenvolvimento (localhost:8080)
-npm run build        # Build para produção
-npm run build:dev    # Build em modo desenvolvimento
-npm run preview      # Preview do build de produção
-npm run lint         # Linting do código com ESLint
+# Web
+npm run dev          # Dev server (localhost:8080)
+npm run build        # Build produção
+npm run preview      # Preview build
 
-# Desenvolvimento Mobile (Capacitor)
-npx cap sync         # Sincronizar com plataformas nativas
-npx cap open ios     # Abrir projeto iOS no Xcode
-npx cap open android # Abrir projeto Android no Android Studio
-npx cap run ios      # Executar no simulador iOS
-npx cap run android  # Executar no emulador Android
+# Mobile
+npx cap sync         # Sincronizar
+npx cap open ios     # Xcode
+npx cap open android # Android Studio
+
+# Hardware (ESP32/Arduino)
+cd server && npm run dev  # Servidor WebSocket
 
 # Utilitários
-npx cap doctor       # Verificar configuração do Capacitor
-npm run type-check   # Verificação de tipos TypeScript
+npm run lint         # ESLint
+npx cap doctor       # Verificar Capacitor
 ```
 
-## ✅ Funcionalidades Implementadas Recentemente
+## 🆕 Versão 2.0.0 - Novas Funcionalidades
 
-### Novas Funcionalidades
+### ✅ Implementado Recentemente
 
-- ✅ **Sistema de Perguntas Customizadas**: Professores podem criar suas próprias perguntas
-  - Formulário completo com validação
-  - Suporte a 6 categorias e 3 níveis de dificuldade
-  - Opção de compartilhar perguntas publicamente
-  - Estatísticas de uso e taxa de acerto
-- ✅ **Modo Escuro Completo**:
-  - 3 opções: Claro, Escuro e Automático
-  - Transições suaves entre temas
-  - Preserva preferência do usuário
-- ✅ **PWA Offline Avançado**:
-  - Service Worker com estratégias inteligentes de cache
-  - Funciona completamente offline após primeiro carregamento
-  - Background Sync para sincronização de dados
-- ✅ **Otimizações de Performance**:
-  - Lazy loading de rotas e componentes
-  - Code splitting automático
-  - Bundle otimizado (redução de ~40% no tamanho)
-  - Cache inteligente de assets e API calls
-- ✅ **Documentação de Hardware**: Tutorial completo para montar sistema de botões físicos com ESP32/Arduino
+#### 🌍 Internacionalização
 
-### 📋 Roadmap Futuro
+- **2 Idiomas**: 🇧🇷 Português e 🇺🇸 Inglês
+- Detecção automática do navegador
+- Seletor de idioma nas Configurações
+- 167 strings traduzidas por idioma
 
-#### Funcionalidades Planejadas
+#### 🌙 Modo Escuro Completo
 
-- [ ] **Modo Torneio**: Competições com múltiplos jogadores e eliminatórias
-- [ ] **Integração Social**: Compartilhamento de resultados nas redes sociais
-- [ ] **Relatórios Avançados**: Análise detalhada do progresso dos alunos com gráficos
-- [ ] **Integração com LMS**: Conectividade com Moodle, Google Classroom, etc.
-- [ ] **Sistema de Badges**: Conquistas e medalhas especiais
-- [ ] **Modo Treinamento**: Revisão de perguntas erradas
+- **3 Opções**: ☀️ Claro, 🌙 Escuro, 🔄 Automático
+- Transições suaves (300ms)
+- Persistência de preferência
+- Variáveis CSS customizadas
 
-#### Melhorias de UX/UI
+#### 🎓 Tutorial Interativo
 
-- [ ] **Animações Avançadas**: Transições mais fluidas e efeitos visuais
-- [ ] **Acessibilidade**: Melhorias WCAG 2.1 AA compliant
-- [ ] **Internacionalização**: Suporte a Inglês, Espanhol e outros idiomas
-- [ ] **Responsividade Tablet**: Layouts otimizados para tablets
-- [ ] **Tema Customizável**: Cores personalizáveis pelo usuário
+- **6 Etapas** educativas
+- Totalmente responsivo
+- Botão flutuante (?) sempre disponível
+- Animações e ícones ilustrativos
+- Auto-exibição para novos usuários
 
-## 🔧 Hardware Físico para Sala de Aula
+#### 📱 Responsividade Total
 
-O Brain Bolt suporta um modo físico revolucionário com botões reais que transforma a sala de aula em um ambiente de competição interativo!
+- **Mobile**: iPhone SE a Pro Max
+- **Tablet**: iPad, iPad Pro, Android tablets
+- **Desktop**: 1280px+
+- **Safe Areas**: Notch, Dynamic Island
+- **Touch Targets**: 44px mínimo (iOS guidelines)
+- **Orientação**: Portrait e Landscape
 
-### 🎮 Sistema de Botões com ESP32/Arduino
+#### 📝 Perguntas Customizadas
 
-Construa seu próprio controlador físico com:
+- Professores criam perguntas ilimitadas
+- 6 categorias + 3 dificuldades
+- Explicações educacionais
+- Compartilhamento público
+- Estatísticas de uso
 
-- **4 botões coloridos** (A, B, C, D) para respostas
-- **1 botão de resposta rápida** para competições
-- **LEDs indicadores** para feedback visual
-- **Buzzer** para efeitos sonoros
-- **Display OLED** (opcional) para informações do jogo
+#### 🔧 Hardware Físico
 
-### 📚 Tutorial Completo
+- Servidor WebSocket completo
+- Tutorial ESP32/Arduino (790 linhas)
+- Protocolo de comunicação documentado
+- Integração Supabase
 
-Acesse o tutorial detalhado de montagem: **[ESP32/Arduino Setup Guide](docs/hardware/ESP32-ARDUINO-SETUP.md)**
+#### ⚡ Performance
 
-O guia inclui:
+- Lazy loading de rotas
+- Code splitting otimizado
+- Bundle reduzido ~40%
+- Service Worker v2.0.0
+- Cache inteligente
 
-- ✅ Lista completa de materiais (custo aproximado: R$ 80-150)
-- ✅ Esquema de conexões detalhado
-- ✅ Código Arduino completo e comentado
-- ✅ Instruções de montagem passo a passo
-- ✅ Integração com o aplicativo via WebSocket
-- ✅ Solução de problemas comuns
-
-### 💰 Materiais Necessários
-
-- ESP32 DevKit (~R$ 30-50)
-- 5x Botões Push Button (~R$ 20-40)
-- 5x LEDs e resistores (~R$ 10)
-- Buzzer passivo (~R$ 3)
-- Display OLED (opcional, ~R$ 15-25)
-- Protoboard, jumpers e case
-
-**Total**: R$ 80-150 para um controlador completo!
+---
 
 ## 🎓 Impacto Educacional
 
@@ -524,18 +538,43 @@ O guia inclui:
 - **Competições Escolares**: Organize torneios entre turmas ou séries
 - **Diferencial Competitivo**: Atrai alunos e pais interessados em inovação
 
-## 📄 Licença
+## 📊 Estatísticas do Projeto
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+- **Arquivos TS/TSX**: 141
+- **Componentes**: 80+
+- **Linhas de código**: ~25.000+
+- **Bundle (gzip)**:
+  - CSS: 22 kB
+  - JS Total: ~250 kB
+- **Build time**: ~4s
+- **Idiomas**: 2
+- **Categorias**: 6
+- **Perguntas**: 400+ (fixas) + Ilimitadas (custom)
 
 ## 👨‍💻 Autor
 
+**João Gabriel Lopes Aguiar**
+
 - GitHub: [@JoaoLops3](https://github.com/JoaoLops3)
+- Projeto: Brain Bolt - Quiz Educacional
+- Versão: 2.0.0
 
 ## 🙏 Agradecimentos
 
-- [Supabase](https://supabase.com) pela infraestrutura backend
-- [shadcn/ui](https://ui.shadcn.com) pelos componentes de interface
-- [Lucide](https://lucide.dev) pelos ícones
-- [Tailwind CSS](https://tailwindcss.com) pelo framework CSS
-- **Educadores e Alunos** que inspiraram este projeto educacional
+- [Supabase](https://supabase.com) - Backend
+- [shadcn/ui](https://ui.shadcn.com) - Componentes UI
+- [Lucide](https://lucide.dev) - Ícones
+- [Tailwind CSS](https://tailwindcss.com) - Framework CSS
+- **Educadores e Alunos** - Inspiração
+
+## 📄 Licença
+
+Este projeto é de código aberto para fins educacionais.
+
+---
+
+<div align="center">
+  <b>🧠 Brain Bolt - Aprenda Brincando! ⚡</b>
+  <br><br>
+  Feito com ❤️ para educadores e alunos
+</div>
