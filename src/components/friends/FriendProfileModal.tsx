@@ -1,6 +1,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -75,6 +76,9 @@ export const FriendProfileModal = ({
             <User className="h-5 w-5" />
             Perfil do Jogador
           </DialogTitle>
+          <DialogDescription>
+            Visualize estatísticas detalhadas e conquistas do jogador
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">
