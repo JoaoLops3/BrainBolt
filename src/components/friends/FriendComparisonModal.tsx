@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -59,7 +60,7 @@ interface CategoryStats {
 const categoryNames = {
   sports: "Esportes",
   entertainment: "Entretenimento",
-  art: "Arte", 
+  art: "Arte",
   science: "Ciência",
   geography: "Geografia",
   history: "História",
@@ -136,7 +137,9 @@ export const FriendComparisonModal = ({
       case "better":
         return <TrendingUp className="h-4 w-4 text-green-500" />;
       case "worse":
-        return <TrendingUp className="h-4 w-4 text-red-500 transform rotate-180" />;
+        return (
+          <TrendingUp className="h-4 w-4 text-red-500 transform rotate-180" />
+        );
       default:
         return <Medal className="h-4 w-4 text-yellow-500" />;
     }
@@ -198,6 +201,12 @@ export const FriendComparisonModal = ({
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-4xl max-h-[80vh] allow-scroll">
+          <DialogHeader>
+            <DialogTitle>Carregando Comparação</DialogTitle>
+            <DialogDescription>
+              Aguarde enquanto buscamos as estatísticas para comparação
+            </DialogDescription>
+          </DialogHeader>
           <div className="flex items-center justify-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
           </div>
@@ -214,6 +223,10 @@ export const FriendComparisonModal = ({
             <Users className="h-5 w-5" />
             Comparação de Estatísticas
           </DialogTitle>
+          <DialogDescription>
+            Compare seu desempenho com o de seus amigos em diferentes categorias
+            e rankings
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">
@@ -338,44 +351,53 @@ export const FriendComparisonModal = ({
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {Object.entries(categoryNames).map(([categoryKey, categoryName]) => {
-                  const userCategory = userCategories.find(c => c.category === categoryKey);
-                  const friendCategory = friendCategories.find(c => c.category === categoryKey);
+                {Object.entries(categoryNames).map(
+                  ([categoryKey, categoryName]) => {
+                    const userCategory = userCategories.find(
+                      (c) => c.category === categoryKey
+                    );
+                    const friendCategory = friendCategories.find(
+                      (c) => c.category === categoryKey
+                    );
 
-                  if (!userCategory && !friendCategory) return null;
+                    if (!userCategory && !friendCategory) return null;
 
-                  const userAccuracy = userCategory?.accuracy_percentage || 0;
-                  const friendAccuracy = friendCategory?.accuracy_percentage || 0;
+                    const userAccuracy = userCategory?.accuracy_percentage || 0;
+                    const friendAccuracy =
+                      friendCategory?.accuracy_percentage || 0;
 
-                  return (
-                    <div key={categoryKey} className="p-4 border rounded-lg">
-                      <div className="flex items-center justify-between mb-3">
-                        <h4 className="font-medium">{categoryName}</h4>
-                        <Badge variant="outline">
-                          {(userCategory?.questions_answered || 0) + (friendCategory?.questions_answered || 0)} perguntas total
-                        </Badge>
-                      </div>
-                      
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <div className="flex justify-between text-sm mb-1">
-                            <span>Você</span>
-                            <span>{userAccuracy.toFixed(1)}%</span>
-                          </div>
-                          <Progress value={userAccuracy} />
+                    return (
+                      <div key={categoryKey} className="p-4 border rounded-lg">
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="font-medium">{categoryName}</h4>
+                          <Badge variant="outline">
+                            {(userCategory?.questions_answered || 0) +
+                              (friendCategory?.questions_answered || 0)}{" "}
+                            perguntas total
+                          </Badge>
                         </div>
-                        
-                        <div>
-                          <div className="flex justify-between text-sm mb-1">
-                            <span>Amigo</span>
-                            <span>{friendAccuracy.toFixed(1)}%</span>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <div className="flex justify-between text-sm mb-1">
+                              <span>Você</span>
+                              <span>{userAccuracy.toFixed(1)}%</span>
+                            </div>
+                            <Progress value={userAccuracy} />
                           </div>
-                          <Progress value={friendAccuracy} />
+
+                          <div>
+                            <div className="flex justify-between text-sm mb-1">
+                              <span>Amigo</span>
+                              <span>{friendAccuracy.toFixed(1)}%</span>
+                            </div>
+                            <Progress value={friendAccuracy} />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  }
+                )}
               </div>
             </CardContent>
           </Card>
@@ -398,7 +420,7 @@ export const FriendComparisonModal = ({
                     Suas vitórias
                   </div>
                 </div>
-                
+
                 <div className="p-4 bg-muted rounded-lg">
                   <div className="text-2xl font-bold text-red-500">
                     {friendStats.multiplayer_wins}
