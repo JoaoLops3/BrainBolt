@@ -196,34 +196,42 @@ export const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
       />
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Confirmar exclusão da sala</AlertDialogTitle>
-            <AlertDialogDescription>
-              Tem certeza que deseja excluir a sala "{classroomToDelete?.name}"?
-              <br />
-              <br />
-              <strong className="text-red-600 dark:text-red-400">
-                ⚠️ Esta ação não pode ser desfeita!
-              </strong>
-              <br />
-              <br />
-              Serão excluídos permanentemente:
-              <ul className="list-disc list-inside mt-2 space-y-1">
-                <li>Todos os alunos da sala</li>
-                <li>Todas as perguntas customizadas</li>
-                <li>Todo o histórico de jogos</li>
-                <li>Todos os convites pendentes</li>
-              </ul>
+        <AlertDialogContent className="max-w-sm w-[90vw] rounded-2xl p-5 gap-3">
+          <AlertDialogHeader className="space-y-2">
+            <AlertDialogTitle className="text-center text-base">
+              Excluir sala?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="space-y-2.5">
+              <p className="text-center font-semibold text-foreground text-sm">
+                "{classroomToDelete?.name}"
+              </p>
+
+              <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 rounded-lg p-2.5">
+                <p className="text-xs text-red-700 dark:text-red-400 font-medium text-center">
+                  ⚠️ Ação irreversível!
+                </p>
+              </div>
+
+              <div className="text-xs">
+                <p className="font-medium mb-1.5">Será excluído:</p>
+                <ul className="space-y-0.5 text-muted-foreground">
+                  <li>• Alunos da sala</li>
+                  <li>• Perguntas customizadas</li>
+                  <li>• Histórico de jogos</li>
+                  <li>• Convites pendentes</li>
+                </ul>
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogFooter className="gap-2 flex-row">
+            <AlertDialogCancel className="flex-1 m-0">
+              Cancelar
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDelete}
-              className="bg-red-600 hover:bg-red-700 text-white"
+              className="flex-1 bg-red-600 hover:bg-red-700 text-white"
             >
-              Sim, excluir sala
+              Excluir
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
