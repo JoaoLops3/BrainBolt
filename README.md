@@ -1,281 +1,203 @@
-# 🧠 Brain Bolt - Jogo de Quiz Educacional
+# 🧠 Brain Bolt - Plataforma Educacional de Quiz
 
 <div align="center">
   <img src="./public/Brain-Bolt-Logo.png" alt="Brain Bolt Logo" width="200" height="200">
   
+  ![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-yellow?style=flat)
+  ![Versão](https://img.shields.io/badge/Vers%C3%A3o-2.0.0-blue?style=flat)
+  
   [![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=flat&logo=react&logoColor=white)](https://reactjs.org/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-  [![Vite](https://img.shields.io/badge/Vite-5.4.19-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev/)
-  [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4.17-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
   [![Supabase](https://img.shields.io/badge/Supabase-2.57.2-3ECF8E?style=flat&logo=supabase&logoColor=white)](https://supabase.com/)
   [![Capacitor](https://img.shields.io/badge/Capacitor-7.4.3-119EFF?style=flat&logo=capacitor&logoColor=white)](https://capacitorjs.com/)
 </div>
 
-## 📖 Sobre o Projeto
+## 📋 Índice
 
-**Brain Bolt** é um jogo de quiz educacional que transforma o aprendizado em uma experiência divertida e gamificada. Desenvolvido especialmente para uso em salas de aula, combina tecnologia digital com interação física para criar um ambiente de aprendizado envolvente e competitivo.
+- [Visão Geral](#-visão-geral)
+- [Funcionalidades Principais](#-funcionalidades-principais)
+- [Stack Tecnológica](#-stack-tecnológica)
+- [Instalação](#-instalação)
+- [Estrutura do Projeto](#-estrutura-do-projeto)
+- [Arquitetura do Banco de Dados](#-arquitetura-do-banco-de-dados)
+- [Performance](#-performance)
+- [Scripts Disponíveis](#-scripts-disponíveis)
 
-### 🎯 Missão Educacional
+---
 
-O Brain Bolt foi criado para resolver um dos maiores desafios da educação moderna: manter o foco e o engajamento dos alunos durante as aulas. Através da gamificação, os estudantes aprendem sem perceber, competem de forma saudável e desenvolvem conhecimentos em diversas áreas enquanto se divertem.
+## 🎯 Visão Geral
 
-### ✨ Características Principais
+**Brain Bolt** é uma plataforma educacional de quiz abrangente, projetada para transformar o aprendizado em uma experiência envolvente e gamificada. Construída especificamente para ambientes de sala de aula, combina tecnologia digital com interação física para criar um ecossistema educacional imersivo.
 
-#### 🎮 Sistema de Jogo
+### Missão
 
-- **3 Modos**: Normal (sem tempo), Veloz (15s), Físico (botões hardware)
-- **400+ Perguntas** em 6 categorias: ⚽ Esportes, 🎬 Entretenimento, 🎨 Arte, 🔬 Ciências, 🌍 Geografia, 🏛️ História
-- **Sistema de Pontuação**: 100 pontos/acerto + bônus por streaks
-- **Personagens Colecionáveis**: Desbloqueie por categoria
+Resolver um dos maiores desafios da educação moderna: manter o foco e o engajamento dos alunos durante as aulas através de gamificação, competição saudável e aprendizado interativo.
 
-#### 👥 Social
+### Destaques
 
-- **Multiplayer em Tempo Real**: Partidas 1v1 com salas privadas
-- **Sistema de Amigos**: Busque, adicione e desafie amigos
-- **Rankings Globais**: Compare estatísticas com outros jogadores
+- **400+ perguntas** selecionadas em 6 categorias
+- **Multiplayer em tempo real** com sincronização WebSocket
+- **Sistema de gerenciamento** de salas de aula
+- **Criação de perguntas** personalizadas
+- **Integração com hardware** físico (botões ESP32/Arduino)
+- **Progressive Web App** com suporte offline
+- **Apps nativos** para iOS e Android
 
-#### 🏫 Educacional
+---
 
-- **Salas de Aula**: Professores criam grupos para turmas
-- **Perguntas Customizadas**: Crie perguntas ilimitadas
-- **Competições**: Rankings e estatísticas por sala
-- **Hardware Físico**: Botões ESP32/Arduino ([Tutorial](docs/hardware/ESP32-ARDUINO-SETUP.md))
+## ✨ Funcionalidades Principais
 
-#### 🎨 UX/UI
+### 🎮 Sistema de Jogo
 
-- **Modo Escuro** 🌙: Claro, Escuro ou Automático
-- **Tutorial Interativo** 🎓: 6 passos para novos usuários
-- **Totalmente Responsivo** 📱: Mobile, Tablet, Desktop, iOS, Android
-- **Design Moderno**: Glassmorphism, gradientes, animações fluidas
+**Modos de Jogo:**
 
-#### ⚡ Performance
+- **Modo Normal**: Foco em estudo, sem pressão de tempo
+- **Modo Veloz**: Limite de 15 segundos por pergunta
+- **Modo Físico**: Integração com botões de hardware para sala de aula
 
-- **PWA Offline**: Funciona sem internet após 1º acesso
-- **Lazy Loading**: Carregamento otimizado de componentes
-- **Code Splitting**: Bundle reduzido em ~40%
-- **Cache Inteligente**: Service Worker avançado
+**Pontuação e Progresso:**
+
+- 100 pontos por resposta correta
+- Bônus de streak por respostas consecutivas corretas
+- Personagens colecionáveis desbloqueados por desempenho em categorias
+- Rankings globais e por sala de aula
+
+### 🏫 Ferramentas Educacionais
+
+**Gerenciamento de Sala de Aula:**
+
+- Criar e gerenciar grupos de sala de aula
+- Definir períodos de competição com datas de início e fim
+- Inscrição de alunos via códigos de turma únicos
+- Acompanhamento de desempenho e análises em tempo real
+- Biblioteca de perguntas personalizadas por sala
+
+**Recursos para Professores:**
+
+- Criação ilimitada de perguntas personalizadas
+- Atribuição de categoria e dificuldade
+- Compartilhamento de perguntas e biblioteca pública
+- Relatórios detalhados de desempenho dos alunos
+- Rankings específicos por sala de aula
+
+**Sistema de Roles:**
+
+- **Professor**: Criar salas, gerenciar perguntas, visualizar análises
+- **Líder**: Organizar grupos de estudo e competições
+- **Estudante**: Participar de salas e responder quizzes
+
+### 👥 Social e Multiplayer
+
+- **Partidas 1v1 em Tempo Real**: Salas privadas com gameplay sincronizado
+- **Sistema de Amigos**: Buscar, adicionar e desafiar amigos
+- **Rankings Globais**: Comparar desempenho com todos os jogadores
+- **Estatísticas Detalhadas**: Acompanhar progresso em todos os modos de jogo
+
+### 🔧 Recursos Técnicos
+
+- **Suporte PWA**: Funcionalidade offline após primeiro carregamento
+- **Code Splitting**: Tamanho de bundle otimizado (~40% de redução)
+- **Lazy Loading**: Carregamento dinâmico de componentes
+- **Service Worker**: Estratégias inteligentes de cache
+- **Modo Escuro**: Claro, escuro e automático pelo sistema
+- **Design Responsivo**: Abordagem mobile-first com suporte tablet/desktop
+
+---
 
 ## 🚀 Stack Tecnológica
 
 ### Frontend
 
-- **React 18.3.1** - UI library com hooks e contexto
-- **TypeScript 5.8.3** - Tipagem estática
-- **Vite 5.4.19** - Build tool ultra-rápido
-- **Tailwind CSS 3.4.17** - Framework CSS utilitário
-- **shadcn/ui + Radix UI** - Componentes modernos e acessíveis
-- **Lucide React** - Ícones SVG otimizados
-- **React Router DOM 6.30.1** - Roteamento
-- **TanStack Query 5.83.0** - Cache e sincronização
-- **Zustand** - State management
+| Tecnologia         | Versão | Propósito                                       |
+| ------------------ | ------ | ----------------------------------------------- |
+| **React**          | 18.3.1 | Framework UI com hooks e context                |
+| **TypeScript**     | 5.8.3  | Tipagem estática e qualidade de código          |
+| **Vite**           | 5.4.19 | Build tool rápida e servidor de desenvolvimento |
+| **Tailwind CSS**   | 3.4.17 | Framework CSS utilitário                        |
+| **shadcn/ui**      | Latest | Componentes modernos e acessíveis               |
+| **React Router**   | 6.30.1 | Roteamento client-side                          |
+| **TanStack Query** | 5.83.0 | Busca de dados e cache                          |
+| **Zustand**        | Latest | Gerenciamento de estado                         |
 
-### Backend & Database
+### Backend e Infraestrutura
 
-- **Supabase 2.57.2** - Backend-as-a-Service completo
-- **PostgreSQL** - Banco de dados relacional com extensões avançadas
-- **Row Level Security (RLS)** - Segurança granular a nível de linha
-- **Real-time subscriptions** - Atualizações em tempo real via WebSockets
-- **Supabase Auth** - Autenticação completa com providers sociais
-- **Edge Functions** - Serverless functions para lógica de negócio
+| Tecnologia                  | Propósito                           |
+| --------------------------- | ----------------------------------- |
+| **Supabase**                | Plataforma Backend-as-a-Service     |
+| **PostgreSQL**              | Banco de dados relacional com RLS   |
+| **Real-time Subscriptions** | Atualizações ao vivo via WebSocket  |
+| **Edge Functions**          | Funções serverless                  |
+| **Supabase Auth**           | Autenticação com provedores sociais |
 
-### Mobile & PWA
+### Mobile
 
-- **Capacitor 7.4.3** - Framework para apps híbridos nativos
-- **iOS & Android** - Versões nativas otimizadas
-- **PWA Avançado** - Progressive Web App com:
-  - Service Worker com cache inteligente
-  - Estratégias de cache: Cache First, Network First, Stale While Revalidate
-  - Suporte offline completo
-  - Background Sync para sincronização de dados
-  - Push Notifications
-- **App ID**: `com.joaolops3.brainbolt`
+| Tecnologia    | Propósito                            |
+| ------------- | ------------------------------------ |
+| **Capacitor** | 7.4.3 - Wrapper para apps nativos    |
+| **iOS**       | App nativo para dispositivos Apple   |
+| **Android**   | App nativo para dispositivos Android |
+| **PWA**       | Recursos de Progressive Web App      |
 
-## 🎮 Funcionalidades Detalhadas
+---
 
-### Sistema de Jogo
-
-- **Modo Normal**: Partidas sem pressão de tempo para estudo detalhado
-- **Modo Veloz**: 15 segundos por pergunta para desafio intenso
-- **🏫 Modo Físico**: Revolucionário sistema para salas de aula
-  - **4 Botões de Resposta**: Cada aluno tem 4 botões para escolher entre as alternativas (A, B, C, D)
-  - **1 Botão de Resposta Rápida**: Botão especial para quem quer responder primeiro
-  - **Competição Física**: Alunos competem fisicamente apertando os botões
-  - **Dinâmica em Sala**: Professor controla o jogo, alunos participam ativamente
-- **Sistema de Pontuação**: 100 pontos por acerto, bônus por streaks
-- **Coleção de Personagens**: Desbloqueie personagens acertando 2+ perguntas por categoria
-- **Dificuldade Progressiva**: Perguntas de fácil a difícil por categoria
-
-### 🏫 Sistema de Salas Educacionais
-
-- **Criação de Grupos/Salas**: Professores podem criar salas específicas para suas turmas
-- **Período de Competição**: Defina data de início e fim (não pode ser alterado depois)
-- **Adição de Alunos**: Convide alunos para participar da sala
-- **Rankings por Sala**: Visualize quem tem mais precisão, pontos e conquistas
-- **Competições Escolares**: Professores podem organizar competições diárias, semanais ou mensais
-- **Gamificação Educacional**: Alunos ganham conquistas e competem de forma saudável
-- **Relatórios de Performance**: Acompanhe o progresso individual e da turma
-
-### Multiplayer em Tempo Real
-
-- **Salas Privadas**: Códigos únicos para partidas entre amigos
-- **Sincronização Instantânea**: Atualizações em tempo real via Supabase
-- **Sistema de Host/Convidado**: Controle de sala e início de partidas
-- **Timer Sincronizado**: 15 segundos por pergunta para ambos os jogadores
-- **Resultados Comparativos**: Estatísticas detalhadas pós-partida
-
-### Sistema de Amigos
-
-- **Busca de Usuários**: Encontre amigos por email ou nome
-- **Solicitações de Amizade**: Sistema de pedidos pendentes/aceitos
-- **Perfis Detalhados**: Visualize estatísticas e histórico de amigos
-- **Comparação de Performance**: Rankings e métricas entre amigos
-- **Status de Amizade**: Gerenciamento completo de relacionamentos
-
-### Estatísticas Avançadas
-
-- **Métricas de Performance**: Precisão, streaks, tempo médio por pergunta
-- **Histórico de Partidas**: Últimas 10 sessões com detalhes completos
-- **Estatísticas por Categoria**: Performance individual em cada área
-- **Rankings Globais**: Comparação com outros jogadores
-- **Progresso Temporal**: Evolução do desempenho ao longo do tempo
-
-## 🎯 Categorias do Jogo
-
-| Categoria             | Ícone   | Descrição                                  |
-| --------------------- | ------- | ------------------------------------------ |
-| 🏃‍♂️ **Esportes**       | Azul    | Futebol, basquete, tênis e mais            |
-| 🎬 **Entretenimento** | Rosa    | Cinema, música, TV e celebridades          |
-| 🎨 **Arte**           | Roxo    | Pintura, escultura, literatura e cultura   |
-| 🔬 **Ciências**       | Verde   | Física, química, biologia e tecnologia     |
-| 🌍 **Geografia**      | Laranja | Países, capitais, continentes e mapas      |
-| 🏛️ **História**       | Âmbar   | Eventos históricos, personalidades e datas |
-
-## 🎮 Como Jogar
-
-### 🏠 Uso Individual
-
-1. **Cadastre-se** ou faça login na plataforma
-2. **Escolha o modo**: Normal, Veloz ou Físico
-3. **Responda perguntas** de diferentes categorias
-4. **Colete personagens** acertando 2+ perguntas por categoria
-5. **Desafie amigos** no modo multiplayer
-6. **Acompanhe suas estatísticas** e melhore seu desempenho
-
-### 🏫 Uso em Sala de Aula
-
-1. **Professor cria uma sala** para sua turma
-2. **Define o período** da competição (início e fim)
-3. **Convida os alunos** para participar da sala
-4. **Inicia o modo físico** com botões para cada aluno
-5. **Alunos competem** fisicamente apertando os botões
-6. **Acompanha rankings** e progresso da turma
-7. **Organiza competições** diárias, semanais ou mensais
-8. **Premia os melhores** alunos ou turmas
-
-### 🎯 Dinâmica Educacional
-
-- **Aprendizado Gamificado**: Alunos aprendem sem perceber
-- **Competição Saudável**: Estimula o estudo e a participação
-- **Engajamento Total**: Mantém o foco dos alunos durante as aulas
-- **Feedback Imediato**: Resultados instantâneos e rankings em tempo real
-- **Flexibilidade**: Use em qualquer matéria ou disciplina
-
-## 🛠️ Instalação e Configuração
+## 💻 Instalação
 
 ### Pré-requisitos
 
-- Node.js 18+
-- npm ou yarn
+- Node.js 18 ou superior
+- npm ou bun (gerenciador de pacotes)
 - Conta no Supabase
 
-### 1. Clone o repositório
+### Início Rápido
 
 ```bash
+# 1. Clone o repositório
 git clone https://github.com/JoaoLops3/BrainBolt.git
 cd BrainBolt
-```
 
-### 2. Instale as dependências
-
-```bash
+# 2. Instale as dependências
 npm install
-# ou
-bun install
-```
 
-### 3. Configure o Supabase
-
-1. Crie um projeto no [Supabase](https://supabase.com)
-2. Execute as migrações SQL da pasta `supabase/migrations/` em ordem cronológica
-3. Configure as variáveis de ambiente:
-   - Copie o arquivo `.env.example` para `.env.local`
-   - Preencha com suas credenciais do Supabase:
-
-```bash
+# 3. Configure as variáveis de ambiente
 cp .env.example .env.local
-```
 
-Edite `.env.local`:
+# Edite .env.local com suas credenciais do Supabase:
+# VITE_SUPABASE_URL=https://seu-projeto.supabase.co
+# VITE_SUPABASE_ANON_KEY=sua_chave_anonima
 
-```env
-VITE_SUPABASE_URL=https://seu-projeto.supabase.co
-VITE_SUPABASE_ANON_KEY=sua_chave_anonima_do_supabase
-```
+# 4. Execute as migrações do banco de dados
+# Execute os arquivos SQL de supabase/migrations/ no dashboard do Supabase
+# em ordem cronológica
 
-> 💡 **Dica**: Nunca compartilhe seu arquivo `.env.local` - ele contém credenciais sensíveis!
-
-### 5. Execute o Projeto
-
-```bash
-# Desenvolvimento (hot reload)
+# 5. Inicie o servidor de desenvolvimento
 npm run dev
-
-# Produção (preview)
-npm run build
-npm run preview
 ```
 
-Acesse: `http://localhost:8080`
+Acesse a aplicação em `http://localhost:8080`
 
-### 6. Servidor WebSocket para Hardware (Opcional)
+### Configuração do Banco de Dados
 
-Se for usar botões físicos ESP32/Arduino:
+Execute as seguintes migrações em ordem:
 
-```bash
-cd server
-npm install
-npm run dev  # Porta 8080 (WebSocket)
+```sql
+-- 1. Tabelas do sistema core
+20250906171319_*.sql  -- Perfis e sistema de usuários
+20250909203617_*.sql  -- Salas multiplayer
+20251001000000_*.sql  -- Sistema de salas de aula
+20251001000005_*.sql  -- Performance multiplayer
+
+-- 2. Sistema de perguntas customizadas
+20251015000000_*.sql  -- Tabela de perguntas customizadas
+20251015000001_*.sql  -- Setup de perguntas customizadas
+20251015000002_*.sql  -- Adicionar todas as colunas
+
+-- 3. Segurança e roles
+20251015000003_*.sql  -- Prevenção de conflito professor/aluno
+20251015000004_*.sql  -- Campo de role do usuário
+20251015000005_*.sql  -- Trigger de criação de perfil
 ```
 
-Veja [Tutorial completo](docs/hardware/ESP32-ARDUINO-SETUP.md)
-
-### 5. Configuração Mobile (Opcional)
-
-Para desenvolvimento mobile, você precisa do Capacitor configurado:
-
-```bash
-# Build para produção
-npm run build
-
-# Sincronizar com plataformas nativas
-npx cap sync
-
-# Abrir no Xcode (iOS)
-npx cap open ios
-
-# Abrir no Android Studio
-npx cap open android
-```
-
-## 📱 Desenvolvimento Mobile
-
-### Pré-requisitos para Mobile
-
-- **iOS**: Xcode 14+ e macOS
-- **Android**: Android Studio e Java 11+
-- **Node.js**: 18+ com npm
-
-### Comandos Mobile
+### Desenvolvimento Mobile
 
 ```bash
 # Build para produção
@@ -284,287 +206,179 @@ npm run build
 # Sincronizar com plataformas nativas
 npx cap sync
 
-# Abrir projeto iOS no Xcode
-npx cap open ios
+# Abrir no IDE
+npx cap open ios      # Xcode (requer macOS)
+npx cap open android  # Android Studio
 
-# Abrir projeto Android no Android Studio
-npx cap open android
-
-# Executar no dispositivo/simulador
+# Executar em dispositivo/simulador
 npx cap run ios
 npx cap run android
 ```
 
-### Configuração Mobile
-
-- **App ID**: `com.joaolops3.brainbolt`
-- **Splash Screen**: Cor roxa (#8B5CF6) personalizada
-- **PWA**: Funciona offline após primeiro carregamento
-
-## 🗄️ Arquitetura do Banco de Dados
-
-### Tabelas Principais
-
-#### `profiles` - Perfis de Usuário
-
-- Armazena informações básicas e estatísticas dos usuários
-- Campos: `user_id`, `display_name`, `avatar_url`, `total_score`, `games_played`, `win_percentage`, etc.
-- Atualizada automaticamente via triggers após cada partida
-
-#### `game_sessions` - Sessões de Jogo
-
-- Histórico completo de todas as partidas
-- Campos: `user_id`, `game_mode`, `final_score`, `correct_answers`, `max_streak`, `time_spent`
-- Suporte a partidas multiplayer com `opponent_id` e `room_id`
-
-#### `multiplayer_rooms` - Salas Multiplayer
-
-- Gerencia partidas em tempo real entre jogadores
-- Campos: `room_code`, `host_id`, `guest_id`, `game_status`, `current_question_id`
-- Sincronização via WebSockets para updates em tempo real
-
-#### `friendships` - Sistema de Amigos
-
-- Relacionamentos entre usuários
-- Campos: `user_id`, `friend_id`, `status` (pending/accepted/blocked)
-- Suporte a solicitações de amizade bidirecionais
-
-### Funcionalidades Avançadas
-
-- **Row Level Security (RLS)**: Segurança granular por usuário
-- **Triggers Automáticos**: Atualização de estatísticas em tempo real
-- **Real-time Subscriptions**: Sincronização instantânea via Supabase
-- **Funções SQL**: Lógica de negócio no servidor (cálculo de estatísticas)
+---
 
 ## 📁 Estrutura do Projeto
 
 ```
 BrainBolt/
 ├── src/
-│   ├── components/          # Componentes React organizados
-│   │   ├── game/           # Lógica do jogo (BrainBoltGame, MultiplayerGame)
-│   │   ├── friends/        # Sistema de amigos (FriendsModal, FriendProfile)
-│   │   └── ui/             # Componentes de interface (shadcn/ui)
-│   ├── contexts/           # Contextos React (AuthContext)
-│   ├── data/              # Dados estáticos (perguntas.ts - 400+ perguntas)
-│   ├── hooks/             # Hooks customizados (use-mobile, use-toast)
-│   ├── integrations/      # Integrações externas (Supabase client)
-│   ├── lib/               # Utilitários (utils, validações)
-│   ├── pages/             # Páginas principais (Index, Auth, NotFound)
-│   └── types/             # Definições TypeScript (game.ts)
-├── ios/                   # Projeto iOS nativo (Xcode)
-├── android/               # Projeto Android nativo (Gradle)
-├── supabase/              # Configurações do Supabase
-│   ├── migrations/        # Migrações SQL do banco
-│   └── config.toml        # Configuração local
-├── public/                # Assets estáticos (logo, ícones)
-├── dist/                  # Build de produção (Vite)
-├── capacitor.config.ts    # Configuração do Capacitor
-└── docs/                  # Documentação adicional
+│   ├── components/
+│   │   ├── game/              # Componentes de lógica do jogo
+│   │   ├── classroom/         # Gerenciamento de sala de aula
+│   │   ├── friends/           # Recursos sociais
+│   │   ├── tutorial/          # Tutorial interativo
+│   │   └── ui/                # Componentes UI reutilizáveis
+│   ├── contexts/              # Contextos React
+│   │   ├── AuthContext.tsx    # Autenticação
+│   │   ├── StatsContext.tsx   # Estatísticas do usuário
+│   │   └── ThemeContext.tsx   # Gerenciamento de tema
+│   ├── hooks/                 # Hooks personalizados React
+│   ├── integrations/          # Serviços externos
+│   │   └── supabase/          # Cliente e tipos Supabase
+│   ├── data/                  # Dados estáticos
+│   │   └── perguntas.ts       # 400+ perguntas de quiz
+│   ├── pages/                 # Páginas de rota
+│   ├── types/                 # Definições TypeScript
+│   └── lib/                   # Utilitários
+├── supabase/
+│   └── migrations/            # Migrações do banco de dados
+├── ios/                       # Projeto nativo iOS
+├── android/                   # Projeto nativo Android
+├── public/                    # Assets estáticos
+└── docs/                      # Documentação
 ```
 
-## 🎨 Design System
+---
 
-### Paleta de Cores
+## 🗄️ Arquitetura do Banco de Dados
 
-- **Primária**: `#8B5CF6` (Roxo)
-- **Secundária**: `#EC4899` (Rosa)
-- **Acentos**: `#F59E0B` (Amarelo), `#10B981` (Verde), `#3B82F6` (Azul)
-- **Fundo**: Gradientes vibrantes
-- **Cards**: Glassmorphism com blur
+### Tabelas Principais
 
-### Componentes
+#### `profiles`
 
-- **Cards** com efeito glassmorphism
-- **Botões** com animações hover
-- **Modais** responsivos e acessíveis
-- **Gradientes** coloridos e modernos
-- **Ícones** minimalistas do Lucide
+Perfis de usuário com estatísticas e preferências
 
-## 🚀 Deploy
+- Armazena: pontuações, jogos realizados, taxa de vitória, conquistas
+- Atualizado automaticamente via triggers após cada jogo
 
-### Vercel (Recomendado)
+#### `game_sessions`
 
-1. Conecte seu repositório ao Vercel
-2. Configure as variáveis de ambiente
-3. Deploy automático a cada push
+Histórico completo de jogos e estatísticas
 
-### Netlify
+- Rastreia: modo, pontuação, precisão, tempo, streaks
+- Suporta sessões single e multiplayer
 
-1. Conecte o repositório
-2. Configure build command: `npm run build`
-3. Configure publish directory: `dist`
+#### `classrooms`
 
-### Outras Plataformas
+Grupos educacionais de sala de aula
 
-O projeto pode ser deployado em qualquer plataforma que suporte aplicações React estáticas.
+- Gerenciado por professores
+- Períodos de competição com datas de início e fim
+- Códigos únicos de entrada para estudantes
 
-### Mobile Stores
+#### `classroom_students`
 
-#### iOS App Store
+Relacionamento muitos-para-muitos entre usuários e salas
 
-1. Configure certificados no Xcode
-2. Build para produção: `npx cap build ios`
-3. Submeta via Xcode ou App Store Connect
+- Inscrição de estudantes e status
+- Rastreamento de desempenho por sala
 
-#### Google Play Store
+#### `custom_questions`
 
-1. Configure assinatura no Android Studio
-2. Build para produção: `npx cap build android`
-3. Submeta via Google Play Console
+Perguntas criadas por professores
 
-### PWA (Progressive Web App)
+- Perguntas ilimitadas por professor/sala
+- Rastreamento de categoria, dificuldade e estatísticas
+- Capacidades de compartilhamento público
 
-- Funciona offline após primeiro carregamento
-- Instalável como app nativo no navegador
-- Notificações push (quando implementadas)
+#### `multiplayer_rooms`
 
-## 🤝 Contribuindo
+Sessões de jogo multiplayer em tempo real
 
-1. Fork o projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
+- Sincronização WebSocket
+- Sistema host/convidado
+- Rastreamento de pontuação ao vivo
+
+#### `friendships`
+
+Conexões sociais entre usuários
+
+- Solicitações de amizade e status
+- Relacionamentos bidirecionais
+
+### Recursos de Segurança
+
+- **Row Level Security (RLS)**: Controle de acesso granular
+- **Triggers Automáticos**: Atualizações de estatísticas em tempo real
+- **Funções SQL**: Lógica de negócios server-side
+- **Real-time Subscriptions**: Sincronização de dados ao vivo
+
+---
 
 ## 📝 Scripts Disponíveis
 
 ```bash
-# Web
-npm run dev          # Dev server (localhost:8080)
-npm run build        # Build produção
-npm run preview      # Preview build
+# Desenvolvimento
+npm run dev          # Iniciar servidor dev (localhost:8080)
+npm run build        # Build de produção
+npm run preview      # Preview do build de produção
+npm run lint         # Executar ESLint
 
 # Mobile
-npx cap sync         # Sincronizar
-npx cap open ios     # Xcode
-npx cap open android # Android Studio
+npx cap sync         # Sincronizar código web com plataformas nativas
+npx cap open ios     # Abrir no Xcode
+npx cap open android # Abrir no Android Studio
+npx cap doctor       # Verificar configuração do Capacitor
 
-# Hardware (ESP32/Arduino)
-cd server && npm run dev  # Servidor WebSocket
-
-# Utilitários
-npm run lint         # ESLint
-npx cap doctor       # Verificar Capacitor
+# Banco de Dados
+# Execute as migrações manualmente no dashboard do Supabase
 ```
-
-## 🆕 Versão 2.0.0 - Novas Funcionalidades
-
-### ✅ Implementado Recentemente
-
-#### 🌙 Modo Escuro Completo
-
-- **3 Opções**: ☀️ Claro, 🌙 Escuro, 🔄 Automático
-- Transições suaves (300ms)
-- Persistência de preferência
-- Variáveis CSS customizadas
-
-#### 🎓 Tutorial Interativo
-
-- **6 Etapas** educativas
-- Totalmente responsivo
-- Botão flutuante (?) sempre disponível
-- Animações e ícones ilustrativos
-- Auto-exibição para novos usuários
-
-#### 📱 Responsividade Total
-
-- **Mobile**: iPhone SE a Pro Max
-- **Tablet**: iPad, iPad Pro, Android tablets
-- **Desktop**: 1280px+
-- **Safe Areas**: Notch, Dynamic Island
-- **Touch Targets**: 44px mínimo (iOS guidelines)
-- **Orientação**: Portrait e Landscape
-
-#### 📝 Perguntas Customizadas
-
-- Professores criam perguntas ilimitadas
-- 6 categorias + 3 dificuldades
-- Explicações educacionais
-- Compartilhamento público
-- Estatísticas de uso
-
-#### 🔧 Hardware Físico
-
-- Servidor WebSocket completo
-- Tutorial ESP32/Arduino (790 linhas)
-- Protocolo de comunicação documentado
-- Integração Supabase
-
-#### ⚡ Performance
-
-- Lazy loading de rotas
-- Code splitting otimizado
-- Bundle reduzido ~40%
-- Service Worker v2.0.0
-- Cache inteligente
 
 ---
 
-## 🎓 Impacto Educacional
+## 📈 Estatísticas do Projeto
 
-### Benefícios para Professores
-
-- **Engajamento Total**: Mantém a atenção dos alunos durante toda a aula
-- **Avaliação Contínua**: Feedback imediato sobre o aprendizado da turma
-- **Gamificação Natural**: Transforma o estudo em diversão
-- **Flexibilidade**: Use em qualquer matéria ou disciplina
-- **Competição Saudável**: Estimula o estudo e a participação
-- **Relatórios Detalhados**: Acompanhe o progresso individual e da turma
-
-### Benefícios para Alunos
-
-- **Aprendizado Divertido**: Estuda sem perceber que está estudando
-- **Competição Saudável**: Desenvolve espírito competitivo positivo
-- **Feedback Imediato**: Sabe instantaneamente se acertou ou errou
-- **Conquistas e Rankings**: Motivação através de gamificação
-- **Participação Ativa**: Todos os alunos participam da aula
-- **Desenvolvimento de Conhecimento**: Aprende enquanto se diverte
-
-### Benefícios para Instituições
-
-- **Melhoria no Aprendizado**: Alunos mais engajados aprendem melhor
-- **Tecnologia Educacional**: Posiciona a escola como inovadora
-- **Relatórios Institucionais**: Dados sobre o desempenho das turmas
-- **Competições Escolares**: Organize torneios entre turmas ou séries
-- **Diferencial Competitivo**: Atrai alunos e pais interessados em inovação
-
-## 📊 Estatísticas do Projeto
-
-- **Arquivos TS/TSX**: 141
+- **Linhas de Código**: ~25.000+
 - **Componentes**: 80+
-- **Linhas de código**: ~25.000+
-- **Bundle (gzip)**:
-  - CSS: 22 kB
-  - JS Total: ~250 kB
-- **Build time**: ~4s
-- **Categorias**: 6
-- **Perguntas**: 400+ (fixas) + Ilimitadas (custom)
+- **Arquivos TypeScript**: 141
+- **Categorias de Quiz**: 6
+- **Perguntas Integradas**: 400+
+- **Perguntas Customizadas**: Ilimitadas
+
+---
 
 ## 👨‍💻 Autor
 
 **João Gabriel Lopes Aguiar**
 
 - GitHub: [@JoaoLops3](https://github.com/JoaoLops3)
-- Projeto: Brain Bolt - Quiz Educacional
+- Email: joaogabriellops@outlook.com
 - Versão: 2.0.0
+
+---
 
 ## 🙏 Agradecimentos
 
-- [Supabase](https://supabase.com) - Backend
+- [Supabase](https://supabase.com) - Infraestrutura backend
 - [shadcn/ui](https://ui.shadcn.com) - Componentes UI
-- [Lucide](https://lucide.dev) - Ícones
+- [Lucide](https://lucide.dev) - Biblioteca de ícones
 - [Tailwind CSS](https://tailwindcss.com) - Framework CSS
-- **Educadores e Alunos** - Inspiração
+- **Educadores e Estudantes** - Inspiração e feedback
+
+---
 
 ## 📄 Licença
 
-Este projeto é de código aberto para fins educacionais.
+Este projeto é open source para fins educacionais.
 
 ---
 
 <div align="center">
-  <b>🧠 Brain Bolt - Aprenda Brincando! ⚡</b>
+  <b>🧠 Brain Bolt - Aprenda Brincando ⚡</b>
   <br><br>
-  Feito com ❤️ para educadores e alunos
+  Feito com ❤️ para educadores e estudantes do mundo todo
+  <br><br>
+  <a href="https://github.com/JoaoLops3/BrainBolt/issues">Reportar Bug</a>
+  ·
+  <a href="https://github.com/JoaoLops3/BrainBolt/issues">Solicitar Funcionalidade</a>
 </div>
