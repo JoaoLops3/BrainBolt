@@ -7,6 +7,7 @@ interface Profile {
   user_id: string;
   display_name: string | null;
   avatar_url: string;
+  user_role?: string | null;
   total_score: number;
   games_played: number;
   best_streak: number;
@@ -28,7 +29,8 @@ interface AuthContextType {
   signUp: (
     email: string,
     password: string,
-    displayName: string
+    displayName: string,
+    userRole?: "teacher" | "leader" | "student"
   ) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signInWithOAuth: (provider: "google" | "apple") => Promise<{ error: any }>;
@@ -132,7 +134,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const signUp = async (
     email: string,
     password: string,
-    displayName: string
+    displayName: string,
+    userRole: "teacher" | "leader" | "student" = "student"
   ) => {
     const redirectUrl = `${window.location.origin}/`;
 
@@ -143,6 +146,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         emailRedirectTo: redirectUrl,
         data: {
           display_name: displayName,
+          user_role: userRole,
         },
       },
     });

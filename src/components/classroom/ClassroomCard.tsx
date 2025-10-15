@@ -16,6 +16,7 @@ import {
   Settings,
   CheckCircle2,
   Clock,
+  Trash2,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
@@ -25,6 +26,7 @@ interface ClassroomCardProps {
   classroom: ClassroomWithDetails;
   onViewDetails: (classroom: ClassroomWithDetails) => void;
   onSettings?: (classroom: ClassroomWithDetails) => void;
+  onDelete?: (classroom: ClassroomWithDetails) => void;
   isTeacher?: boolean;
 }
 
@@ -32,6 +34,7 @@ export const ClassroomCard = ({
   classroom,
   onViewDetails,
   onSettings,
+  onDelete,
   isTeacher = false,
 }: ClassroomCardProps) => {
   const { toast } = useToast();
@@ -238,8 +241,20 @@ export const ClassroomCard = ({
             variant="outline"
             size="icon"
             onClick={() => onSettings(classroom)}
+            title="Configurações"
           >
             <Settings className="h-4 w-4" />
+          </Button>
+        )}
+        {isTeacher && onDelete && (
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => onDelete(classroom)}
+            className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950"
+            title="Excluir sala"
+          >
+            <Trash2 className="h-4 w-4" />
           </Button>
         )}
       </CardFooter>

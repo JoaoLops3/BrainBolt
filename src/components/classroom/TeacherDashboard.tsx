@@ -8,21 +8,49 @@ import { ClassroomDetails } from "./ClassroomDetails";
 import { ClassroomWithDetails } from "@/types/classroom";
 import { School, Plus, Loader2, GraduationCap, ArrowLeft } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface TeacherDashboardProps {
   onBack: () => void;
 }
 
 export const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
-  const { classrooms, loading } = useClassrooms();
+  const { classrooms, loading, deleteClassroom } = useClassrooms();
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [selectedClassroom, setSelectedClassroom] =
     useState<ClassroomWithDetails | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [classroomToDelete, setClassroomToDelete] =
+    useState<ClassroomWithDetails | null>(null);
 
   const handleViewDetails = (classroom: ClassroomWithDetails) => {
     setSelectedClassroom(classroom);
     setDetailsOpen(true);
+  };
+
+  const handleDeleteClassroom = (classroom: ClassroomWithDetails) => {
+    setClassroomToDelete(classroom);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!classroomToDelete) return;
+
+    const success = await deleteClassroom(classroomToDelete.id);
+    if (success) {
+      setDeleteDialogOpen(false);
+      setClassroomToDelete(null);
+    }
   };
 
   const activeClassrooms = classrooms.filter((c) => {
@@ -123,6 +151,7 @@ export const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
                       key={classroom.id}
                       classroom={classroom}
                       onViewDetails={handleViewDetails}
+                      onDelete={handleDeleteClassroom}
                       isTeacher={true}
                     />
                   ))}
@@ -143,6 +172,7 @@ export const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
                       key={classroom.id}
                       classroom={classroom}
                       onViewDetails={handleViewDetails}
+                      onDelete={handleDeleteClassroom}
                       isTeacher={true}
                     />
                   ))}
@@ -164,7 +194,40 @@ export const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
         onOpenChange={setDetailsOpen}
         isTeacher={true}
       />
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar exclusão da sala</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir a sala "{classroomToDelete?.name}"?
+              <br />
+              <br />
+              <strong className="text-red-600 dark:text-red-400">
+                ⚠️ Esta ação não pode ser desfeita!
+              </strong>
+              <br />
+              <br />
+              Serão excluídos permanentemente:
+              <ul className="list-disc list-inside mt-2 space-y-1">
+                <li>Todos os alunos da sala</li>
+                <li>Todas as perguntas customizadas</li>
+                <li>Todo o histórico de jogos</li>
+                <li>Todos os convites pendentes</li>
+              </ul>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              Sim, excluir sala
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
-

@@ -201,46 +201,6 @@ export const useClassrooms = () => {
     [user, toast, fetchTeacherClassrooms]
   );
 
-  // Excluir sala de aula
-  const deleteClassroom = useCallback(
-    async (classroomId: string) => {
-      if (!user) return false;
-
-      setLoading(true);
-      setError(null);
-
-      try {
-        const { error: deleteError } = await sb
-          .from("classrooms")
-          .delete()
-          .eq("id", classroomId)
-          .eq("teacher_id", user.id);
-
-        if (deleteError) throw deleteError;
-
-        toast({
-          title: "✅ Sala excluída!",
-          description: "A sala foi removida com sucesso.",
-        });
-
-        await fetchTeacherClassrooms();
-        return true;
-      } catch (err: any) {
-        console.error("Error deleting classroom:", err);
-        setError(err.message);
-        toast({
-          title: "❌ Erro ao excluir sala",
-          description: err.message,
-          variant: "destructive",
-        });
-        return false;
-      } finally {
-        setLoading(false);
-      }
-    },
-    [user, toast, fetchTeacherClassrooms]
-  );
-
   // Entrar na sala com código
   const joinClassroom = useCallback(
     async (classCode: string) => {
@@ -267,7 +227,18 @@ export const useClassrooms = () => {
 
         if (findError) throw new Error("Código de sala inválido");
 
-        // Check if already a member
+        // Verificar se o usuário é o professor desta sala
+        if (classroom.teacher_id === user.id) {
+          toast({
+            title: "❌ Acesso negado",
+            description:
+              "Professores não podem entrar na própria sala como alunos.",
+            variant: "destructive",
+          });
+          return false;
+        }
+
+        // Verificar se já é membro
         const { data: existing } = await sb
           .from("classroom_students")
           .select("*")
@@ -284,7 +255,7 @@ export const useClassrooms = () => {
           return false;
         }
 
-        // Join classroom
+        // Entrar na sala
         const { error: joinError } = await sb
           .from("classroom_students")
           .insert([
@@ -318,6 +289,90 @@ export const useClassrooms = () => {
       }
     },
     [user, toast, fetchStudentClassrooms]
+  );
+
+  // Excluir sala (apenas para professores/lider)
+  const deleteClassroom = useCallback(
+    async (classroomId: string) => {
+      if (!user) {
+        toast({
+          title: "❌ Erro",
+          description: "Você precisa estar logado para excluir uma sala.",
+          variant: "destructive",
+        });
+        return false;
+      }
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        // Verificar se o usuário é professor da sala
+        const { data: classroom, error: fetchError } = await sb
+          .from("classrooms")
+          .select("*")
+          .eq("id", classroomId)
+          .eq("teacher_id", user.id)
+          .single();
+
+        if (fetchError || !classroom) {
+          throw new Error(
+            "Sala não encontrada ou você não tem permissão para excluí-la"
+          );
+        }
+
+        // Excluir todos os estudantes da sala primeiro
+        const { error: deleteStudentsError } = await sb
+          .from("classroom_students")
+          .delete()
+          .eq("classroom_id", classroomId);
+
+        if (deleteStudentsError) {
+          console.warn("Erro ao excluir estudantes:", deleteStudentsError);
+        }
+
+        // Excluir todas as perguntas customizadas da sala
+        const { error: deleteQuestionsError } = await sb
+          .from("custom_questions")
+          .delete()
+          .eq("classroom_id", classroomId);
+
+        if (deleteQuestionsError) {
+          console.warn(
+            "Erro ao excluir perguntas customizadas:",
+            deleteQuestionsError
+          );
+        }
+
+        // Excluir a sala
+        const { error: deleteError } = await sb
+          .from("classrooms")
+          .delete()
+          .eq("id", classroomId);
+
+        if (deleteError) throw deleteError;
+
+        toast({
+          title: "✅ Sala excluída!",
+          description: `A sala "${classroom.name}" foi excluída com sucesso.`,
+        });
+
+        await fetchTeacherClassrooms();
+        return true;
+      } catch (err: any) {
+        console.error("Erro ao excluir sala:", err);
+        setError(err.message);
+        toast({
+          title: "❌ Erro ao excluir sala",
+          description: err.message,
+          variant: "destructive",
+        });
+        return false;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [user, toast, fetchTeacherClassrooms]
   );
 
   // Sair da sala

@@ -13,11 +13,18 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Mail, Lock, User } from "lucide-react";
+import { Loader2, Mail, Lock, User, GraduationCap, Users } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useLoginStorage } from "@/hooks/useSecureStorage";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const Auth = () => {
   const { user, loading, signIn, signUp, signInWithOAuth } = useAuth();
@@ -36,6 +43,7 @@ const Auth = () => {
     email: "",
     password: "",
     displayName: "",
+    userRole: "student" as "teacher" | "leader" | "student",
   });
 
   // Carregar e-mail salvo quando o componente montar
@@ -116,7 +124,8 @@ const Auth = () => {
     const { error } = await signUp(
       signupForm.email,
       signupForm.password,
-      signupForm.displayName
+      signupForm.displayName,
+      signupForm.userRole
     );
 
     if (error) {
@@ -432,6 +441,55 @@ const Auth = () => {
                         required
                       />
                     </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="userRole" className="text-white">
+                      Você é:
+                    </Label>
+                    <Select
+                      value={signupForm.userRole}
+                      onValueChange={(
+                        value: "teacher" | "leader" | "student"
+                      ) =>
+                        setSignupForm((prev) => ({
+                          ...prev,
+                          userRole: value,
+                        }))
+                      }
+                    >
+                      <SelectTrigger className="bg-white/20 border-white/40 text-white focus:border-white/60 focus:ring-2 focus:ring-white/20">
+                        <SelectValue placeholder="Selecione seu papel" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="teacher">
+                          <div className="flex items-center gap-2">
+                            <GraduationCap className="h-4 w-4" />
+                            <span>Professor</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="leader">
+                          <div className="flex items-center gap-2">
+                            <Users className="h-4 w-4" />
+                            <span>Líder</span>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="student">
+                          <div className="flex items-center gap-2">
+                            <User className="h-4 w-4" />
+                            <span>Estudante</span>
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-white/70">
+                      {signupForm.userRole === "teacher" &&
+                        "Crie e gerencie salas de aula para seus alunos"}
+                      {signupForm.userRole === "leader" &&
+                        "Gerencie grupos de estudo e competições"}
+                      {signupForm.userRole === "student" &&
+                        "Entre em salas e participe de competições"}
+                    </p>
                   </div>
 
                   <div className="space-y-2">
