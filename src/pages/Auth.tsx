@@ -258,7 +258,7 @@ const Auth = () => {
                       <Separator className="w-full bg-white/20" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-gradient-auth px-2 text-white/80">
+                      <span className="bg-white/20 backdrop-blur-lg px-3 py-1 rounded-full text-white/80 text-xs font-medium border border-white/30">
                         ou
                       </span>
                     </div>
@@ -403,7 +403,7 @@ const Auth = () => {
                       <Separator className="w-full bg-white/20" />
                     </div>
                     <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-gradient-auth px-2 text-white/80">
+                      <span className="bg-white/20 backdrop-blur-lg px-3 py-1 rounded-full text-white/80 text-xs font-medium border border-white/30">
                         ou
                       </span>
                     </div>

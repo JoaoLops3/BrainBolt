@@ -351,10 +351,16 @@ export const AdvancedStatsModal = ({
                         <div className="flex justify-between text-sm mb-1">
                           <span>Precisão</span>
                           <span>
-                            {category.accuracy_percentage.toFixed(1)}%
+                            {Math.min(
+                              category.accuracy_percentage,
+                              100
+                            ).toFixed(1)}
+                            %
                           </span>
                         </div>
-                        <Progress value={category.accuracy_percentage} />
+                        <Progress
+                          value={Math.min(category.accuracy_percentage, 100)}
+                        />
                       </div>
 
                       <div className="grid grid-cols-2 gap-2 text-sm">
@@ -432,10 +438,16 @@ export const AdvancedStatsModal = ({
                           </div>
 
                           <div className="text-sm text-muted-foreground">
-                            {session.correct_answers}/
-                            {session.questions_answered} corretas •{" "}
-                            {session.accuracy_percentage?.toFixed(1) || 0}%
-                            precisão • {session.max_streak} streak •{" "}
+                            {Math.min(
+                              session.correct_answers,
+                              session.questions_answered
+                            )}
+                            /{session.questions_answered} corretas •{" "}
+                            {Math.min(
+                              session.accuracy_percentage || 0,
+                              100
+                            ).toFixed(1)}
+                            % precisão • {session.max_streak} streak •{" "}
                             {Math.round(
                               session.time_spent / session.questions_answered
                             )}
@@ -494,7 +506,8 @@ export const AdvancedStatsModal = ({
                       #{ranking.win_rate_rank}
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      {ranking.win_percentage.toFixed(1)}% vitórias
+                      {Math.min(ranking.win_percentage, 100).toFixed(1)}%
+                      vitórias
                     </div>
                   </CardContent>
                 </Card>

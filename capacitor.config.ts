@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: "com.joaolops3.perguntados",
+  appId: "com.joaolops3.brainbolt",
   appName: "Brain Bolt",
   webDir: "dist",
   plugins: {

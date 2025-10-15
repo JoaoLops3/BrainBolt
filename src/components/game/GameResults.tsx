@@ -29,8 +29,9 @@ export const GameResults = ({
   onPlayAgain,
   onBackToMenu,
 }: GameResultsProps) => {
-  const accuracy = Math.round(
-    (stats.correctAnswers / stats.totalQuestions) * 100
+  const accuracy = Math.min(
+    Math.round((stats.correctAnswers / stats.totalQuestions) * 100),
+    100
   );
   const collectedCount = categories.filter((cat) => cat.collected).length;
 
