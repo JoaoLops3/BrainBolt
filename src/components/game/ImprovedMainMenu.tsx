@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatCard } from "@/components/ui/StatCard";
@@ -20,13 +20,14 @@ import {
   Award,
   School,
   GraduationCap,
+  LogOut,
+  CircleHelp,
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { LogOut } from "lucide-react";
 import { useStats } from "@/contexts/StatsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { TutorialTrigger } from "@/components/tutorial/TutorialTrigger";
+import { InteractiveTutorial } from "@/components/tutorial/InteractiveTutorial";
 
 interface ImprovedMainMenuProps {
   onSelectMode: (mode: "normal" | "speed") => void;
@@ -56,6 +57,7 @@ export const ImprovedMainMenu = ({
   const { stats, loading } = useStats();
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
+  const [showTutorial, setShowTutorial] = useState(false);
 
   const handleSignOut = async () => {
     try {
@@ -63,6 +65,15 @@ export const ImprovedMainMenu = ({
     } finally {
       navigate("/auth", { replace: true });
     }
+  };
+
+  const handleTutorialComplete = () => {
+    setShowTutorial(false);
+    localStorage.setItem("brainbolt-tutorial-completed", "true");
+  };
+
+  const handleTutorialSkip = () => {
+    setShowTutorial(false);
   };
 
   // Estatísticas rápidas removidas
@@ -284,6 +295,20 @@ export const ImprovedMainMenu = ({
             </div>
             <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out pointer-events-none" />
           </Button>
+
+          {/* Botão de Tutorial */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setShowTutorial(true)}
+            className="group relative overflow-hidden transition-all glass-button text-white hover:bg-white/30 shadow-lg hover:shadow-xl hover:shadow-primary/20 border border-white/20 hover:border-white/40 rounded-full"
+          >
+            <div className="p-1 rounded-md bg-white/10 group-hover:bg-white/20 transition-colors duration-200">
+              <CircleHelp className="h-6 w-6" />
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out pointer-events-none" />
+          </Button>
+
           <Button
             variant="ghost"
             size="icon"
@@ -298,8 +323,13 @@ export const ImprovedMainMenu = ({
         </div>
       </ResponsiveContainer>
 
-      {/* Botão de Tutorial Flutuante */}
-      <TutorialTrigger />
+      {/* Modal de Tutorial */}
+      {showTutorial && (
+        <InteractiveTutorial
+          onComplete={handleTutorialComplete}
+          onSkip={handleTutorialSkip}
+        />
+      )}
     </div>
   );
 };

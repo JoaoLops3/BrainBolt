@@ -1,12 +1,23 @@
 import { useState } from "react";
 import { useClassrooms } from "@/hooks/useClassrooms";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
+import { InteractiveTutorial } from "@/components/tutorial/InteractiveTutorial";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ClassroomCard } from "./ClassroomCard";
 import { CreateClassroomModal } from "./CreateClassroomModal";
 import { ClassroomDetails } from "./ClassroomDetails";
 import { ClassroomWithDetails } from "@/types/classroom";
-import { School, Plus, Loader2, GraduationCap, ArrowLeft } from "lucide-react";
+import {
+  School,
+  Plus,
+  Loader2,
+  GraduationCap,
+  ArrowLeft,
+  Settings,
+  LogOut,
+  CircleHelp,
+} from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   AlertDialog,
@@ -25,6 +36,7 @@ interface TeacherDashboardProps {
 
 export const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
   const { classrooms, loading, deleteClassroom } = useClassrooms();
+  const { signOut } = useAuth();
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [selectedClassroom, setSelectedClassroom] =
     useState<ClassroomWithDetails | null>(null);
@@ -32,6 +44,21 @@ export const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [classroomToDelete, setClassroomToDelete] =
     useState<ClassroomWithDetails | null>(null);
+  const [showTutorial, setShowTutorial] = useState(false);
+
+  const handleSignOut = async () => {
+    await signOut();
+    onBack();
+  };
+
+  const handleTutorialComplete = () => {
+    setShowTutorial(false);
+    localStorage.setItem("brainbolt-tutorial-completed", "true");
+  };
+
+  const handleTutorialSkip = () => {
+    setShowTutorial(false);
+  };
 
   const handleViewDetails = (classroom: ClassroomWithDetails) => {
     setSelectedClassroom(classroom);
@@ -70,14 +97,59 @@ export const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <Button
-            variant="ghost"
-            onClick={onBack}
-            className="mb-4 text-white hover:bg-white/20"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Voltar ao Menu
-          </Button>
+          <div className="flex items-center justify-between mb-4">
+            <Button
+              variant="ghost"
+              onClick={onBack}
+              className="text-white hover:bg-white/20"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Voltar ao Menu
+            </Button>
+
+            {/* Botões de Configurações, Tutorial e Sair */}
+            <div className="flex justify-center gap-3">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  // TODO: Abrir configurações
+                  console.log("Configurações");
+                }}
+                className="group relative overflow-hidden transition-all glass-button text-white hover:bg-white/30 shadow-lg hover:shadow-xl hover:shadow-primary/20 border border-white/20 hover:border-white/40 rounded-full"
+              >
+                <div className="p-1 rounded-md bg-white/10 group-hover:bg-white/20 transition-colors duration-200">
+                  <Settings className="h-6 w-6" />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out pointer-events-none" />
+              </Button>
+
+              {/* Botão de Tutorial */}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowTutorial(true)}
+                className="group relative overflow-hidden transition-all glass-button text-white hover:bg-white/30 shadow-lg hover:shadow-xl hover:shadow-primary/20 border border-white/20 hover:border-white/40 rounded-full"
+              >
+                <div className="p-1 rounded-md bg-white/10 group-hover:bg-white/20 transition-colors duration-200">
+                  <CircleHelp className="h-6 w-6" />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out pointer-events-none" />
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleSignOut}
+                className="group relative overflow-hidden transition-all glass-button text-white hover:bg-white/30 shadow-lg hover:shadow-xl hover:shadow-primary/20 border border-white/20 hover:border-white/40 rounded-full"
+              >
+                <div className="p-1 rounded-md bg-white/10 group-hover:bg-white/20 transition-colors duration-200">
+                  <LogOut className="h-6 w-6" />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out pointer-events-none" />
+              </Button>
+            </div>
+          </div>
 
           <Card className="backdrop-blur-lg bg-white/20 border-white/30">
             <CardHeader>
@@ -236,6 +308,14 @@ export const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Modal de Tutorial */}
+      {showTutorial && (
+        <InteractiveTutorial
+          onComplete={handleTutorialComplete}
+          onSkip={handleTutorialSkip}
+        />
+      )}
     </div>
   );
 };
