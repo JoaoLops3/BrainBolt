@@ -44,7 +44,6 @@ O Brain Bolt foi criado para resolver um dos maiores desafios da educação mode
 #### 🎨 UX/UI
 
 - **Modo Escuro** 🌙: Claro, Escuro ou Automático
-- **Multilíngue** 🌍: Português 🇧🇷 e Inglês 🇺🇸
 - **Tutorial Interativo** 🎓: 6 passos para novos usuários
 - **Totalmente Responsivo** 📱: Mobile, Tablet, Desktop, iOS, Android
 - **Design Moderno**: Glassmorphism, gradientes, animações fluidas
@@ -68,7 +67,6 @@ O Brain Bolt foi criado para resolver um dos maiores desafios da educação mode
 - **Lucide React** - Ícones SVG otimizados
 - **React Router DOM 6.30.1** - Roteamento
 - **TanStack Query 5.83.0** - Cache e sincronização
-- **i18next** - Internacionalização (PT-BR/EN)
 - **Zustand** - State management
 
 ### Backend & Database
@@ -454,13 +452,6 @@ npx cap doctor       # Verificar Capacitor
 
 ### ✅ Implementado Recentemente
 
-#### 🌍 Internacionalização
-
-- **2 Idiomas**: 🇧🇷 Português e 🇺🇸 Inglês
-- Detecção automática do navegador
-- Seletor de idioma nas Configurações
-- 167 strings traduzidas por idioma
-
 #### 🌙 Modo Escuro Completo
 
 - **3 Opções**: ☀️ Claro, 🌙 Escuro, 🔄 Automático
@@ -547,7 +538,6 @@ npx cap doctor       # Verificar Capacitor
   - CSS: 22 kB
   - JS Total: ~250 kB
 - **Build time**: ~4s
-- **Idiomas**: 2
 - **Categorias**: 6
 - **Perguntas**: 400+ (fixas) + Ilimitadas (custom)
 
