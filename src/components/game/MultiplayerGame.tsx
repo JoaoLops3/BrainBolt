@@ -142,7 +142,6 @@ export const MultiplayerGame = ({
     }
   };
 
-  // Save multiplayer game results for both players
   const saveMultiplayerResults = async (room: MultiplayerRoom) => {
     if (!user) return;
 
@@ -161,7 +160,6 @@ export const MultiplayerGame = ({
         gameResult = "draw";
       }
 
-      // Garantir valores válidos
       const safeCorrectAnswers = Math.min(Math.floor(userScore / 100), 24);
 
       await supabase.from("game_sessions").insert({
@@ -172,7 +170,7 @@ export const MultiplayerGame = ({
         correct_answers: safeCorrectAnswers,
         categories_completed: [],
         max_streak: 0,
-        time_spent: 360, // 24 questions * 15 seconds
+        time_spent: 360,
         game_result: gameResult,
         opponent_id: opponentId,
         room_id: room.id,
@@ -182,7 +180,6 @@ export const MultiplayerGame = ({
     }
   };
 
-  // Calculate scores when both players answered
   const calculateScores = useCallback(async () => {
     if (
       !room ||
@@ -213,7 +210,7 @@ export const MultiplayerGame = ({
 
     setShowAnswer(true);
 
-    // Auto advance to next question after 3 seconds (host only)
+    // Avançar automaticamente após 3 seconds (host only)
     if (isHost) {
       setTimeout(() => {
         nextQuestion();
@@ -234,7 +231,7 @@ export const MultiplayerGame = ({
     }
   };
 
-  // Synchronized timer calculation
+  // Cálculo sincronizado do timer
   const calculateTimeLeft = useCallback(() => {
     if (!room?.question_start_time) return 15;
 
@@ -292,7 +289,7 @@ export const MultiplayerGame = ({
               updatedRoom.game_status as MultiplayerRoom["game_status"],
           });
 
-          // Save results when game finishes
+          // Salvar resultados ao finalizar
           if (
             updatedRoom.game_status === "finished" &&
             room?.game_status !== "finished"
@@ -316,7 +313,7 @@ export const MultiplayerGame = ({
       setSelectedAnswer(null);
       setShowAnswer(false);
 
-      // Set timer based on server synchronization
+      // Timer sincronizado com servidor
       if (room.question_start_time) {
         const newTimeLeft = calculateTimeLeft();
         setTimeLeft(newTimeLeft);

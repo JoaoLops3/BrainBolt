@@ -1,8 +1,3 @@
-/**
- * BRAIN BOLT - Service Worker Avançado
- * PWA Offline-First com Cache Inteligente
- */
-
 const VERSION = '2.0.0';
 const CACHE_PREFIX = 'brainbolt';
 const CACHE_NAME = `${CACHE_PREFIX}-v${VERSION}`;
@@ -36,9 +31,6 @@ const API_ROUTES = [
   '/api/classrooms',
 ];
 
-// ==================================================
-// INSTALL - Cachear assets essenciais
-// ==================================================
 self.addEventListener('install', (event) => {
   console.log(`[SW] Installing version ${VERSION}...`);
 
@@ -58,9 +50,6 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// ==================================================
-// ACTIVATE - Limpar caches antigas
-// ==================================================
 self.addEventListener('activate', (event) => {
   console.log('[SW] Activating...');
 
@@ -83,24 +72,18 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// ==================================================
-// FETCH - Estratégias de cache
-// ==================================================
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Ignorar requests não-GET
   if (request.method !== 'GET') {
     return;
   }
 
-  // Ignorar chrome extensions e requests externos específicos
   if (url.protocol === 'chrome-extension:' || url.hostname === 'localhost') {
     return;
   }
 
-  // Determinar estratégia baseada no tipo de request
   if (isImageRequest(url)) {
     event.respondWith(cacheFirstStrategy(request, IMAGE_CACHE));
   } else if (isStaticAsset(url)) {
@@ -114,20 +97,11 @@ self.addEventListener('fetch', (event) => {
   }
 });
 
-// ==================================================
-// ESTRATÉGIAS DE CACHE
-// ==================================================
-
-/**
- * Cache First - Tenta cache primeiro, depois network
- * Ideal para: Imagens, fontes, CSS, JS
- */
 async function cacheFirstStrategy(request, cacheName) {
   try {
     const cachedResponse = await caches.match(request);
     
     if (cachedResponse) {
-      // Verificar se o cache ainda é válido
       const cachedDate = new Date(cachedResponse.headers.get('date'));
       const now = new Date();
       const age = now - cachedDate;
@@ -137,7 +111,6 @@ async function cacheFirstStrategy(request, cacheName) {
       }
     }
 
-    // Se não há cache ou está expirado, buscar da rede
     const networkResponse = await fetch(request);
     
     if (networkResponse && networkResponse.status === 200) {
@@ -147,21 +120,15 @@ async function cacheFirstStrategy(request, cacheName) {
     
     return networkResponse;
   } catch (error) {
-    // Se falhar, tentar retornar do cache mesmo expirado
     const cachedResponse = await caches.match(request);
     if (cachedResponse) {
       return cachedResponse;
     }
     
-    // Retornar fallback se disponível
     return getOfflineFallback(request);
   }
 }
 
-/**
- * Network First - Tenta network primeiro, depois cache
- * Ideal para: API calls, dados dinâmicos
- */
 async function networkFirstStrategy(request, cacheName) {
   try {
     const networkResponse = await fetch(request);
@@ -184,10 +151,6 @@ async function networkFirstStrategy(request, cacheName) {
   }
 }
 
-/**
- * Stale While Revalidate - Serve cache e atualiza em background
- * Ideal para: Conteúdo que pode estar levemente desatualizado
- */
 async function staleWhileRevalidateStrategy(request, cacheName) {
   const cachedResponse = await caches.match(request);
   
@@ -204,9 +167,6 @@ async function staleWhileRevalidateStrategy(request, cacheName) {
   return cachedResponse || networkFetch;
 }
 
-// ==================================================
-// HELPERS
-// ==================================================
 
 function isImageRequest(url) {
   return url.pathname.match(/\.(png|jpg|jpeg|gif|svg|webp|ico)$/i);
@@ -263,11 +223,9 @@ async function syncGameData() {
   try {
     console.log('[SW] Syncing game data...');
     
-    // Buscar dados pendentes do IndexedDB
     const pendingData = await getPendingData('game-sessions');
     
     if (pendingData && pendingData.length > 0) {
-      // Enviar para API
       const response = await fetch('/api/game-sessions/sync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -278,7 +236,6 @@ async function syncGameData() {
         await clearPendingData('game-sessions');
         console.log('[SW] Game data synced successfully');
         
-        // Notificar cliente
         self.clients.matchAll().then((clients) => {
           clients.forEach((client) => {
             client.postMessage({
@@ -401,17 +358,11 @@ self.addEventListener('message', (event) => {
   }
 });
 
-// ==================================================
-// INDEXEDDB HELPERS (para Background Sync)
-// ==================================================
 async function getPendingData(storeName) {
-  // TODO: Implementar leitura do IndexedDB
-  // Por enquanto retorna null
   return null;
 }
 
 async function clearPendingData(storeName) {
-  // TODO: Implementar limpeza do IndexedDB
   return;
 }
 

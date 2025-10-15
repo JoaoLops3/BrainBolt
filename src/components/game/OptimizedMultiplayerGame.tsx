@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Users, Trophy, Timer } from "lucide-react";
 
-// Import optimized hooks and stores
 import { useServerTimer } from "@/hooks/useServerTimer";
 import { useMultiplayerHeartbeat } from "@/hooks/useMultiplayerHeartbeat";
 import { useOfflineMultiplayer } from "@/hooks/useOfflineMultiplayer";
@@ -22,6 +21,7 @@ import { ConnectionStatus } from "@/components/ui/ConnectionStatus";
 import { multiplayerQueries } from "@/utils/supabaseOptimized";
 import { withRetry } from "@/utils/retryWrapper";
 import { questions } from "@/data/questions";
+import { Question } from "@/types/game";
 
 interface OptimizedMultiplayerGameProps {
   roomId: string;
@@ -37,7 +37,6 @@ export const OptimizedMultiplayerGame = ({
   const { user } = useAuth();
   const { toast } = useToast();
 
-  // Zustand store for state management
   const {
     room,
     currentQuestion,
@@ -55,10 +54,8 @@ export const OptimizedMultiplayerGame = ({
     setIsConnected,
   } = useMultiplayerStore();
 
-  // Offline multiplayer handling
   const { queueAction, isSyncing } = useOfflineMultiplayer(roomId);
 
-  // Heartbeat for connection monitoring
   const {
     isConnected: heartbeatConnected,
     lastActivity,
@@ -69,7 +66,25 @@ export const OptimizedMultiplayerGame = ({
     onReconnect: () => setIsConnected(true),
   });
 
-  // Server-synchronized timer
+  const handleTimeUp = async () => {
+    if (selectedAnswer !== null || !currentQuestion || !user) return;
+
+    setSelectedAnswer(-1);
+    setShowAnswer(true);
+
+    queueAction("answer", {
+      userId: user.id,
+      questionId: currentQuestion.id,
+      answerIndex: -1,
+      isCorrect: false,
+      timeSpent: 15,
+    });
+
+    setTimeout(() => {
+      nextQuestion();
+    }, 2000);
+  };
+
   const { timeLeft: serverTimeLeft, isActive: timerActive } = useServerTimer(
     room?.question_start_time || null,
     {
@@ -78,7 +93,6 @@ export const OptimizedMultiplayerGame = ({
     }
   );
 
-  // Debounced score update to prevent spam
   const debouncedScoreUpdate = useDebouncedUpdate(
     async (scoreData: {
       userId: string;
@@ -97,7 +111,6 @@ export const OptimizedMultiplayerGame = ({
     { delay: 500, maxWait: 2000 }
   );
 
-  // Fetch room data with optimized query
   const fetchRoomData = async () => {
     try {
       const { data, error } = await multiplayerQueries.getRoomById(roomId);
@@ -116,12 +129,10 @@ export const OptimizedMultiplayerGame = ({
     }
   };
 
-  // Start game (host only)
   const startGame = async () => {
     if (!isHost || !room || !user) return;
 
     try {
-      // Shuffle questions for host
       const shuffledQuestions = [...questions]
         .sort(() => Math.random() - 0.5)
         .slice(0, 24);
@@ -156,7 +167,6 @@ export const OptimizedMultiplayerGame = ({
     }
   };
 
-  // Handle answer selection
   const handleAnswerSelect = async (answerIndex: number) => {
     if (selectedAnswer !== null || !currentQuestion || !user) return;
 
@@ -165,7 +175,6 @@ export const OptimizedMultiplayerGame = ({
 
     const isCorrect = currentQuestion.correct_answer === answerIndex;
 
-    // Queue answer for offline playback and immediate database update
     queueAction("answer", {
       userId: user.id,
       questionId: currentQuestion.id,
@@ -174,53 +183,27 @@ export const OptimizedMultiplayerGame = ({
       timeSpent: 15 - timeLeft,
     });
 
-    // Debounced update to prevent spam
     debouncedScoreUpdate.update({
       userId: user.id,
       isCorrect,
       questionId: currentQuestion.id,
     });
 
-    // Auto-advance after 2 seconds
     setTimeout(() => {
       nextQuestion();
     }, 2000);
   };
 
-  // Handle time up
-  const handleTimeUp = async () => {
-    if (selectedAnswer !== null || !currentQuestion || !user) return;
-
-    setSelectedAnswer(-1);
-    setShowAnswer(true);
-
-    // Queue timeout answer
-    queueAction("answer", {
-      userId: user.id,
-      questionId: currentQuestion.id,
-      answerIndex: -1,
-      isCorrect: false,
-      timeSpent: 15,
-    });
-
-    setTimeout(() => {
-      nextQuestion();
-    }, 2000);
-  };
-
-  // Next question
   const nextQuestion = async () => {
     if (!room || !isHost) return;
 
     const currentIndex = (room.current_question_index || 0) + 1;
 
-    // End game if last question
     if (currentIndex >= 24) {
       await endGame();
       return;
     }
 
-    // Get next question
     const shuffledIndex = currentIndex % questions.length;
     const nextQuestionData = questions[shuffledIndex];
 
@@ -250,7 +233,6 @@ export const OptimizedMultiplayerGame = ({
     }
   };
 
-  // End game
   const endGame = async () => {
     if (!room || !user) return;
 
@@ -279,7 +261,6 @@ export const OptimizedMultiplayerGame = ({
     }
   };
 
-  // Determine game winner
   const determineWinner = () => {
     if (!room) return null;
 
@@ -288,10 +269,9 @@ export const OptimizedMultiplayerGame = ({
 
     if (hostScore > guestScore) return room.host_id;
     if (guestScore > hostScore) return room.guest_id;
-    return null; // Draw
+    return null;
   };
 
-  // Real-time room updates
   useEffect(() => {
     if (!roomId) return;
 
@@ -311,7 +291,6 @@ export const OptimizedMultiplayerGame = ({
           const updatedRoom = payload.new as any;
           updateRoomFromServer(updatedRoom);
 
-          // Update current question if changed
           if (
             updatedRoom.current_question_id &&
             updatedRoom.current_question_id !== currentQuestion?.id
@@ -334,17 +313,14 @@ export const OptimizedMultiplayerGame = ({
     };
   }, [roomId, currentQuestion?.id]);
 
-  // Update timer from server
   useEffect(() => {
     setTimeLeft(serverTimeLeft);
   }, [serverTimeLeft]);
 
-  // Update connection status
   useEffect(() => {
     setIsConnected(heartbeatConnected);
   }, [heartbeatConnected, setIsConnected]);
 
-  // Get current question
   useEffect(() => {
     if (
       !room?.current_question_id ||

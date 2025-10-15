@@ -495,7 +495,7 @@ export const ImprovedMultiplayerMenu = ({
                 onClick={createRoom}
                 disabled={loading}
                 size="lg"
-                className="w-full h-12 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-base font-bold transform hover:scale-105 transition-all duration-300 shadow-xl"
+                className="w-full h-12 bg-transparent hover:bg-white/10 text-base font-bold transform hover:scale-105 transition-all duration-300 shadow-xl border-2 border-white/30"
               >
                 <div className="flex items-center gap-3">
                   <Plus className="h-6 w-6" />
@@ -534,7 +534,7 @@ export const ImprovedMultiplayerMenu = ({
                     placeholder="Código da sala (ex: ABC123)"
                     value={roomCode}
                     onChange={(e) => setRoomCode(e.target.value.toUpperCase())}
-                    className="pl-12 text-center text-lg font-bold h-12 bg-white/10 border-white/30 text-white placeholder:text-white/50 focus:bg-white/20"
+                    className="pl-12 text-center text-lg font-bold h-12 bg-transparent border-white/30 text-white placeholder:text-white/50 focus:bg-transparent"
                     maxLength={6}
                   />
                 </div>

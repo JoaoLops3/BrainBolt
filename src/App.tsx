@@ -4,7 +4,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { StatsProvider } from "@/contexts/StatsContext";
-import { ThemeProvider } from "@/contexts/ThemeContext";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { Loader2 } from "lucide-react";
 
@@ -36,30 +35,28 @@ const PageLoader = () => (
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <AuthProvider>
-        <StatsProvider>
-          <TooltipProvider>
-            <BrowserRouter
-              future={{
-                v7_startTransition: true,
-                v7_relativeSplatPath: true,
-              }}
-            >
-              <Suspense fallback={<PageLoader />}>
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/auth" element={<Auth />} />
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-            </BrowserRouter>
-            <InstallPrompt />
-          </TooltipProvider>
-        </StatsProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <StatsProvider>
+        <TooltipProvider>
+          <BrowserRouter
+            future={{
+              v7_startTransition: true,
+              v7_relativeSplatPath: true,
+            }}
+          >
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/auth" element={<Auth />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
+          <InstallPrompt />
+        </TooltipProvider>
+      </StatsProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 

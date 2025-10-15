@@ -20,10 +20,7 @@ export const useClassrooms = () => {
   const [myClassrooms, setMyClassrooms] = useState<ClassroomWithDetails[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // Ajuste de tipagem: usar instância sem tipos fortes para tabelas recém-criadas
   const sb: any = supabase;
-
-  // Buscar salas em que o usuário é professor
   const fetchTeacherClassrooms = useCallback(async () => {
     if (!user) return;
 
@@ -65,7 +62,6 @@ export const useClassrooms = () => {
     }
   }, [user, toast]);
 
-  // Buscar salas em que o usuário é aluno
   const fetchStudentClassrooms = useCallback(async () => {
     if (!user) return;
 
@@ -99,7 +95,6 @@ export const useClassrooms = () => {
     }
   }, [user, toast]);
 
-  // Criar nova sala de aula
   const createClassroom = useCallback(
     async (classroomData: CreateClassroomData) => {
       if (!user) {
@@ -115,7 +110,6 @@ export const useClassrooms = () => {
       setError(null);
 
       try {
-        // Generate unique class code
         const { data: codeData, error: codeError } = await sb.rpc(
           "generate_classroom_code"
         );
@@ -161,7 +155,6 @@ export const useClassrooms = () => {
     [user, toast, fetchTeacherClassrooms]
   );
 
-  // Atualizar dados da sala
   const updateClassroom = useCallback(
     async (classroomId: string, updates: UpdateClassroomData) => {
       if (!user) return false;
@@ -201,7 +194,6 @@ export const useClassrooms = () => {
     [user, toast, fetchTeacherClassrooms]
   );
 
-  // Entrar na sala com código
   const joinClassroom = useCallback(
     async (classCode: string) => {
       if (!user) {
@@ -217,7 +209,6 @@ export const useClassrooms = () => {
       setError(null);
 
       try {
-        // Find classroom by code
         const { data: classroom, error: findError } = await sb
           .from("classrooms")
           .select("*")
@@ -291,7 +282,6 @@ export const useClassrooms = () => {
     [user, toast, fetchStudentClassrooms]
   );
 
-  // Excluir sala (apenas para professores/lider)
   const deleteClassroom = useCallback(
     async (classroomId: string) => {
       if (!user) {
@@ -375,7 +365,6 @@ export const useClassrooms = () => {
     [user, toast, fetchTeacherClassrooms]
   );
 
-  // Sair da sala
   const leaveClassroom = useCallback(
     async (classroomId: string) => {
       if (!user) return false;
@@ -415,7 +404,6 @@ export const useClassrooms = () => {
     [user, toast, fetchStudentClassrooms]
   );
 
-  // Obter ranking da sala
   const getClassroomRankings = useCallback(
     async (classroomId: string): Promise<ClassroomRanking[]> => {
       if (!classroomId) {
@@ -447,7 +435,6 @@ export const useClassrooms = () => {
     [toast]
   );
 
-  // Obter estatísticas da sala
   const getClassroomStatistics = useCallback(
     async (classroomId: string): Promise<ClassroomStatistics | null> => {
       if (!classroomId) {
@@ -479,7 +466,6 @@ export const useClassrooms = () => {
     [toast]
   );
 
-  // Get classroom students
   const getClassroomStudents = useCallback(
     async (classroomId: string): Promise<ClassroomStudent[]> => {
       try {
@@ -505,7 +491,6 @@ export const useClassrooms = () => {
     []
   );
 
-  // Remove student from classroom
   const removeStudent = useCallback(
     async (classroomId: string, studentId: string) => {
       if (!user) return false;
