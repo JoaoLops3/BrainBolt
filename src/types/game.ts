@@ -1,5 +1,11 @@
-export type CategoryType = 'sports' | 'entertainment' | 'art' | 'science' | 'geography' | 'history';
-export type GameMode = 'normal' | 'speed' | 'multiplayer';
+export type CategoryType =
+  | "sports"
+  | "entertainment"
+  | "art"
+  | "science"
+  | "geography"
+  | "history";
+export type GameMode = "normal" | "speed" | "multiplayer";
 
 export interface Question {
   id: string;
@@ -7,7 +13,10 @@ export interface Question {
   question: string;
   options: string[];
   correctAnswer: number;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: "easy" | "medium" | "hard";
+  explanation?: string;
+  isCustom?: boolean;
+  customQuestionId?: string;
 }
 
 export interface CategoryInfo {
@@ -23,7 +32,14 @@ export interface GameState {
   score: number;
   questionsAnswered: number;
   categories: CategoryInfo[];
-  gamePhase: 'menu' | 'mode-selection' | 'playing' | 'results' | 'multiplayer' | 'teacherClassrooms' | 'studentClassrooms';
+  gamePhase:
+    | "menu"
+    | "mode-selection"
+    | "playing"
+    | "results"
+    | "multiplayer"
+    | "teacherClassrooms"
+    | "studentClassrooms";
   selectedAnswer: number | null;
   showAnswer: boolean;
   currentStreak: number;
@@ -54,7 +70,7 @@ export interface MultiplayerRoom {
   host_answer?: number;
   guest_answer?: number;
   question_start_time?: string;
-  game_status: 'waiting' | 'playing' | 'question_answered' | 'finished';
+  game_status: "waiting" | "playing" | "question_answered" | "finished";
   winner_id?: string;
   created_at: string;
   updated_at: string;
@@ -65,7 +81,7 @@ export interface MultiplayerInvitation {
   room_id: string;
   inviter_id: string;
   invited_id: string;
-  status: 'pending' | 'accepted' | 'declined' | 'expired';
+  status: "pending" | "accepted" | "declined" | "expired";
   created_at: string;
   updated_at: string;
 }
@@ -74,7 +90,7 @@ export interface Friendship {
   id: string;
   user_id: string;
   friend_id: string;
-  status: 'pending' | 'accepted' | 'blocked';
+  status: "pending" | "accepted" | "blocked";
   created_at: string;
   updated_at: string;
 }

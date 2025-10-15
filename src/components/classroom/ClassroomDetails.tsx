@@ -10,7 +10,8 @@ import { ClassroomWithDetails } from "@/types/classroom";
 import { ClassroomRankings } from "./ClassroomRankings";
 import { ClassroomStatistics } from "./ClassroomStatistics";
 import { ClassroomStudentList } from "./ClassroomStudentList";
-import { School, Trophy, Users, BarChart3 } from "lucide-react";
+import { CustomQuestionsManager } from "./CustomQuestionsManager";
+import { School, Trophy, Users, BarChart3, HelpCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -72,13 +73,21 @@ export const ClassroomDetails = ({
               </div>
               <div className="mt-2 text-sm text-muted-foreground">
                 📅{" "}
-                {format(new Date(classroom.competition_start_date), "dd 'de' MMMM", {
-                  locale: ptBR,
-                })}{" "}
+                {format(
+                  new Date(classroom.competition_start_date),
+                  "dd 'de' MMMM",
+                  {
+                    locale: ptBR,
+                  }
+                )}{" "}
                 até{" "}
-                {format(new Date(classroom.competition_end_date), "dd 'de' MMMM 'de' yyyy", {
-                  locale: ptBR,
-                })}
+                {format(
+                  new Date(classroom.competition_end_date),
+                  "dd 'de' MMMM 'de' yyyy",
+                  {
+                    locale: ptBR,
+                  }
+                )}
               </div>
               {isTeacher && (
                 <div className="mt-2 flex items-center gap-2">
@@ -99,20 +108,40 @@ export const ClassroomDetails = ({
           onValueChange={setActiveTab}
           className="flex-1 overflow-hidden flex flex-col"
         >
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList
+            className={`grid w-full ${
+              isTeacher ? "grid-cols-4" : "grid-cols-2"
+            }`}
+          >
             <TabsTrigger value="rankings" className="flex items-center gap-2">
               <Trophy className="h-4 w-4" />
-              Rankings
+              <span className="hidden sm:inline">Rankings</span>
+              <span className="sm:hidden">Rank</span>
             </TabsTrigger>
             <TabsTrigger value="statistics" className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4" />
-              Estatísticas
+              <span className="hidden sm:inline">Estatísticas</span>
+              <span className="sm:hidden">Stats</span>
             </TabsTrigger>
             {isTeacher && (
-              <TabsTrigger value="students" className="flex items-center gap-2">
-                <Users className="h-4 w-4" />
-                Alunos
-              </TabsTrigger>
+              <>
+                <TabsTrigger
+                  value="students"
+                  className="flex items-center gap-2"
+                >
+                  <Users className="h-4 w-4" />
+                  <span className="hidden sm:inline">Alunos</span>
+                  <span className="sm:hidden">Alunos</span>
+                </TabsTrigger>
+                <TabsTrigger
+                  value="questions"
+                  className="flex items-center gap-2"
+                >
+                  <HelpCircle className="h-4 w-4" />
+                  <span className="hidden sm:inline">Perguntas</span>
+                  <span className="sm:hidden">Q&A</span>
+                </TabsTrigger>
+              </>
             )}
           </TabsList>
 
@@ -126,9 +155,15 @@ export const ClassroomDetails = ({
             </TabsContent>
 
             {isTeacher && (
-              <TabsContent value="students" className="mt-0">
-                <ClassroomStudentList classroomId={classroom.id} />
-              </TabsContent>
+              <>
+                <TabsContent value="students" className="mt-0">
+                  <ClassroomStudentList classroomId={classroom.id} />
+                </TabsContent>
+
+                <TabsContent value="questions" className="mt-0">
+                  <CustomQuestionsManager classroomId={classroom.id} />
+                </TabsContent>
+              </>
             )}
           </div>
         </Tabs>
@@ -136,4 +171,3 @@ export const ClassroomDetails = ({
     </Dialog>
   );
 };
-

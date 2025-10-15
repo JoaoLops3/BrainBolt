@@ -10,7 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
-import { Zap, Clock } from "lucide-react";
+import { Zap, Clock, Lightbulb } from "lucide-react";
 
 interface QuestionCardProps {
   question: Question;
@@ -143,6 +143,28 @@ export const QuestionCard = ({
               <span className="flex-1 text-left">{option}</span>
             </Button>
           ))}
+
+          {/* Show explanation if available and answer is shown */}
+          {showAnswer && question.explanation && (
+            <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800 animate-in slide-in-from-bottom-2 duration-300">
+              <div className="flex items-start gap-2">
+                <Lightbulb className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 shrink-0" />
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold text-blue-700 dark:text-blue-300">
+                    💡 Explicação:
+                  </p>
+                  <p className="text-sm text-blue-600 dark:text-blue-400 leading-relaxed">
+                    {question.explanation}
+                  </p>
+                  {question.isCustom && (
+                    <p className="text-xs text-blue-500 dark:text-blue-500 italic mt-2">
+                      ✨ Pergunta criada pelo professor
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

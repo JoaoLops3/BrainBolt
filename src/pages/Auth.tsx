@@ -56,7 +56,7 @@ const Auth = () => {
     };
 
     loadRememberedEmail();
-  }, [getRememberedEmail]);
+  }, []); // Removido getRememberedEmail da dependência
 
   // Redirecionar se já estiver autenticado
   if (user && !loading) {

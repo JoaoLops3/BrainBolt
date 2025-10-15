@@ -1,7 +1,17 @@
-export type GradeLevel = 'elementary' | 'middle' | 'high' | 'college' | 'other';
-export type ClassroomSubject = 'general' | 'science' | 'history' | 'geography' | 'art' | 'sports' | 'entertainment' | 'math' | 'language' | 'other';
-export type StudentStatus = 'active' | 'inactive' | 'removed';
-export type InvitationStatus = 'pending' | 'accepted' | 'declined' | 'expired';
+export type GradeLevel = "elementary" | "middle" | "high" | "college" | "other";
+export type ClassroomSubject =
+  | "general"
+  | "science"
+  | "history"
+  | "geography"
+  | "art"
+  | "sports"
+  | "entertainment"
+  | "math"
+  | "language"
+  | "other";
+export type StudentStatus = "active" | "inactive" | "removed";
+export type InvitationStatus = "pending" | "accepted" | "declined" | "expired";
 
 export interface Classroom {
   id: string;
@@ -114,3 +124,52 @@ export interface ClassroomWithDetails extends Classroom {
   teacher_email?: string;
 }
 
+export interface CustomQuestion {
+  id: string;
+  category: string;
+  classroom_id: string | null;
+  correct_answer: number;
+  correct_count: number | null;
+  correct_rate: number | null;
+  created_at: string | null;
+  created_by: string;
+  difficulty: string | null;
+  explanation: string | null;
+  is_active: boolean | null;
+  is_public: boolean | null;
+  option_a: string;
+  option_b: string;
+  option_c: string;
+  option_d: string;
+  options: string[];
+  question: string;
+  question_text: string;
+  teacher_id: string | null;
+  updated_at: string | null;
+  usage_count: number | null;
+}
+
+export interface CreateCustomQuestionData {
+  category: string;
+  classroom_id?: string | null;
+  correct_answer: number;
+  correct_count?: number | null;
+  correct_rate?: number | null;
+  created_at?: string | null;
+  created_by: string;
+  difficulty?: string | null;
+  explanation?: string | null;
+  id?: string;
+  is_active?: boolean | null;
+  is_public?: boolean | null;
+  option_a: string;
+  option_b: string;
+  option_c: string;
+  option_d: string;
+  options?: string[];
+  question?: string;
+  question_text: string;
+  teacher_id?: string | null;
+  updated_at?: string | null;
+  usage_count?: number | null;
+}

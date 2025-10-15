@@ -100,17 +100,17 @@ export const useLoginStorage = () => {
     async (email: string) => {
       await storage.setItem(REMEMBER_EMAIL_KEY, email);
     },
-    [storage]
+    [storage.setItem]
   );
 
   const getRememberedEmail = useCallback(async (): Promise<string> => {
     const email = await storage.getItem(REMEMBER_EMAIL_KEY);
     return email || "";
-  }, [storage]);
+  }, [storage.getItem]);
 
   const clearRememberedEmail = useCallback(async () => {
     await storage.removeItem(REMEMBER_EMAIL_KEY);
-  }, [storage]);
+  }, [storage.removeItem]);
 
   return {
     saveRememberedEmail,
