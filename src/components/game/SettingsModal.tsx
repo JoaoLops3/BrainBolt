@@ -10,7 +10,6 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { useNativeNotifications } from "@/hooks/useNativeNotifications";
 import { useTheme } from "@/contexts/ThemeContext";
-import { useTranslation } from "react-i18next";
 import {
   User,
   Save,
@@ -23,9 +22,7 @@ import {
   Moon,
   Sun,
   Monitor,
-  Globe,
 } from "lucide-react";
-import { LanguageSelector } from "@/components/ui/language-selector";
 
 interface SettingsModalProps {
   open: boolean;
@@ -214,26 +211,6 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
                 ? "O tema será ajustado automaticamente de acordo com as configurações do seu sistema."
                 : `Tema ${theme === "light" ? "claro" : "escuro"} ativado.`}
             </p>
-          </div>
-
-          <Separator className="my-4" />
-
-          {/* Language Section */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Globe className="h-4 w-4" />
-              <Label className="text-sm font-medium">Idioma / Language</Label>
-            </div>
-
-            <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-              <div className="flex-1">
-                <p className="text-sm font-medium">Selecione o idioma</p>
-                <p className="text-xs text-muted-foreground">
-                  Select your language
-                </p>
-              </div>
-              <LanguageSelector />
-            </div>
           </div>
 
           <Separator className="my-4" />
