@@ -1,10 +1,3 @@
-/**
- * BRAIN BOLT - Servidor WebSocket para Hardware Físico
- *
- * Este servidor gerencia a comunicação entre os dispositivos ESP32/Arduino
- * e o aplicativo Brain Bolt via WebSocket.
- */
-
 import { WebSocketServer, WebSocket } from "ws";
 import { createServer } from "http";
 import { supabaseServer as supabase } from "./supabase-server";
@@ -521,7 +514,7 @@ const PORT = process.env.WS_PORT || 8080;
 httpServer.listen(PORT, () => {
   console.log(`\n✅ Servidor rodando na porta ${PORT}`);
   console.log(`📡 WebSocket: ws://localhost:${PORT}/ws/hardware`);
-  console.log(`\n💡 Aguardando conexões de dispositivos ESP32/Arduino...\n`);
+  console.log(`\n💡 Aguardando conexões de dispositivos Arduino...\n`);
 });
 
 // Graceful shutdown

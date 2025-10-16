@@ -1,7 +1,3 @@
-/* ============================================
-   BRAIN BOLT - TEMA CLARO E ESCURO
-   ============================================ */
-
 :root {
   /* Cores base - Light Mode */
   --background: 0 0% 100%;
@@ -80,10 +76,6 @@
   --shadow-color: 0 0% 0%;
 }
 
-/* ============================================
-   GRADIENTES RESPONSIVOS AO TEMA
-   ============================================ */
-
 .bg-gradient-primary {
   background: linear-gradient(
     135deg,
@@ -100,10 +92,6 @@
   );
 }
 
-/* ============================================
-   GLASSMORPHISM RESPONSIVO AO TEMA
-   ============================================ */
-
 .glass-card {
   background: hsla(var(--glass-bg) / 0.2);
   border: 1px solid hsla(var(--glass-border) / 0.3);
@@ -118,10 +106,6 @@
   -webkit-backdrop-filter: blur(16px);
 }
 
-/* ============================================
-   SOMBRAS RESPONSIVAS AO TEMA
-   ============================================ */
-
 .shadow-primary {
   box-shadow: 0 10px 30px hsla(var(--shadow-color) / 0.1);
 }
@@ -130,17 +114,9 @@
   box-shadow: 0 10px 40px hsla(var(--shadow-color) / 0.5);
 }
 
-/* ============================================
-   ANIMAÇÕES E TRANSIÇÕES
-   ============================================ */
-
 * {
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
-
-/* ============================================
-   AJUSTES ESPECÍFICOS PARA DARK MODE
-   ============================================ */
 
 .dark .text-gray-600 {
   color: hsl(215 20.2% 65.1%);
@@ -183,10 +159,6 @@
 .dark textarea::placeholder {
   color: hsl(215 20.2% 55.1%);
 }
-
-/* ============================================
-   COMPONENTES ESPECÍFICOS
-   ============================================ */
 
 /* Cards */
 .dark .bg-white\/20 {

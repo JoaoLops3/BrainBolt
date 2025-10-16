@@ -1,7 +1,7 @@
 {
   "name": "brainbolt-hardware-server",
   "version": "1.0.0",
-  "description": "WebSocket server for Brain Bolt physical hardware (ESP32/Arduino)",
+  "description": "WebSocket server for Brain Bolt physical hardware (Arduino)",
   "main": "hardware-websocket.ts",
   "scripts": {
     "start": "tsx hardware-websocket.ts",

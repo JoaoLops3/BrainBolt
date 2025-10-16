@@ -1,11 +1,11 @@
 # 🔧 Brain Bolt - Servidor WebSocket para Hardware Físico
 
-Este é o servidor WebSocket que gerencia a comunicação entre os dispositivos ESP32/Arduino e o aplicativo Brain Bolt.
+Este é o servidor WebSocket que gerencia a comunicação entre os dispositivos Arduino e o aplicativo Brain Bolt.
 
 ## 📋 Pré-requisitos
 
 - Node.js 18+
-- Dispositivos ESP32/Arduino configurados (veja [../docs/hardware/ESP32-ARDUINO-SETUP.md](../docs/hardware/ESP32-ARDUINO-SETUP.md))
+- Dispositivos Arduino configurados (veja [../docs/hardware/ARDUINO-SETUP.md](../docs/hardware/ARDUINO-SETUP.md))
 
 ## 🚀 Instalação
 
@@ -69,14 +69,14 @@ O servidor iniciará na porta `8080` por padrão.
 
 ## 📡 Protocolo de Comunicação
 
-### Mensagens do ESP32 → Servidor
+### Mensagens do Arduino → Servidor
 
 #### 1. Registro de Dispositivo
 
 ```json
 {
   "type": "register",
-  "device": "esp32_buttons",
+  "device": "arduino_buttons",
   "mac": "AA:BB:CC:DD:EE:FF"
 }
 ```
@@ -160,7 +160,7 @@ ou
 }
 ```
 
-### Mensagens do Servidor → ESP32
+### Mensagens do Servidor → Arduino
 
 #### Notificações de Sala
 
@@ -222,7 +222,7 @@ O servidor exibe logs em tempo real:
 ✅ Servidor rodando na porta 8080
 📡 WebSocket: ws://localhost:8080/ws/hardware
 
-💡 Aguardando conexões de dispositivos ESP32/Arduino...
+💡 Aguardando conexões de dispositivos Arduino...
 
 🔌 Nova conexão de: 192.168.1.100
 ✅ Dispositivo registrado: device_AA_BB_CC_DD_EE_FF (AA:BB:CC:DD:EE:FF)
@@ -235,7 +235,7 @@ O servidor exibe logs em tempo real:
 ### Dispositivo não conecta
 
 1. Verifique se o servidor está rodando
-2. Confirme o IP e porta no código do ESP32
+2. Confirme o IP e porta no código do Arduino
 3. Verifique firewall
 
 ### Mensagens não chegam
@@ -252,10 +252,10 @@ O servidor exibe logs em tempo real:
 
 ## 🔄 Fluxo Típico
 
-1. ESP32 conecta ao WebSocket
-2. ESP32 envia `register`
+1. Arduino conecta ao WebSocket
+2. Arduino envia `register`
 3. Servidor confirma com `registered`
-4. ESP32 envia `create_room` ou `join_room`
+4. Arduino envia `create_room` ou `join_room`
 5. Servidor confirma criação/entrada na sala
 6. Professor/Host envia pergunta via `start_question`
 7. Alunos respondem com `button_press`
