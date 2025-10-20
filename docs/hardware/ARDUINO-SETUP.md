@@ -18,10 +18,9 @@ Um sistema com:
 
 ## 🛠️ Materiais Necessários
 
-### Arduino Uno com Módulo WiFi
+### Arduino Uno (Comunicação USB)
 
 - **1x Arduino Uno R3** (~R$ 40-70)
-- **1x Módulo WiFi ESP8266 (ESP-01)** ou **Shield Ethernet W5100** (~R$ 20-50)
 - **5x Botões Push Button** (arcade buttons ou push buttons grandes)
 - **5x LEDs** (vermelho, verde, azul, amarelo, branco)
 - **5x Resistores 220Ω** (para LEDs)
@@ -31,8 +30,7 @@ Um sistema com:
 - **Protoboard** ou **Placa PCB**
 - **Jumpers** e fios
 - **Caixa/Case** para montagem (pode ser MDF, acrílico ou impressão 3D)
-- **Cabo USB** para Arduino
-- **Fonte de alimentação 9V** (recomendado para uso contínuo)
+- **Cabo USB tipo A-B** para Arduino (comunicação com o computador)
 
 ---
 
@@ -65,11 +63,7 @@ A5 (SCL)   ──────────→  Display LCD (SCL) [opcional]
 5V         ──────────→  VCC Display LCD
 GND        ──────────→  GND (comum para todos)
 
---- Módulo WiFi ESP8266 ---
-Digital 0 (RX) ───────→  TX do ESP8266
-Digital 1 (TX) ───────→  RX do ESP8266
-3.3V       ──────────→  VCC e CH_PD do ESP8266
-GND        ──────────→  GND do ESP8266
+USB        ──────────→  Computador (comunicação serial)
 ```
 
 ### Diagrama de Circuito
@@ -90,8 +84,7 @@ GND        ──────────→  GND do ESP8266
   LCD SDA ├─A4                   │
   LCD SCL ├─A5                   │
           │                      │
-  WiFi RX ├─D0 (TX)              │
-  WiFi TX ├─D1 (RX)              │
+          │                 USB  ├─→ Computador
           │                      │
           └──────────────────────┘
 
@@ -118,22 +111,14 @@ Cada botão:
 No Arduino IDE, vá em `Sketch → Include Library → Manage Libraries` e instale:
 
 - **ArduinoJson** (by Benoit Blanchon)
-- **ESP8266WiFi** (para módulo ESP8266) ou **Ethernet** (para Shield Ethernet)
-- **WebSockets** (by Markus Sattler)
 - **LiquidCrystal I2C** (opcional, para display LCD)
 
-### 3. Código Principal - Arduino com ESP8266
+### 3. Código Principal - Arduino com Comunicação Serial
 
 Crie um novo sketch e cole o código abaixo:
 
 ```cpp
-#include <SoftwareSerial.h>
 #include <ArduinoJson.h>
-
-const char* ssid = "SEU_WIFI_AQUI";           // Nome da sua rede WiFi
-const char* password = "SUA_SENHA_AQUI";       // Senha do WiFi
-const char* serverIP = "192.168.1.100";        // IP do servidor Brain Bolt
-const int serverPort = 8080;                   // Porta do servidor
 
 // Botões
 const int BUTTON_A = 2;
@@ -152,9 +137,6 @@ const int LED_FAST = 11;
 // Buzzer
 const int BUZZER = 12;
 
-// Comunicação Serial com ESP8266
-SoftwareSerial espSerial(0, 1); // RX, TX
-
 bool connected = false;
 String roomCode = "";
 String playerId = "";
@@ -167,7 +149,6 @@ bool buttonState[5] = {LOW};
 
 void setup() {
   Serial.begin(115200);
-  espSerial.begin(115200);
 
   Serial.println(F("\n\n================================="));
   Serial.println(F("Brain Bolt - Hardware Controller"));
@@ -193,24 +174,20 @@ void setup() {
   // Teste inicial dos LEDs e buzzer
   testHardware();
 
-  // Configurar ESP8266
-  setupESP8266();
-
-  // Conectar ao WiFi
-  connectWiFi();
+  Serial.println(F("Aguardando conexão do computador..."));
 }
 
 void loop() {
   // Verificar botões
   checkButtons();
 
-  // Processar dados do ESP8266
-  if (espSerial.available()) {
-    String response = espSerial.readStringUntil('\n');
+  // Processar dados do Serial (computador)
+  if (Serial.available()) {
+    String response = Serial.readStringUntil('\n');
     handleMessage(response);
   }
 
-  // Piscar LED de conexão se não conectado
+  // Piscar LED de status se não conectado
   if (!connected) {
     static unsigned long lastBlink = 0;
     if (millis() - lastBlink > 500) {
@@ -218,96 +195,6 @@ void loop() {
       lastBlink = millis();
     }
   }
-}
-
-void setupESP8266() {
-  Serial.println(F("Configurando ESP8266..."));
-
-  // Reset ESP8266
-  espSerial.println(F("AT+RST"));
-  delay(2000);
-
-  // Configurar modo WiFi
-  espSerial.println(F("AT+CWMODE=1"));
-  delay(1000);
-
-  Serial.println(F("ESP8266 configurado"));
-}
-
-void connectWiFi() {
-  Serial.print(F("Conectando ao WiFi"));
-
-  String cmd = "AT+CWJAP=\"";
-  cmd += ssid;
-  cmd += "\",\"";
-  cmd += password;
-  cmd += "\"";
-
-  espSerial.println(cmd);
-
-  unsigned long timeout = millis();
-  while (millis() - timeout < 20000) {
-    if (espSerial.find("OK")) {
-      Serial.println(F("\n✓ WiFi Conectado!"));
-      playSuccess();
-      connected = true;
-      return;
-    }
-    Serial.print(".");
-    delay(500);
-  }
-
-  Serial.println(F("\n✗ Falha ao conectar WiFi"));
-  playError();
-}
-
-void connectWebSocket() {
-  Serial.println(F("Conectando ao servidor WebSocket..."));
-
-  String cmd = "AT+CIPSTART=\"TCP\",\"";
-  cmd += serverIP;
-  cmd += "\",";
-  cmd += serverPort;
-
-  espSerial.println(cmd);
-  delay(2000);
-
-  if (espSerial.find("OK")) {
-    Serial.println(F("✓ Conectado ao servidor!"));
-    registerDevice();
-  } else {
-    Serial.println(F("✗ Falha na conexão"));
-  }
-}
-
-void registerDevice() {
-  StaticJsonDocument<200> doc;
-  doc["type"] = "register";
-  doc["device"] = "arduino_buttons";
-  doc["mac"] = getMacAddress();
-
-  String output;
-  serializeJson(doc, output);
-  sendWebSocketMessage(output);
-
-  Serial.println(F("Dispositivo registrado"));
-}
-
-void sendWebSocketMessage(String message) {
-  String cmd = "AT+CIPSEND=";
-  cmd += message.length();
-
-  espSerial.println(cmd);
-  delay(100);
-
-  if (espSerial.find(">")) {
-    espSerial.print(message);
-  }
-}
-
-String getMacAddress() {
-  // Simula um MAC address único baseado no tempo
-  return "AR:DU:IN:O0:00:01";
 }
 
 void handleMessage(String payload) {
@@ -322,7 +209,13 @@ void handleMessage(String payload) {
 
   const char* type = doc["type"];
 
-  if (strcmp(type, "room_joined") == 0) {
+  if (strcmp(type, "connected") == 0) {
+    connected = true;
+    Serial.println(F("✓ Conectado ao Brain Bolt!"));
+    playSuccess();
+    allLEDsOff();
+  }
+  else if (strcmp(type, "room_joined") == 0) {
     roomCode = doc["room_code"].as<String>();
     playerId = doc["player_id"].as<String>();
     Serial.print(F("Sala: "));
@@ -378,27 +271,22 @@ void checkButton(int index, int buttonPin, int ledPin, const char* buttonName) {
 }
 
 void onButtonPress(const char* button, int ledPin) {
-  Serial.print(F("Botão pressionado: "));
-  Serial.println(button);
-
   // Acender LED
   digitalWrite(ledPin, HIGH);
 
   // Som de clique
   playTone(800, 50);
 
-  // Enviar para servidor
-  if (connected) {
-    StaticJsonDocument<200> doc;
-    doc["type"] = "button_press";
-    doc["button"] = button;
-    doc["player_id"] = playerId;
-    doc["timestamp"] = millis();
+  // Enviar para computador via Serial
+  StaticJsonDocument<200> doc;
+  doc["type"] = "button_press";
+  doc["button"] = button;
+  doc["player_id"] = playerId;
+  doc["timestamp"] = millis();
 
-    String output;
-    serializeJson(doc, output);
-    sendWebSocketMessage(output);
-  }
+  String output;
+  serializeJson(doc, output);
+  Serial.println(output);
 
   // Apagar LED após 300ms
   delay(300);
@@ -558,24 +446,16 @@ Jogador 1 ←──────┼──────→ Jogador 3
 ### 1. Preparar o Arduino
 
 1. Abra o código no Arduino IDE
-2. Altere as configurações no início do código:
-
-   ```cpp
-   const char* ssid = "SEU_WIFI_AQUI";
-   const char* password = "SUA_SENHA_AQUI";
-   const char* serverIP = "192.168.1.100";  // IP do servidor Brain Bolt
-   ```
-
-3. Selecione a placa:
+2. Selecione a placa:
 
    - `Tools → Board → Arduino Uno`
 
-4. Selecione a porta:
+3. Selecione a porta:
 
-   - `Tools → Port → /dev/ttyUSB0` (Linux)
+   - `Tools → Port → /dev/ttyUSB0` (Linux/Mac)
    - `Tools → Port → COM3` (Windows)
 
-5. Upload:
+4. Upload:
    - Clique em "Upload" (→)
    - Aguarde "Done uploading"
 
@@ -596,18 +476,23 @@ Jogador 1 ←──────┼──────→ Jogador 3
 
 ### 3. Conectar e Testar
 
-1. Ligue o Arduino
+1. Conecte o Arduino ao computador via USB
 2. Observe o Serial Monitor:
 
    - `Tools → Serial Monitor`
    - Baud rate: 115200
 
-3. Verifique:
+3. Verifique a mensagem de inicialização:
 
    ```
-   ✓ WiFi Conectado!
-   ✓ Conectado ao servidor!
-   Dispositivo registrado
+   =================================
+   Brain Bolt - Hardware Controller
+   =================================
+
+   Testando hardware...
+   ✓ Teste concluído
+
+   Aguardando conexão do computador...
    ```
 
 4. No app Brain Bolt:
@@ -620,12 +505,12 @@ Jogador 1 ←──────┼──────→ Jogador 3
 
 ## 🐛 Solução de Problemas
 
-### Arduino não conecta ao WiFi
+### Arduino não é detectado pelo computador
 
-- Verifique SSID e senha
-- Certifique-se que a rede é 2.4GHz (não 5GHz)
-- Verifique se o ESP8266 está bem conectado
-- Tente resetar o Arduino
+- Verifique se o cabo USB está funcionando (tente outro cabo)
+- Instale os drivers CH340/CH341 se necessário (Arduino clones)
+- Verifique se a porta serial está correta no Arduino IDE
+- Reinicie o Arduino IDE
 
 ### Botões não respondem
 
@@ -634,12 +519,12 @@ Jogador 1 ←──────┼──────→ Jogador 3
 - Verifique os resistores pull-down (10kΩ)
 - Confirme que os botões estão funcionando com um multímetro
 
-### WebSocket desconecta
+### Comunicação Serial não funciona
 
-- Verifique se o servidor está rodando
-- Verifique o IP do servidor
-- Verifique firewall
-- Tente aumentar o timeout de conexão
+- Verifique se o baud rate está em 115200
+- Certifique-se que nenhum outro programa está usando a porta serial
+- Verifique se o servidor WebSocket está rodando
+- Tente desconectar e reconectar o Arduino
 
 ### LEDs não acendem
 
@@ -648,12 +533,12 @@ Jogador 1 ←──────┼──────→ Jogador 3
 - Teste com um LED simples direto no pino digital
 - Confirme que os LEDs não estão queimados
 
-### ESP8266 não responde
+### Buzzer não emite som
 
-- Verifique alimentação (3.3V, não 5V!)
-- Certifique-se que CH_PD está conectado ao 3.3V
-- Verifique conexões RX/TX (são cruzadas: RX do Arduino → TX do ESP8266)
-- Teste comandos AT manualmente no Serial Monitor
+- Verifique se é um buzzer passivo (não ativo)
+- Teste a polaridade (inverta se necessário)
+- Confirme que o pino 12 está correto
+- Teste com um multímetro se há sinal no pino
 
 ---
 
@@ -661,9 +546,10 @@ Jogador 1 ←──────┼──────→ Jogador 3
 
 ### Alimentação
 
-- Para uso em sala de aula, use fonte de alimentação 9V DC (não USB)
-- Power bank pode ser usado para demonstrações móveis
-- Autonomia típica: 6-8 horas com power bank de 10.000mAh
+- O Arduino será alimentado via USB conectado ao computador
+- Para uso em sala de aula, o computador deve estar próximo dos botões
+- Considere usar um cabo USB extenso (até 5 metros com cabos ativos)
+- Alternativamente, use um Raspberry Pi ou laptop dedicado
 
 ### Melhorias Futuras
 
@@ -671,6 +557,7 @@ Jogador 1 ←──────┼──────→ Jogador 3
 - Implementar modo offline com cartão SD
 - Adicionar mais LEDs RGB para feedback colorido
 - Criar case personalizado com impressão 3D
+- Adicionar ESP32 para comunicação WiFi sem fio
 
 ### Segurança
 
@@ -678,15 +565,15 @@ Jogador 1 ←──────┼──────→ Jogador 3
 - Certifique-se que todas as conexões estão firmes
 - Evite exposição à água ou umidade excessiva
 - Mantenha longe de superfícies condutoras
+- Não force a conexão USB
 
 ---
 
 ## 📚 Recursos Adicionais
 
 - [Arduino Official Documentation](https://www.arduino.cc/reference/en/)
-- [ESP8266 AT Commands](https://www.espressif.com/sites/default/files/documentation/4a-esp8266_at_instruction_set_en.pdf)
 - [ArduinoJson Documentation](https://arduinojson.org/)
-- [WebSocket Protocol RFC 6455](https://tools.ietf.org/html/rfc6455)
+- [Arduino Serial Communication](https://www.arduino.cc/reference/en/language/functions/communication/serial/)
 
 ---
 
