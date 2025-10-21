@@ -31,8 +31,9 @@
   --radius: 0.5rem;
 
   /* Cores personalizadas - Light */
-  --gradient-primary-from: 262.1 83.3% 57.8%;
-  --gradient-primary-to: 330.4 81.2% 60.4%;
+  --gradient-primary-from: 262 83% 58%;
+  --gradient-primary-via: 330 81% 60%;
+  --gradient-primary-to: 45 93% 58%;
   --glass-bg: 0 0% 100%;
   --glass-border: 214.3 31.8% 91.4%;
   --shadow-color: 222.2 84% 4.9%;
@@ -69,8 +70,9 @@
   --ring: 262.1 83.3% 57.8%;
 
   /* Cores personalizadas - Dark */
-  --gradient-primary-from: 262.1 83.3% 47.8%;
-  --gradient-primary-to: 330.4 81.2% 50.4%;
+  --gradient-primary-from: 262 83% 58%;
+  --gradient-primary-via: 330 81% 60%;
+  --gradient-primary-to: 45 93% 58%;
   --glass-bg: 222.2 84% 8%;
   --glass-border: 217.2 32.6% 20%;
   --shadow-color: 0 0% 0%;
@@ -80,6 +82,7 @@
   background: linear-gradient(
     135deg,
     hsl(var(--gradient-primary-from)) 0%,
+    hsl(var(--gradient-primary-via)) 50%,
     hsl(var(--gradient-primary-to)) 100%
   );
 }
@@ -88,6 +91,7 @@
   background: linear-gradient(
     135deg,
     hsl(var(--gradient-primary-from)) 0%,
+    hsl(var(--gradient-primary-via)) 50%,
     hsl(var(--gradient-primary-to)) 100%
   );
 }

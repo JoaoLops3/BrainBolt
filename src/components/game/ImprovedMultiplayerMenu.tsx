@@ -414,7 +414,7 @@ export const ImprovedMultiplayerMenu = ({
                   <Button
                     onClick={startGame}
                     size="lg"
-                    className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-base font-bold transform hover:scale-105 transition-all duration-300 shadow-xl"
+                    className="w-full bg-gradient-to-r from-[hsl(262,83%,58%)] to-[hsl(330,81%,60%)] hover:from-[hsl(262,83%,68%)] hover:to-[hsl(330,81%,70%)] text-base font-bold transform hover:scale-105 transition-all duration-300 shadow-xl"
                   >
                     <div className="flex items-center gap-3">
                       <Gamepad2 className="h-6 w-6" />

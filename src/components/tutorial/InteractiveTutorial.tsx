@@ -241,7 +241,7 @@ export const InteractiveTutorial = ({
 
                 <Button
                   onClick={handleNext}
-                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 h-11 sm:h-10 text-sm sm:text-base font-medium"
+                  className="flex items-center justify-center gap-2 bg-gradient-to-r from-[hsl(262,83%,58%)] to-[hsl(330,81%,60%)] hover:from-[hsl(262,83%,68%)] hover:to-[hsl(330,81%,70%)] h-11 sm:h-10 text-sm sm:text-base font-medium"
                 >
                   <span>{step.action}</span>
                   {currentStep < tutorialSteps.length - 1 ? (

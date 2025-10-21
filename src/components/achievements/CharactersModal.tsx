@@ -221,7 +221,7 @@ export const CharactersModal = ({
         key={character.id}
         className={`transition-transform duration-200 hover:scale-[1.02] hover:shadow-md ${
           isLocked ? "opacity-60" : ""
-        } h-fit border-2 hover:border-primary/20`}
+        } h-fit border-2 hover:border-primary/20 bg-white/20 border-white/30`}
       >
         <CardHeader className="pb-3 p-4 sm:p-5">
           <div className="flex items-start justify-between gap-3">
@@ -241,7 +241,7 @@ export const CharactersModal = ({
                 </AvatarFallback>
               </Avatar>
               <div className="min-w-0 flex-1">
-                <CardTitle className="text-sm sm:text-base font-semibold leading-tight mb-2">
+                <CardTitle className="text-sm sm:text-base font-semibold leading-tight mb-2 text-white">
                   {character.name}
                 </CardTitle>
                 <div className="flex items-center gap-1 flex-wrap">
@@ -284,7 +284,7 @@ export const CharactersModal = ({
           </div>
         </CardHeader>
         <CardContent className="p-4 sm:p-5 pt-0 space-y-3">
-          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+          <p className="text-xs sm:text-sm text-white/80 leading-relaxed">
             {character.description}
           </p>
 
@@ -300,7 +300,7 @@ export const CharactersModal = ({
           )}
 
           {isLocked ? (
-            <div className="flex items-center gap-2 text-muted-foreground bg-muted/50 p-2 rounded-lg">
+            <div className="flex items-center gap-2 text-white/80 bg-white/10 p-2 rounded-lg">
               <Target className="h-4 w-4 flex-shrink-0" />
               <span className="text-xs">
                 Acerte {character.unlock_requirement} perguntas de{" "}
@@ -332,13 +332,13 @@ export const CharactersModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] max-w-6xl h-[90vh] max-h-[90vh] flex flex-col p-2 sm:p-6">
+      <DialogContent className="w-[95vw] max-w-6xl h-[90vh] max-h-[90vh] flex flex-col p-2 sm:p-6 backdrop-blur-lg bg-gradient-to-br from-[hsl(262,83%,58%)]/95 via-[hsl(330,81%,60%)]/95 to-[hsl(45,93%,58%)]/95 border-white/30">
         <DialogHeader className="flex-shrink-0">
-          <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
+          <DialogTitle className="flex items-center gap-2 text-base sm:text-lg text-white">
             <Users className="h-4 w-4 sm:h-5 sm:w-5" />
             Coleção de Personagens
           </DialogTitle>
-          <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
+          <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm text-white/80">
             <span>
               {unlockedCharacters.length}/{allCharacters.length} coletados
             </span>
@@ -350,7 +350,7 @@ export const CharactersModal = ({
           defaultValue="unlocked"
           className="w-full flex flex-col flex-1 min-h-0"
         >
-          <TabsList className="grid w-full grid-cols-2 h-10 flex-shrink-0">
+          <TabsList className="grid w-full grid-cols-2 h-10 flex-shrink-0 bg-white/10">
             <TabsTrigger value="unlocked" className="text-xs sm:text-sm">
               Coletados ({unlockedCharacters.length})
             </TabsTrigger>
@@ -370,7 +370,7 @@ export const CharactersModal = ({
                 size="md"
               />
             ) : unlockedCharacters.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground">
+              <div className="text-center py-12 text-white/80">
                 <Users className="h-16 w-16 mx-auto mb-4 opacity-50" />
                 <p className="text-lg font-medium mb-2">
                   Nenhum personagem coletado ainda
@@ -385,7 +385,7 @@ export const CharactersModal = ({
                   ([category, characters]) => (
                     <div key={category} className="space-y-4">
                       <div className="flex items-center gap-3">
-                        <h3 className="text-lg sm:text-xl font-bold capitalize">
+                        <h3 className="text-lg sm:text-xl font-bold capitalize text-white">
                           {category}
                         </h3>
                         <Badge
@@ -427,7 +427,7 @@ export const CharactersModal = ({
                 size="md"
               />
             ) : lockedCharacters.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground">
+              <div className="text-center py-12 text-white/80">
                 <Crown className="h-16 w-16 mx-auto mb-4 opacity-50" />
                 <p className="text-lg font-medium mb-2">
                   Todos os personagens foram coletados!
@@ -439,7 +439,7 @@ export const CharactersModal = ({
                 {Object.entries(groupedLocked).map(([category, characters]) => (
                   <div key={category} className="space-y-4">
                     <div className="flex items-center gap-3">
-                      <h3 className="text-lg sm:text-xl font-bold capitalize">
+                      <h3 className="text-lg sm:text-xl font-bold capitalize text-white">
                         {category}
                       </h3>
                       <Badge

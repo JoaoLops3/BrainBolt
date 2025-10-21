@@ -23,7 +23,7 @@ export const OtherModesModal = ({
 }: OtherModesModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="w-full max-w-[90vw] sm:max-w-lg max-h-[85vh] backdrop-blur-lg bg-gradient-to-br from-purple-500/95 via-pink-500/95 to-purple-600/95 border-white/30 modal-responsive safe-top safe-bottom rounded-2xl sm:rounded-3xl p-0 gap-0 overflow-hidden [&>.absolute.right-4.top-4]:!hidden">
+      <DialogContent className="w-full max-w-[90vw] sm:max-w-lg max-h-[85vh] backdrop-blur-lg bg-gradient-to-br from-[hsl(262,83%,58%)]/95 via-[hsl(330,81%,60%)]/95 to-[hsl(45,93%,58%)]/95 border-white/30 modal-responsive safe-top safe-bottom rounded-2xl sm:rounded-3xl p-0 gap-0 overflow-hidden [&>.absolute.right-4.top-4]:!hidden">
         {/* Botão X customizado na esquerda */}
         <DialogClose asChild>
           <button className="absolute top-4 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-1.5 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg flex items-center justify-center">
@@ -56,9 +56,6 @@ export const OtherModesModal = ({
                   <div className="flex-1 w-full">
                     <h3 className="text-lg sm:text-xl font-bold mb-2 flex flex-wrap items-center gap-2 text-white">
                       <span>🔥 Modo Sobrevivência</span>
-                      <span className="text-xs bg-white/30 text-white px-2 py-1 rounded-full">
-                        NOVO!
-                      </span>
                     </h3>
                     <p className="text-xs sm:text-sm text-white/80 mb-3">
                       Responda até errar! Cada acerto aumenta a dificuldade.

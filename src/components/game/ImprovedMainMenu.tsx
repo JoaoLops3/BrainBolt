@@ -112,7 +112,7 @@ export const ImprovedMainMenu = ({
                     src={profile?.avatar_url || "/placeholder.svg"}
                     alt={profile?.display_name || "Avatar do usuário"}
                   />
-                  <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500">
+                  <AvatarFallback className="bg-gradient-to-br from-[hsl(262,83%,58%)] to-[hsl(330,81%,60%)]">
                     <User className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                   </AvatarFallback>
                 </Avatar>
@@ -190,8 +190,6 @@ export const ImprovedMainMenu = ({
               <StatButton
                 icon={<Flame className="h-5 w-5" />}
                 label="Outros Modos"
-                badge="NOVO"
-                badgeVariant="destructive"
                 onClick={() => setShowOtherModesModal(true)}
                 className="h-auto py-6 bg-gradient-to-r from-orange-500/20 to-red-500/20 hover:from-orange-500/30 hover:to-red-500/30 border-2 border-orange-500/50"
                 showStat={false}
@@ -215,7 +213,7 @@ export const ImprovedMainMenu = ({
                 icon={<GraduationCap className="h-5 w-5" />}
                 label="Sou Professor"
                 onClick={onViewTeacherClassrooms}
-                className="h-auto py-5 bg-gradient-to-r from-purple-500/20 to-pink-500/20 hover:from-purple-500/30 hover:to-pink-500/30"
+                className="h-auto py-5 bg-gradient-to-r from-[hsl(262,83%,58%)]/20 to-[hsl(330,81%,60%)]/20 hover:from-[hsl(262,83%,58%)]/30 hover:to-[hsl(330,81%,60%)]/30"
                 showStat={false}
                 animation="scaleIn"
               />

@@ -200,7 +200,7 @@ export const FriendComparisonModal = ({
   if (loading || !userStats || !friendStats) {
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-4xl max-h-[80vh] allow-scroll">
+        <DialogContent className="max-w-4xl max-h-[80vh] allow-scroll backdrop-blur-lg bg-gradient-to-br from-[hsl(262,83%,58%)]/95 via-[hsl(330,81%,60%)]/95 to-[hsl(45,93%,58%)]/95 border-white/30">
           <DialogHeader>
             <DialogTitle>Carregando Comparação</DialogTitle>
             <DialogDescription>
@@ -217,7 +217,7 @@ export const FriendComparisonModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[80vh] allow-scroll">
+      <DialogContent className="max-w-4xl max-h-[80vh] allow-scroll backdrop-blur-lg bg-gradient-to-br from-[hsl(262,83%,58%)]/95 via-[hsl(330,81%,60%)]/95 to-[hsl(45,93%,58%)]/95 border-white/30">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Users className="h-5 w-5" />

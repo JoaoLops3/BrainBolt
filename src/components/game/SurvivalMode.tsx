@@ -3,16 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import {
-  Skull,
-  Heart,
-  Flame,
-  Trophy,
-  ArrowLeft,
-  Zap,
-  Target,
-  Crown,
-} from "lucide-react";
+import { Skull, Heart, Flame, Trophy, Zap, Target, Crown } from "lucide-react";
 import { Question } from "@/types/game";
 import { questions as allQuestions } from "@/data/questions";
 import { useAuth } from "@/contexts/AuthContext";
@@ -259,7 +250,7 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
         {/* Botão X para sair */}
         <button
           onClick={onBack}
-          className="fixed top-12 sm:top-8 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
+          className="fixed top-6 sm:top-4 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
         >
           <svg
             className="w-6 h-6"
@@ -424,7 +415,27 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
 
   if (gameState === "gameOver") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-900 to-black p-4 sm:p-6 flex items-center justify-center overflow-y-auto safe-top safe-bottom">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-900 to-black p-4 sm:p-6 flex items-center justify-center overflow-y-auto safe-top safe-bottom relative">
+        {/* Botão X para sair */}
+        <button
+          onClick={onBack}
+          className="fixed top-6 sm:top-4 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+
         <Card className="max-w-2xl w-full backdrop-blur-lg bg-white/95 border-2 border-white shadow-2xl">
           <CardHeader>
             <div className="flex items-center justify-center gap-3 mb-4">
@@ -473,20 +484,14 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
               </div>
             )}
 
-            {/* Botões */}
-            <div className="flex gap-3">
-              <Button
-                onClick={startGame}
-                className="flex-1 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white"
-              >
-                <Flame className="h-5 w-5 mr-2" />
-                Jogar Novamente
-              </Button>
-              <Button onClick={onBack} variant="outline" className="flex-1">
-                <ArrowLeft className="h-5 w-5 mr-2" />
-                Voltar ao Menu
-              </Button>
-            </div>
+            {/* Botão */}
+            <Button
+              onClick={startGame}
+              className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white"
+            >
+              <Flame className="h-5 w-5 mr-2" />
+              Jogar Novamente
+            </Button>
           </CardContent>
         </Card>
       </div>
@@ -499,7 +504,7 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
       {/* Botão X para sair */}
       <button
         onClick={onBack}
-        className="fixed top-12 sm:top-8 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
+        className="fixed top-6 sm:top-4 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
       >
         <svg
           className="w-6 h-6"

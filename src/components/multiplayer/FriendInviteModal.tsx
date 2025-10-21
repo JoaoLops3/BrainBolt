@@ -39,7 +39,7 @@ interface Friendship {
   id: string;
   user_id: string;
   friend_id: string;
-  status: 'pending' | 'accepted' | 'blocked';
+  status: "pending" | "accepted" | "blocked";
   friend_profile: Profile;
 }
 
@@ -50,11 +50,11 @@ interface FriendInviteModalProps {
   roomCode: string;
 }
 
-export const FriendInviteModal = ({ 
-  open, 
-  onOpenChange, 
-  roomId, 
-  roomCode 
+export const FriendInviteModal = ({
+  open,
+  onOpenChange,
+  roomId,
+  roomCode,
 }: FriendInviteModalProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -69,7 +69,7 @@ export const FriendInviteModal = ({
 
     try {
       setLoading(true);
-      
+
       // Fetch accepted friendships
       const { data: acceptedFriends, error: friendsError } = await supabase
         .from("friendships")
@@ -113,7 +113,9 @@ export const FriendInviteModal = ({
 
       if (invitesError) throw invitesError;
 
-      setSentInvites(new Set(existingInvites.map(invite => invite.invited_id)));
+      setSentInvites(
+        new Set(existingInvites.map((invite) => invite.invited_id))
+      );
     } catch (error) {
       console.error("Error fetching friends:", error);
       toast({
@@ -131,18 +133,16 @@ export const FriendInviteModal = ({
     if (!user) return;
 
     try {
-      const { error } = await supabase
-        .from("multiplayer_invitations")
-        .insert({
-          room_id: roomId,
-          inviter_id: user.id,
-          invited_id: friendId,
-        });
+      const { error } = await supabase.from("multiplayer_invitations").insert({
+        room_id: roomId,
+        inviter_id: user.id,
+        invited_id: friendId,
+      });
 
       if (error) throw error;
 
-      setSentInvites(prev => new Set(prev).add(friendId));
-      
+      setSentInvites((prev) => new Set(prev).add(friendId));
+
       toast({
         title: "Convite enviado!",
         description: "Seu amigo receberá o convite para jogar",
@@ -163,7 +163,7 @@ export const FriendInviteModal = ({
     }
   }, [open, user]);
 
-  const filteredFriends = friends.filter(friend =>
+  const filteredFriends = friends.filter((friend) =>
     friend.friend_profile.display_name
       ?.toLowerCase()
       .includes(searchQuery.toLowerCase())
@@ -171,14 +171,15 @@ export const FriendInviteModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto backdrop-blur-lg bg-gradient-to-br from-[hsl(262,83%,58%)]/95 via-[hsl(330,81%,60%)]/95 to-[hsl(45,93%,58%)]/95 border-white/30">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Send className="h-5 w-5" />
             Convidar Amigos
           </DialogTitle>
           <p className="text-sm text-muted-foreground">
-            Código da sala: <span className="font-mono font-bold">{roomCode}</span>
+            Código da sala:{" "}
+            <span className="font-mono font-bold">{roomCode}</span>
           </p>
         </DialogHeader>
 
@@ -201,7 +202,7 @@ export const FriendInviteModal = ({
             <div className="text-center py-8 text-muted-foreground">
               <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>
-                {friends.length === 0 
+                {friends.length === 0
                   ? "Você ainda não tem amigos adicionados"
                   : "Nenhum amigo encontrado"}
               </p>
@@ -210,7 +211,7 @@ export const FriendInviteModal = ({
             <div className="space-y-3 max-h-[400px] overflow-y-auto">
               {filteredFriends.map((friendship) => {
                 const isInvited = sentInvites.has(friendship.friend_id);
-                
+
                 return (
                   <Card key={friendship.id} className="p-4">
                     <div className="flex items-center justify-between">
@@ -231,20 +232,23 @@ export const FriendInviteModal = ({
                           <div className="flex items-center gap-4 text-sm text-muted-foreground">
                             <span className="flex items-center gap-1">
                               <Trophy className="h-3 w-3" />
-                              {friendship.friend_profile.win_percentage?.toFixed(1) || 0}% vitórias
+                              {friendship.friend_profile.win_percentage?.toFixed(
+                                1
+                              ) || 0}
+                              % vitórias
                             </span>
                             <span className="flex items-center gap-1">
                               <Target className="h-3 w-3" />
-                              {friendship.friend_profile.multiplayer_wins || 0} vitórias MP
+                              {friendship.friend_profile.multiplayer_wins ||
+                                0}{" "}
+                              vitórias MP
                             </span>
                           </div>
                         </div>
                       </div>
-                      
+
                       {isInvited ? (
-                        <Badge variant="secondary">
-                          Convite Enviado
-                        </Badge>
+                        <Badge variant="secondary">Convite Enviado</Badge>
                       ) : (
                         <Button
                           onClick={() => sendInvitation(friendship.friend_id)}

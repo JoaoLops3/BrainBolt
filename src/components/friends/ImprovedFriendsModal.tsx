@@ -234,13 +234,13 @@ export const ImprovedFriendsModal = ({
         maxHeight="screen"
       >
         <div className="space-y-4">
-          <div className="flex items-center gap-2 text-lg sm:text-xl">
+          <div className="flex items-center gap-2 text-lg sm:text-xl text-white">
             <Users className="h-5 w-5 sm:h-6 sm:w-6" />
             Amigos
           </div>
 
           <Tabs defaultValue="friends" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 h-auto p-1 gap-1">
+            <TabsList className="grid w-full grid-cols-3 h-auto p-1 gap-1 bg-white/10">
               <TabsTrigger
                 value="friends"
                 className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap"
@@ -267,7 +267,7 @@ export const ImprovedFriendsModal = ({
 
             <TabsContent value="friends" className="space-y-4">
               {friends.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
+                <div className="text-center py-8 text-white/80">
                   <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
                   <p>Você ainda não tem amigos adicionados</p>
                   <p className="text-sm">
@@ -279,7 +279,7 @@ export const ImprovedFriendsModal = ({
                   {friends.map((friendship) => (
                     <Card
                       key={friendship.id}
-                      className="p-4 sm:p-6 transition-transform duration-200 hover:scale-[1.02]"
+                      className="p-4 sm:p-6 transition-transform duration-200 hover:scale-[1.02] bg-white/20 border-white/30"
                     >
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div className="flex items-center gap-3">
@@ -292,11 +292,11 @@ export const ImprovedFriendsModal = ({
                             </AvatarFallback>
                           </Avatar>
                           <div className="min-w-0 flex-1">
-                            <h4 className="font-semibold text-sm sm:text-base">
+                            <h4 className="font-semibold text-sm sm:text-base text-white">
                               {friendship.friend_profile.display_name ||
                                 "Jogador"}
                             </h4>
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-white/80">
                               <span className="flex items-center gap-1">
                                 <Trophy className="h-3 w-3" />
                                 {friendship.friend_profile.win_percentage.toFixed(
@@ -319,7 +319,7 @@ export const ImprovedFriendsModal = ({
                               setSelectedProfile(friendship.friend_profile);
                               setShowProfileModal(true);
                             }}
-                            className="h-8 w-8 sm:h-9 sm:w-auto sm:px-3"
+                            className="h-8 w-8 sm:h-9 sm:w-auto sm:px-3 bg-white/20 hover:bg-white/30 text-white border-white/30"
                           >
                             <Eye className="h-4 w-4" />
                             <span className="hidden sm:inline ml-2">Ver</span>
@@ -330,14 +330,14 @@ export const ImprovedFriendsModal = ({
                             onClick={() =>
                               openComparison(friendship.friend_profile.user_id)
                             }
-                            className="h-8 w-8 sm:h-9 sm:w-auto sm:px-3"
+                            className="h-8 w-8 sm:h-9 sm:w-auto sm:px-3 bg-white/20 hover:bg-white/30 text-white border-white/30"
                           >
                             <BarChart3 className="h-4 w-4" />
                             <span className="hidden sm:inline ml-2">
                               Comparar
                             </span>
                           </Button>
-                          <Badge variant="secondary" className="text-xs">
+                          <Badge className="text-xs bg-white/10 text-white border-white/30">
                             Amigo
                           </Badge>
                         </div>
@@ -350,7 +350,7 @@ export const ImprovedFriendsModal = ({
 
             <TabsContent value="requests" className="space-y-4">
               {friendRequests.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground">
+                <div className="text-center py-8 text-white/80">
                   <UserPlus className="h-12 w-12 mx-auto mb-4 opacity-50" />
                   <p>Nenhum pedido de amizade pendente</p>
                 </div>
@@ -359,7 +359,7 @@ export const ImprovedFriendsModal = ({
                   {friendRequests.map((request) => (
                     <Card
                       key={request.id}
-                      className="p-4 sm:p-6 transition-transform duration-200 hover:scale-[1.02]"
+                      className="p-4 sm:p-6 transition-transform duration-200 hover:scale-[1.02] bg-white/20 border-white/30"
                     >
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                         <div className="flex items-center gap-3">
@@ -372,11 +372,11 @@ export const ImprovedFriendsModal = ({
                             </AvatarFallback>
                           </Avatar>
                           <div className="min-w-0 flex-1">
-                            <h4 className="font-semibold text-sm sm:text-base">
+                            <h4 className="font-semibold text-sm sm:text-base text-white">
                               {request.requester_profile.display_name ||
                                 "Jogador"}
                             </h4>
-                            <p className="text-xs sm:text-sm text-muted-foreground">
+                            <p className="text-xs sm:text-sm text-white/80">
                               Quer ser seu amigo
                             </p>
                           </div>
@@ -387,7 +387,7 @@ export const ImprovedFriendsModal = ({
                             onClick={() =>
                               acceptFriendRequest(request.id, request.user_id)
                             }
-                            className="h-8 w-8 sm:h-9 sm:w-auto sm:px-3"
+                            className="h-8 w-8 sm:h-9 sm:w-auto sm:px-3 bg-white/20 hover:bg-white/30 text-white"
                           >
                             <Check className="h-4 w-4" />
                             <span className="hidden sm:inline ml-2">
@@ -398,7 +398,7 @@ export const ImprovedFriendsModal = ({
                             size="sm"
                             variant="outline"
                             onClick={() => rejectFriendRequest(request.id)}
-                            className="h-8 w-8 sm:h-9 sm:w-auto sm:px-3"
+                            className="h-8 w-8 sm:h-9 sm:w-auto sm:px-3 bg-white/20 hover:bg-white/30 text-white border-white/30"
                           >
                             <X className="h-4 w-4" />
                             <span className="hidden sm:inline ml-2">
@@ -417,7 +417,7 @@ export const ImprovedFriendsModal = ({
               <div className="space-y-4">
                 <Button
                   onClick={() => setShowUserSearch(true)}
-                  className="w-full h-10 sm:h-12"
+                  className="w-full h-10 sm:h-12 bg-white/20 hover:bg-white/30 text-white"
                   size="lg"
                 >
                   <Search className="h-4 w-4 mr-2" />
@@ -426,7 +426,7 @@ export const ImprovedFriendsModal = ({
                   </span>
                 </Button>
 
-                <div className="text-center text-muted-foreground">
+                <div className="text-center text-white/80">
                   <p className="text-xs sm:text-sm">
                     Encontre outros jogadores e compare suas estatísticas!
                   </p>

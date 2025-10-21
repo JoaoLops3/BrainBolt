@@ -42,7 +42,7 @@ export const ClassroomDetails = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
+      <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden flex flex-col backdrop-blur-lg bg-gradient-to-br from-[hsl(262,83%,58%)]/95 via-[hsl(330,81%,60%)]/95 to-[hsl(45,93%,58%)]/95 border-white/30">
         <DialogHeader>
           <div className="flex items-start gap-3">
             <School className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
@@ -57,7 +57,9 @@ export const ClassroomDetails = ({
               )}
               <div className="flex flex-wrap items-center gap-2 mt-3">
                 {isActive() ? (
-                  <Badge className="bg-green-500">Em Andamento</Badge>
+                  <Badge className="bg-gradient-to-br from-[hsl(262,83%,58%)] via-[hsl(330,81%,60%)] to-[hsl(45,93%,58%)]">
+                    Em Andamento
+                  </Badge>
                 ) : (
                   <Badge variant="secondary">Finalizada</Badge>
                 )}

@@ -19,7 +19,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useClassrooms } from "@/hooks/useClassrooms";
-import { CreateClassroomData, GradeLevel, ClassroomSubject } from "@/types/classroom";
+import {
+  CreateClassroomData,
+  GradeLevel,
+  ClassroomSubject,
+} from "@/types/classroom";
 import { Loader2, School } from "lucide-react";
 
 interface CreateClassroomModalProps {
@@ -50,8 +54,12 @@ export const CreateClassroomModal = ({
 
     const result = await createClassroom({
       ...formData,
-      competition_start_date: new Date(formData.competition_start_date).toISOString(),
-      competition_end_date: new Date(formData.competition_end_date).toISOString(),
+      competition_start_date: new Date(
+        formData.competition_start_date
+      ).toISOString(),
+      competition_end_date: new Date(
+        formData.competition_end_date
+      ).toISOString(),
     });
 
     if (result) {
@@ -73,14 +81,15 @@ export const CreateClassroomModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto backdrop-blur-lg bg-gradient-to-br from-[hsl(262,83%,58%)]/95 via-[hsl(330,81%,60%)]/95 to-[hsl(45,93%,58%)]/95 border-white/30">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <School className="h-5 w-5" />
             Criar Nova Sala de Aula
           </DialogTitle>
           <DialogDescription>
-            Configure sua sala educacional e comece a competição com seus alunos!
+            Configure sua sala educacional e comece a competição com seus
+            alunos!
           </DialogDescription>
         </DialogHeader>
 
@@ -263,4 +272,3 @@ export const CreateClassroomModal = ({
     </Dialog>
   );
 };
-

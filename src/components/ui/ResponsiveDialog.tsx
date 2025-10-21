@@ -69,14 +69,19 @@ export const ResponsiveDialog = ({
           maxWidthClasses[maxWidth],
           maxHeightClasses[maxHeight],
           "overflow-y-auto",
+          "backdrop-blur-lg bg-gradient-to-br from-[hsl(262,83%,58%)]/95 via-[hsl(330,81%,60%)]/95 to-[hsl(45,93%,58%)]/95 border-white/30",
           className
         )}
       >
         <DialogHeader>
-          <DialogTitle className={title ? "text-lg sm:text-xl" : "sr-only"}>
+          <DialogTitle
+            className={title ? "text-lg sm:text-xl text-white" : "sr-only"}
+          >
             {title || "Janela"}
           </DialogTitle>
-          <DialogDescription className={description ? undefined : "sr-only"}>
+          <DialogDescription
+            className={description ? "text-white/80" : "sr-only"}
+          >
             {description || "Conteúdo da janela"}
           </DialogDescription>
         </DialogHeader>

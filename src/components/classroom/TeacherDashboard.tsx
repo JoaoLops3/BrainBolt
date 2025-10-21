@@ -6,7 +6,7 @@ import { ClassroomCard } from "./ClassroomCard";
 import { CreateClassroomModal } from "./CreateClassroomModal";
 import { ClassroomDetails } from "./ClassroomDetails";
 import { ClassroomWithDetails } from "@/types/classroom";
-import { School, Plus, Loader2, GraduationCap, ArrowLeft } from "lucide-react";
+import { School, Plus, Loader2, GraduationCap } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -65,21 +65,30 @@ export const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-primary p-4 safe-top safe-bottom">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gradient-primary p-4 safe-top safe-bottom relative">
+      {/* Botão X para sair */}
+      <button
+        onClick={onBack}
+        className="fixed top-6 sm:top-4 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+
+      <div className="max-w-7xl mx-auto pt-20 sm:pt-12">
         {/* Header */}
         <div className="mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <Button
-              variant="ghost"
-              onClick={onBack}
-              className="text-white hover:bg-white/20"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Voltar ao Menu
-            </Button>
-          </div>
-
           <Card className="backdrop-blur-lg bg-white/20 border-white/30">
             <CardHeader>
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -99,7 +108,7 @@ export const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
                 <Button
                   onClick={() => setCreateModalOpen(true)}
                   size="lg"
-                  className="bg-white text-primary hover:bg-white/90"
+                  className="bg-white/[0.08] text-white hover:bg-white/30"
                 >
                   <Plus className="h-5 w-5 mr-2" />
                   Nova Sala
@@ -129,7 +138,7 @@ export const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
                 <Button
                   onClick={() => setCreateModalOpen(true)}
                   size="lg"
-                  className="bg-white text-primary hover:bg-white/90"
+                  className="bg-white/[0.08] text-white hover:bg-white/30"
                 >
                   <Plus className="h-5 w-5 mr-2" />
                   Criar Primeira Sala
