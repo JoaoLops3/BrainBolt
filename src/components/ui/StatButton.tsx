@@ -46,9 +46,14 @@ export const StatButton = forwardRef<HTMLButtonElement, StatButtonProps>(
     return (
       <Button
         ref={ref}
+        variant="ghost"
+        style={{
+          backgroundColor: "rgba(255, 255, 255, 0.08)",
+          color: "#ffffff",
+        }}
         className={cn(
           "group relative overflow-hidden transition-all duration-300",
-          "glass-button text-white hover:bg-white/30",
+          "glass-button hover:!bg-white/30",
           "shadow-lg hover:shadow-xl hover:shadow-primary/20",
           "border border-white/20 hover:border-white/40",
           animationClasses,
@@ -58,14 +63,16 @@ export const StatButton = forwardRef<HTMLButtonElement, StatButtonProps>(
         {...props}
       >
         <div className="flex items-center justify-between w-full">
-          <div className="flex items-center space-x-3">
-            <div className="p-1 rounded-md bg-white/10 group-hover:bg-white/20 transition-colors duration-200">
+          <div className="flex items-center space-x-2 sm:space-x-3">
+            <div className="p-1.5 sm:p-2 rounded-md bg-white/15 group-hover:bg-white/25 transition-colors duration-200">
               {icon}
             </div>
             <div className="flex flex-col items-start">
-              <span className="font-medium">{label}</span>
+              <span className="font-medium text-sm sm:text-base text-white">
+                {label}
+              </span>
               {showStat && statValue !== undefined && (
-                <span className="text-xs opacity-80 group-hover:opacity-100 transition-opacity duration-200">
+                <span className="text-xs opacity-90 group-hover:opacity-100 transition-opacity duration-200 text-white/90">
                   {statValue} {statLabel}
                 </span>
               )}

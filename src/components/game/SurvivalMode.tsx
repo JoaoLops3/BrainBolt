@@ -255,40 +255,50 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
 
   if (gameState === "ready") {
     return (
-      <div className="min-h-screen bg-gradient-primary p-4 sm:p-6 overflow-y-auto safe-top safe-bottom">
-        <div className="max-w-4xl mx-auto space-y-6">
-          {/* Botão Voltar */}
-          <Button
-            variant="outline"
-            onClick={onBack}
-            className="gap-2 bg-white/20 border-white/30 text-white hover:bg-white/30 hover:text-white"
+      <div className="min-h-screen bg-gradient-primary p-3 sm:p-4 md:p-6 overflow-y-auto safe-top safe-bottom relative">
+        {/* Botão X para sair */}
+        <button
+          onClick={onBack}
+          className="fixed top-12 sm:top-8 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
           >
-            <ArrowLeft className="h-4 w-4" />
-            Voltar
-          </Button>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
 
+        <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 md:space-y-6 pt-20 sm:pt-24">
           {/* Card Principal */}
           <Card className="backdrop-blur-lg bg-white/20 border-white/30 shadow-2xl">
-            <CardHeader>
-              <div className="flex items-center justify-center gap-3 mb-4">
-                <Skull className="h-12 w-12 text-white" />
-                <CardTitle className="text-4xl font-bold text-white">
+            <CardHeader className="p-4 sm:p-6">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                <Skull className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 text-white" />
+                <CardTitle className="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center">
                   Modo Sobrevivência
                 </CardTitle>
-                <Flame className="h-12 w-12 text-white animate-pulse" />
+                <Flame className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 text-white animate-pulse" />
               </div>
-              <p className="text-center text-white/80 text-lg">
+              <p className="text-center text-white/80 text-sm sm:text-base md:text-lg px-2">
                 Responda até errar! A dificuldade aumenta a cada 5 acertos.
               </p>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-4 sm:space-y-6 p-4 sm:p-6">
               {/* Regras */}
-              <div className="bg-white/10 p-6 rounded-lg border-2 border-white/20">
-                <h3 className="font-bold text-xl mb-4 flex items-center gap-2 text-white">
-                  <Target className="h-5 w-5 text-white" />
+              <div className="bg-white/10 p-4 sm:p-6 rounded-lg border-2 border-white/20">
+                <h3 className="font-bold text-lg sm:text-xl mb-3 sm:mb-4 flex items-center gap-2 text-white">
+                  <Target className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                   Como Jogar
                 </h3>
-                <ul className="space-y-3 text-sm text-white/90">
+                <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm text-white/90">
                   <li className="flex items-start gap-2">
                     <Heart className="h-5 w-5 text-white flex-shrink-0 mt-0.5" />
                     <span>
@@ -323,13 +333,15 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
               </div>
 
               {/* Estatísticas */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 <Card className="bg-white/10 border-white/20">
-                  <CardContent className="p-4">
+                  <CardContent className="p-3 sm:p-4">
                     <div className="text-center">
-                      <Trophy className="h-8 w-8 mx-auto mb-2 text-white" />
-                      <p className="text-sm text-white/70">Seu Recorde</p>
-                      <p className="text-3xl font-bold text-white">
+                      <Trophy className="h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-1 sm:mb-2 text-white" />
+                      <p className="text-xs sm:text-sm text-white/70">
+                        Seu Recorde
+                      </p>
+                      <p className="text-xl sm:text-2xl md:text-3xl font-bold text-white">
                         {personalBest}
                       </p>
                     </div>
@@ -337,11 +349,13 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
                 </Card>
 
                 <Card className="bg-white/10 border-white/20">
-                  <CardContent className="p-4">
+                  <CardContent className="p-3 sm:p-4">
                     <div className="text-center">
-                      <Crown className="h-8 w-8 mx-auto mb-2 text-white" />
-                      <p className="text-sm text-white/70">Recorde Global</p>
-                      <p className="text-3xl font-bold text-white">
+                      <Crown className="h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-1 sm:mb-2 text-white" />
+                      <p className="text-xs sm:text-sm text-white/70">
+                        Recorde Global
+                      </p>
+                      <p className="text-xl sm:text-2xl md:text-3xl font-bold text-white">
                         {leaderboard[0]?.final_score || 0}
                       </p>
                     </div>
@@ -352,22 +366,22 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
               {/* Top 5 Leaderboard */}
               {leaderboard.length > 0 && (
                 <div>
-                  <h3 className="font-bold text-lg mb-3 flex items-center gap-2 text-white">
-                    <Crown className="h-5 w-5 text-white" />
+                  <h3 className="font-bold text-base sm:text-lg mb-2 sm:mb-3 flex items-center gap-2 text-white">
+                    <Crown className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                     Top 5 Jogadores
                   </h3>
                   <div className="space-y-2">
                     {leaderboard.slice(0, 5).map((entry, index) => (
                       <div
                         key={index}
-                        className={`flex items-center justify-between p-3 rounded-lg ${
+                        className={`flex items-center justify-between p-2 sm:p-3 rounded-lg ${
                           index === 0
                             ? "bg-white/30 border-2 border-white/40"
                             : "bg-white/10 border border-white/20"
                         }`}
                       >
-                        <div className="flex items-center gap-3">
-                          <span className="text-2xl font-bold w-8 text-center">
+                        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                          <span className="text-lg sm:text-2xl font-bold w-6 sm:w-8 text-center flex-shrink-0">
                             {index === 0
                               ? "🥇"
                               : index === 1
@@ -376,13 +390,13 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
                               ? "🥉"
                               : `#${index + 1}`}
                           </span>
-                          <span className="font-medium text-white">
+                          <span className="font-medium text-white text-sm sm:text-base truncate">
                             {entry.profiles?.display_name || "Anônimo"}
                           </span>
                         </div>
                         <Badge
                           variant={index === 0 ? "default" : "secondary"}
-                          className="text-lg px-3 py-1 bg-white/20 text-white border-white/30"
+                          className="text-xs sm:text-sm md:text-base px-2 sm:px-3 py-1 bg-white/20 text-white border-white/30 flex-shrink-0"
                         >
                           {entry.final_score} pts
                         </Badge>
@@ -396,9 +410,9 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
               <Button
                 onClick={startGame}
                 size="lg"
-                className="w-full bg-white/20 hover:bg-white/30 border-2 border-white/30 text-white text-xl py-6 shadow-lg hover:shadow-xl transition-all"
+                className="w-full bg-white/20 hover:bg-white/30 border-2 border-white/30 text-white text-base sm:text-lg md:text-xl py-4 sm:py-5 md:py-6 shadow-lg hover:shadow-xl transition-all min-h-[56px]"
               >
-                <Flame className="h-6 w-6 mr-2" />
+                <Flame className="h-5 w-5 sm:h-6 sm:w-6 mr-2" />
                 Iniciar Sobrevivência
               </Button>
             </CardContent>
@@ -481,19 +495,41 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
 
   // Estado "playing"
   return (
-    <div className="min-h-screen bg-gradient-primary p-4 sm:p-6 overflow-y-auto safe-top safe-bottom">
-      <div className="max-w-4xl mx-auto space-y-4">
+    <div className="min-h-screen bg-gradient-primary p-3 sm:p-4 md:p-6 overflow-y-auto safe-top safe-bottom relative">
+      {/* Botão X para sair */}
+      <button
+        onClick={onBack}
+        className="fixed top-12 sm:top-8 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+
+      <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 pt-20 sm:pt-24">
         {/* Header com estatísticas */}
         <Card className="backdrop-blur-lg bg-white/20 border-white/30 shadow-xl">
-          <CardContent className="p-4">
-            <div className="grid grid-cols-3 gap-4 text-center">
+          <CardContent className="p-3 sm:p-4">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4 text-center">
               <div>
-                <p className="text-sm text-white/70 mb-1">Vidas</p>
-                <div className="flex justify-center gap-1">
+                <p className="text-xs sm:text-sm text-white/70 mb-0.5 sm:mb-1">
+                  Vidas
+                </p>
+                <div className="flex justify-center gap-0.5 sm:gap-1">
                   {[...Array(3)].map((_, i) => (
                     <Heart
                       key={i}
-                      className={`h-6 w-6 ${
+                      className={`h-5 w-5 sm:h-6 sm:w-6 ${
                         i < lives ? "fill-white text-white" : "text-white/30"
                       }`}
                     />
@@ -501,14 +537,22 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
                 </div>
               </div>
               <div>
-                <p className="text-sm text-white/70 mb-1">Pontuação</p>
-                <p className="text-2xl font-bold text-white">{score}</p>
+                <p className="text-xs sm:text-sm text-white/70 mb-0.5 sm:mb-1">
+                  Pontuação
+                </p>
+                <p className="text-xl sm:text-2xl font-bold text-white">
+                  {score}
+                </p>
               </div>
               <div>
-                <p className="text-sm text-white/70 mb-1">Sequência</p>
-                <div className="flex items-center justify-center gap-1">
-                  <Flame className="h-5 w-5 text-white" />
-                  <p className="text-2xl font-bold text-white">{streak}</p>
+                <p className="text-xs sm:text-sm text-white/70 mb-0.5 sm:mb-1">
+                  Sequência
+                </p>
+                <div className="flex items-center justify-center gap-0.5 sm:gap-1">
+                  <Flame className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                  <p className="text-xl sm:text-2xl font-bold text-white">
+                    {streak}
+                  </p>
                 </div>
               </div>
             </div>
@@ -517,7 +561,7 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
 
         {/* Dificuldade atual */}
         <div className="flex justify-center">
-          <Badge className="bg-white/20 border-white/30 text-white px-4 py-2 text-base">
+          <Badge className="bg-white/20 border-white/30 text-white px-3 sm:px-4 py-1.5 sm:py-2 text-sm sm:text-base">
             {getDifficultyLabel()}
           </Badge>
         </div>
@@ -525,12 +569,12 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
         {/* Pergunta */}
         {currentQuestion && (
           <Card className="backdrop-blur-lg bg-white/20 border-white/30 shadow-xl">
-            <CardHeader>
-              <CardTitle className="text-2xl text-center text-white">
+            <CardHeader className="p-4 sm:p-6">
+              <CardTitle className="text-lg sm:text-xl md:text-2xl text-center text-white leading-tight">
                 {currentQuestion.question}
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardContent className="space-y-2 sm:space-y-3 p-4 sm:p-6">
               {currentQuestion.options.map((option, index) => {
                 const isSelected = selectedAnswer === index;
                 const isCorrect = index === currentQuestion.correctAnswer;
@@ -542,21 +586,23 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
                     key={index}
                     onClick={() => handleAnswer(index)}
                     disabled={showAnswer}
-                    className={`w-full h-auto min-h-[60px] text-left justify-start p-4 transition-all ${
+                    className={`w-full h-auto min-h-[52px] sm:min-h-[60px] text-left justify-start p-3 sm:p-4 transition-all ${
                       showCorrect
                         ? "bg-green-500 hover:bg-green-500 text-white border-2 border-green-600"
                         : showWrong
                         ? "bg-red-500 hover:bg-red-500 text-white border-2 border-red-600"
                         : isSelected
                         ? "bg-white/30 border-2 border-white/50 text-white"
-                        : "bg-white/10 border-white/20 hover:bg-white/20 text-white"
+                        : "bg-white/10 border-white/20 hover:bg-white/20 text-white active:bg-white/30"
                     }`}
                     variant={showCorrect || showWrong ? "default" : "outline"}
                   >
-                    <span className="font-semibold mr-3 text-lg">
+                    <span className="font-semibold mr-2 sm:mr-3 text-base sm:text-lg flex-shrink-0">
                       {String.fromCharCode(65 + index)}.
                     </span>
-                    <span className="text-base">{option}</span>
+                    <span className="text-sm sm:text-base leading-tight">
+                      {option}
+                    </span>
                   </Button>
                 );
               })}

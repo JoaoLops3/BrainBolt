@@ -26,8 +26,8 @@ export const MultiplayerResults = ({
   const isDraw = room.winner_id === null;
 
   return (
-    <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4 no-scroll">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4 sm:p-6 no-scroll safe-top safe-bottom">
+      <Card className="w-full max-w-md backdrop-blur-lg bg-white/95 border-white/30">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             {isWinner ? (
@@ -85,18 +85,22 @@ export const MultiplayerResults = ({
 
           {/* Performance stats */}
           <div className="bg-muted rounded-lg p-4">
-            <h4 className="text-sm font-medium mb-3">Estatísticas da Partida</h4>
+            <h4 className="text-sm font-medium mb-3">
+              Estatísticas da Partida
+            </h4>
             <div className="grid grid-cols-2 gap-4 text-xs">
               <div>
                 <span className="text-muted-foreground">Acertos:</span>
                 <div className="font-bold">
-                  {Math.floor(userScore / 100)}/10 vs {Math.floor(opponentScore / 100)}/10
+                  {Math.floor(userScore / 100)}/10 vs{" "}
+                  {Math.floor(opponentScore / 100)}/10
                 </div>
               </div>
               <div>
                 <span className="text-muted-foreground">Precisão:</span>
                 <div className="font-bold">
-                  {Math.round((userScore / 1000) * 100)}% vs {Math.round((opponentScore / 1000) * 100)}%
+                  {Math.round((userScore / 1000) * 100)}% vs{" "}
+                  {Math.round((opponentScore / 1000) * 100)}%
                 </div>
               </div>
             </div>

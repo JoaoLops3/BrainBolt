@@ -349,8 +349,8 @@ export const MultiplayerGame = ({
 
   if (!room) {
     return (
-      <div className="min-h-screen bg-gradient-primary flex items-center justify-center">
-        <div>Carregando...</div>
+      <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4 sm:p-6 safe-top safe-bottom">
+        <div className="text-white">Carregando...</div>
       </div>
     );
   }
@@ -367,12 +367,12 @@ export const MultiplayerGame = ({
 
   if (room.game_status === "waiting") {
     return (
-      <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4">
-        <Card className="w-full max-w-md text-center">
-          <CardContent className="pt-6">
-            <Users className="h-16 w-16 mx-auto mb-4 text-primary" />
+      <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4 sm:p-6 safe-top safe-bottom">
+        <Card className="w-full max-w-md text-center backdrop-blur-lg bg-white/20 border-white/30">
+          <CardContent className="pt-6 text-white">
+            <Users className="h-16 w-16 mx-auto mb-4 text-white" />
             <h2 className="text-2xl font-bold mb-2">Aguardando...</h2>
-            <p className="text-muted-foreground">
+            <p className="text-white/80">
               {!room.guest_id
                 ? "Esperando outro jogador entrar"
                 : "Preparando o jogo"}
@@ -385,8 +385,8 @@ export const MultiplayerGame = ({
 
   if (!currentQuestion) {
     return (
-      <div className="min-h-screen bg-gradient-primary flex items-center justify-center">
-        <div>Carregando pergunta...</div>
+      <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4 sm:p-6 safe-top safe-bottom">
+        <div className="text-white">Carregando pergunta...</div>
       </div>
     );
   }
@@ -409,7 +409,7 @@ export const MultiplayerGame = ({
       {/* Exit button */}
       <button
         onClick={onBackToMenu}
-        className="absolute top-4 left-4 z-30 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30"
+        className="fixed top-12 sm:top-8 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
       >
         <svg
           className="w-6 h-6"
@@ -427,7 +427,7 @@ export const MultiplayerGame = ({
       </button>
 
       {/* Score display */}
-      <div className="fixed top-4 left-16 right-4 z-10">
+      <div className="fixed top-12 sm:top-8 left-16 right-4 z-10">
         <div className="flex justify-between items-center">
           <Card className="px-4 py-2">
             <div className="flex items-center gap-2">
@@ -485,15 +485,19 @@ export const MultiplayerGame = ({
         </Card>
       </div>
 
-      <QuestionCard
-        question={currentQuestion}
-        questionNumber={room.current_question_index + 1}
-        totalQuestions={24}
-        selectedAnswer={selectedAnswer}
-        showAnswer={showAnswer}
-        onSelectAnswer={handleAnswerSelect}
-        gameMode="multiplayer"
-      />
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 pt-24 sm:pt-20">
+        <div className="w-full max-w-2xl">
+          <QuestionCard
+            question={currentQuestion}
+            questionNumber={room.current_question_index + 1}
+            totalQuestions={24}
+            selectedAnswer={selectedAnswer}
+            showAnswer={showAnswer}
+            onSelectAnswer={handleAnswerSelect}
+            gameMode="multiplayer"
+          />
+        </div>
+      </div>
     </div>
   );
 };

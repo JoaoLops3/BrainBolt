@@ -97,10 +97,10 @@ export const ImprovedMainMenu = ({
         maxWidth="4xl"
         padding="md"
         spacing="md"
-        className="pt-4 sm:pt-6"
+        className="pt-12 sm:pt-6"
       >
         {/* Header com avatar e nome */}
-        <Card className="backdrop-blur-lg bg-white/20 border-white/30 shadow-2xl animate-in fade-in-0 slide-in-from-top-4">
+        <Card className="backdrop-blur-lg bg-white/20 border-white/30 shadow-2xl animate-in fade-in-0 slide-in-from-top-4 mt-2">
           <CardHeader className="pb-4">
             <div className="flex items-center space-x-3 sm:space-x-4">
               <div className="relative">
@@ -151,7 +151,7 @@ export const ImprovedMainMenu = ({
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <StatButton
                 icon={<Clock className="h-5 w-5" />}
                 label="Modo Normal"
@@ -173,35 +173,33 @@ export const ImprovedMainMenu = ({
                 animation="scaleIn"
               />
               <StatButton
+                icon={<Users className="h-5 w-5" />}
+                label="Multiplayer"
+                statValue={stats?.multiplayerWins || 0}
+                statLabel="vitórias"
+                badge={
+                  stats?.pendingInvites && stats.pendingInvites > 0
+                    ? `${stats.pendingInvites}`
+                    : undefined
+                }
+                badgeVariant={stats?.pendingInvites ? "destructive" : "default"}
+                onClick={onStartMultiplayer}
+                className="h-auto py-6"
+                animation="scaleIn"
+              />
+              <StatButton
                 icon={<Flame className="h-5 w-5" />}
                 label="Outros Modos"
                 badge="NOVO"
                 badgeVariant="destructive"
                 onClick={() => setShowOtherModesModal(true)}
-                className="h-auto py-6 bg-gradient-to-r from-orange-500/20 to-red-500/20 hover:from-orange-500/30 hover:to-red-500/30 border-2 border-orange-500/50 md:col-span-2 lg:col-span-1"
+                className="h-auto py-6 bg-gradient-to-r from-orange-500/20 to-red-500/20 hover:from-orange-500/30 hover:to-red-500/30 border-2 border-orange-500/50"
                 showStat={false}
                 animation="scaleIn"
               />
             </div>
           </CardContent>
         </Card>
-
-        {/* Multiplayer */}
-        <StatButton
-          icon={<Users className="h-5 w-5" />}
-          label="Multiplayer"
-          statValue={stats?.multiplayerWins || 0}
-          statLabel="vitórias"
-          badge={
-            stats?.pendingInvites && stats.pendingInvites > 0
-              ? `${stats.pendingInvites}`
-              : undefined
-          }
-          badgeVariant={stats?.pendingInvites ? "destructive" : "default"}
-          onClick={onStartMultiplayer}
-          className="w-full h-auto py-6 animate-in fade-in-0 slide-in-from-bottom-2"
-          animation="scaleIn"
-        />
 
         {/* Salas Educacionais */}
         <Card className="backdrop-blur-lg bg-white/20 border-white/30 shadow-2xl animate-in fade-in-0 slide-in-from-bottom-3">
@@ -280,7 +278,7 @@ export const ImprovedMainMenu = ({
         </div>
 
         {/* Configurações e Sair */}
-        <div className="flex justify-center gap-3">
+        <div className="flex justify-center gap-3 mt-2 pb-6 sm:pb-8 animate-in fade-in-0 slide-in-from-bottom-2">
           <Button
             variant="ghost"
             size="icon"
