@@ -22,12 +22,14 @@ import {
   GraduationCap,
   LogOut,
   CircleHelp,
+  Flame,
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useStats } from "@/contexts/StatsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { InteractiveTutorial } from "@/components/tutorial/InteractiveTutorial";
+import { OtherModesModal } from "./OtherModesModal";
 
 interface ImprovedMainMenuProps {
   onSelectMode: (mode: "normal" | "speed") => void;
@@ -40,6 +42,7 @@ interface ImprovedMainMenuProps {
   onViewCharacters: () => void;
   onViewTeacherClassrooms: () => void;
   onViewStudentClassrooms: () => void;
+  onStartSurvival: () => void;
 }
 
 export const ImprovedMainMenu = ({
@@ -53,11 +56,13 @@ export const ImprovedMainMenu = ({
   onViewCharacters,
   onViewTeacherClassrooms,
   onViewStudentClassrooms,
+  onStartSurvival,
 }: ImprovedMainMenuProps) => {
   const { stats, loading } = useStats();
   const { user, profile, signOut } = useAuth();
   const navigate = useNavigate();
   const [showTutorial, setShowTutorial] = useState(false);
+  const [showOtherModesModal, setShowOtherModesModal] = useState(false);
 
   const handleSignOut = async () => {
     try {
@@ -146,7 +151,7 @@ export const ImprovedMainMenu = ({
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <StatButton
                 icon={<Clock className="h-5 w-5" />}
                 label="Modo Normal"
@@ -165,6 +170,16 @@ export const ImprovedMainMenu = ({
                 badgeVariant="secondary"
                 onClick={() => onSelectMode("speed")}
                 className="h-auto py-6"
+                animation="scaleIn"
+              />
+              <StatButton
+                icon={<Flame className="h-5 w-5" />}
+                label="Outros Modos"
+                badge="NOVO"
+                badgeVariant="destructive"
+                onClick={() => setShowOtherModesModal(true)}
+                className="h-auto py-6 bg-gradient-to-r from-orange-500/20 to-red-500/20 hover:from-orange-500/30 hover:to-red-500/30 border-2 border-orange-500/50 md:col-span-2 lg:col-span-1"
+                showStat={false}
                 animation="scaleIn"
               />
             </div>
@@ -330,6 +345,16 @@ export const ImprovedMainMenu = ({
           onSkip={handleTutorialSkip}
         />
       )}
+
+      {/* Modal de Outros Modos */}
+      <OtherModesModal
+        open={showOtherModesModal}
+        onClose={() => setShowOtherModesModal(false)}
+        onSelectSurvival={() => {
+          setShowOtherModesModal(false);
+          onStartSurvival();
+        }}
+      />
     </div>
   );
 };

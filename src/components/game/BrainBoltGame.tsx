@@ -23,6 +23,7 @@ import { CharactersModal } from "@/components/achievements/CharactersModal";
 import { AchievementNotification } from "@/components/achievements/AchievementNotification";
 import { TeacherDashboard } from "@/components/classroom/TeacherDashboard";
 import { StudentDashboard } from "@/components/classroom/StudentDashboard";
+import { SurvivalMode } from "./SurvivalMode";
 import { useAchievements } from "@/hooks/useAchievements";
 import { useRetentionNotifications } from "@/hooks/useRetentionNotifications";
 import { useNativeNotifications } from "@/hooks/useNativeNotifications";
@@ -378,6 +379,18 @@ export const BrainBoltGame = () => {
     setGameState((prev) => ({ ...prev, gamePhase: "studentClassrooms" }));
   };
 
+  const startSurvivalMode = () => {
+    setGameState((prev) => ({
+      ...prev,
+      gamePhase: "survival",
+      gameMode: "survival",
+    }));
+  };
+
+  if (gameState.gamePhase === "survival") {
+    return <SurvivalMode onBack={backToMenu} />;
+  }
+
   if (gameState.gamePhase === "menu") {
     return (
       <>
@@ -392,6 +405,7 @@ export const BrainBoltGame = () => {
           onViewCharacters={() => setCharactersOpen(true)}
           onViewTeacherClassrooms={viewTeacherClassrooms}
           onViewStudentClassrooms={viewStudentClassrooms}
+          onStartSurvival={startSurvivalMode}
         />
 
         <SettingsModal open={settingsOpen} onOpenChange={setSettingsOpen} />

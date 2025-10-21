@@ -5,7 +5,7 @@ export type CategoryType =
   | "science"
   | "geography"
   | "history";
-export type GameMode = "normal" | "speed" | "multiplayer";
+export type GameMode = "normal" | "speed" | "multiplayer" | "survival";
 
 export interface Question {
   id: string;
@@ -39,7 +39,9 @@ export interface GameState {
     | "results"
     | "multiplayer"
     | "teacherClassrooms"
-    | "studentClassrooms";
+    | "studentClassrooms"
+    | "otherModes"
+    | "survival";
   selectedAnswer: number | null;
   showAnswer: boolean;
   currentStreak: number;
