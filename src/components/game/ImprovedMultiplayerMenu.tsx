@@ -288,9 +288,9 @@ export const ImprovedMultiplayerMenu = ({
           ></div>
         </div>
 
-        <div className="relative z-10 flex flex-col h-full max-w-2xl mx-auto justify-center px-4 sm:px-0">
+        <div className="relative z-10 flex flex-col h-full max-w-2xl mx-auto justify-center px-4 sm:px-0 py-6 sm:py-8 safe-top safe-bottom">
           {/* Cabeçalho com botão voltar e status da sala */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-6 mt-4 sm:mt-6">
             {/* Botão para voltar ao menu principal */}
             <Button
               variant="ghost"
@@ -458,20 +458,20 @@ export const ImprovedMultiplayerMenu = ({
         ></div>
       </div>
 
-      <div className="relative z-10 flex flex-col h-full justify-center max-w-md mx-auto min-h-[90vh] px-4 sm:px-0">
+      <div className="relative z-10 flex flex-col h-full justify-center max-w-md mx-auto min-h-[90vh] px-4 sm:px-6 py-6 sm:py-8 safe-top safe-bottom">
         {/* Cabeçalho principal do menu */}
-        <div className="flex-1">
-          <div className="text-center mb-6">
+        <div className="flex-1 flex items-center">
+          <div className="text-center mb-6 sm:mb-8 w-full mt-8 sm:mt-12">
             {/* Ícone principal do multiplayer */}
-            <div className="mx-auto mb-4 p-3 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl w-fit backdrop-blur-xl">
-              <Users className="h-10 w-10 text-white" />
+            <div className="mx-auto mb-3 sm:mb-4 p-2.5 sm:p-3 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl w-fit backdrop-blur-xl">
+              <Users className="h-8 w-8 sm:h-10 sm:w-10 text-white" />
             </div>
             {/* Título principal */}
-            <h1 className="text-3xl font-bold text-white mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">
               Modo Multiplayer
             </h1>
             {/* Descrição do modo */}
-            <p className="text-white/80 text-base">
+            <p className="text-white/80 text-sm sm:text-base px-4">
               Jogue com seus amigos em tempo real
             </p>
           </div>

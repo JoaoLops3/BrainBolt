@@ -44,8 +44,8 @@ export const GameResults = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary to-entertainment flex items-center justify-center p-4 no-scroll">
-      <div className="bg-white rounded-3xl p-8 max-w-2xl w-full shadow-2xl animate-bounce-in">
+    <div className="min-h-screen bg-gradient-to-br from-primary to-entertainment flex items-center justify-center p-4 sm:p-6 no-scroll safe-top safe-bottom">
+      <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl animate-bounce-in">
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-primary mb-2">

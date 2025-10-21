@@ -23,6 +23,7 @@ import { CharactersModal } from "@/components/achievements/CharactersModal";
 import { AchievementNotification } from "@/components/achievements/AchievementNotification";
 import { TeacherDashboard } from "@/components/classroom/TeacherDashboard";
 import { StudentDashboard } from "@/components/classroom/StudentDashboard";
+import { SurvivalMode } from "./SurvivalMode";
 import { useAchievements } from "@/hooks/useAchievements";
 import { useRetentionNotifications } from "@/hooks/useRetentionNotifications";
 import { useNativeNotifications } from "@/hooks/useNativeNotifications";
@@ -378,6 +379,18 @@ export const BrainBoltGame = () => {
     setGameState((prev) => ({ ...prev, gamePhase: "studentClassrooms" }));
   };
 
+  const startSurvivalMode = () => {
+    setGameState((prev) => ({
+      ...prev,
+      gamePhase: "survival",
+      gameMode: "survival",
+    }));
+  };
+
+  if (gameState.gamePhase === "survival") {
+    return <SurvivalMode onBack={backToMenu} />;
+  }
+
   if (gameState.gamePhase === "menu") {
     return (
       <>
@@ -392,6 +405,7 @@ export const BrainBoltGame = () => {
           onViewCharacters={() => setCharactersOpen(true)}
           onViewTeacherClassrooms={viewTeacherClassrooms}
           onViewStudentClassrooms={viewStudentClassrooms}
+          onStartSurvival={startSurvivalMode}
         />
 
         <SettingsModal open={settingsOpen} onOpenChange={setSettingsOpen} />
@@ -477,7 +491,7 @@ export const BrainBoltGame = () => {
       {/* Exit button */}
       <button
         onClick={backToMenu}
-        className="absolute top-4 left-4 z-20 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30"
+        className="fixed top-12 sm:top-8 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
       >
         <svg
           className="w-6 h-6"
@@ -494,7 +508,7 @@ export const BrainBoltGame = () => {
         </svg>
       </button>
 
-      <div className="min-h-screen bg-gradient-primary flex flex-col items-center justify-center p-4 no-scroll w-full">
+      <div className="min-h-screen bg-gradient-primary flex flex-col items-center justify-center p-4 pt-16 sm:pt-4 no-scroll w-full">
         <div className="w-full max-w-2xl space-y-4">
           {/* Timer for speed mode - positioned above progress */}
           {gameState.gameMode === "speed" && (
