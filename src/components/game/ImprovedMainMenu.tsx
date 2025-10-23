@@ -191,22 +191,20 @@ export const ImprovedMainMenu = ({
                 animation="scaleIn"
               />
               <StatButton
-                icon={<Flame className="h-5 w-5" />}
-                label="Outros Modos"
-                badge="NOVO"
-                badgeVariant="destructive"
-                onClick={() => setShowOtherModesModal(true)}
-                className="h-auto py-6 bg-gradient-to-r from-orange-500/20 to-red-500/20 hover:from-orange-500/30 hover:to-red-500/30 border-2 border-orange-500/50"
-                showStat={false}
-                animation="scaleIn"
-              />
-              <StatButton
                 icon={<Cpu className="h-5 w-5" />}
                 label="Modo Físico"
                 statValue={stats?.physicalGamesPlayed || 0}
                 statLabel="jogos"
                 onClick={() => onStartPhysicalMode?.()}
                 className="h-auto py-6"
+                animation="scaleIn"
+              />
+              <StatButton
+                icon={<Flame className="h-5 w-5" />}
+                label="Outros Modos"
+                onClick={() => setShowOtherModesModal(true)}
+                className="h-auto py-6 bg-gradient-to-r from-orange-500/20 to-red-500/20 hover:from-orange-500/30 hover:to-red-500/30 border-2 border-orange-500/50"
+                showStat={false}
                 animation="scaleIn"
               />
             </div>
