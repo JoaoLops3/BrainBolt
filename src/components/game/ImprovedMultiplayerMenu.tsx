@@ -25,22 +25,26 @@ import {
   CheckCircle2,
   UserPlus,
   Zap,
+  Cpu,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { MultiplayerRoom } from "@/types/game";
 import { cn } from "@/lib/utils";
+import { PhysicalModeModal } from "./PhysicalModeModal";
 
 // Props do componente de menu multiplayer melhorado
 interface ImprovedMultiplayerMenuProps {
   onStartMultiplayer: (roomId: string, isHost: boolean) => void; // Função para iniciar o jogo multiplayer
   onBackToMenu: () => void; // Função para voltar ao menu principal
+  onStartPhysicalMode?: () => void; // Função para iniciar o modo físico
 }
 
 export const ImprovedMultiplayerMenu = ({
   onStartMultiplayer,
   onBackToMenu,
+  onStartPhysicalMode,
 }: ImprovedMultiplayerMenuProps) => {
   // Hooks principais
   const { user } = useAuth(); // Usuário logado
@@ -52,6 +56,7 @@ export const ImprovedMultiplayerMenu = ({
   const [currentRoom, setCurrentRoom] = useState<MultiplayerRoom | null>(null); // Sala atual
   const [copied, setCopied] = useState(false); // Estado de cópia do código
   const [playerCount, setPlayerCount] = useState(1); // Contador de jogadores na sala
+  const [physicalModeModalOpen, setPhysicalModeModalOpen] = useState(false); // Modal do modo físico
 
   // Gera um código único de 6 caracteres para a sala
   const generateRoomCode = () => {
@@ -216,6 +221,12 @@ export const ImprovedMultiplayerMenu = ({
   const startGame = () => {
     if (currentRoom) {
       onStartMultiplayer(currentRoom.id, true);
+    }
+  };
+
+  const handleStartPhysicalMode = () => {
+    if (onStartPhysicalMode) {
+      onStartPhysicalMode();
     }
   };
 
@@ -556,6 +567,36 @@ export const ImprovedMultiplayerMenu = ({
           </CardContent>
         </Card>
 
+        {/* Physical Mode Option */}
+        <Card className="bg-white/20 backdrop-blur-xl border-white/30 shadow-2xl mb-4">
+          <CardContent className="p-4 sm:p-6">
+            <div className="text-center space-y-4">
+              <div className="mx-auto p-3 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl w-fit">
+                <Cpu className="h-8 w-8 text-white" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">
+                  Modo Físico
+                </h3>
+                <p className="text-white/70 text-sm">
+                  Use botões físicos conectados ao Arduino para responder
+                </p>
+              </div>
+
+              <Button
+                onClick={() => setPhysicalModeModalOpen(true)}
+                size="lg"
+                className="w-full h-12 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold transform hover:scale-105 transition-all duration-300 shadow-xl"
+              >
+                <div className="flex items-center gap-3">
+                  <Gamepad2 className="h-6 w-6" />
+                  <span>Selecionar "Modo Físico"</span>
+                </div>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Features Info */}
         <Card className="bg-white/20 backdrop-blur-xl border-white/30 shadow-2xl mb-4">
           <CardContent className="p-4">
@@ -598,6 +639,13 @@ export const ImprovedMultiplayerMenu = ({
           <ArrowLeft className="h-4 w-4 mr-2" />
           Voltar ao Menu Principal
         </Button>
+
+        {/* Physical Mode Modal */}
+        <PhysicalModeModal
+          open={physicalModeModalOpen}
+          onOpenChange={setPhysicalModeModalOpen}
+          onStartPhysicalMode={handleStartPhysicalMode}
+        />
       </div>
     </div>
   );

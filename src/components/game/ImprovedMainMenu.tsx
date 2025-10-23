@@ -23,6 +23,7 @@ import {
   LogOut,
   CircleHelp,
   Flame,
+  Cpu,
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useStats } from "@/contexts/StatsContext";
@@ -34,6 +35,7 @@ import { OtherModesModal } from "./OtherModesModal";
 interface ImprovedMainMenuProps {
   onSelectMode: (mode: "normal" | "speed") => void;
   onStartMultiplayer: () => void;
+  onStartPhysicalMode?: () => void;
   onOpenSettings: () => void;
   onViewStats: () => void;
   onViewAdvancedStats: () => void;
@@ -48,6 +50,7 @@ interface ImprovedMainMenuProps {
 export const ImprovedMainMenu = ({
   onSelectMode,
   onStartMultiplayer,
+  onStartPhysicalMode,
   onOpenSettings,
   onViewStats,
   onViewAdvancedStats,
@@ -173,6 +176,7 @@ export const ImprovedMainMenu = ({
                 animation="scaleIn"
               />
               <StatButton
+<<<<<<< Updated upstream
                 icon={<Users className="h-5 w-5" />}
                 label="Multiplayer"
                 statValue={stats?.multiplayerWins || 0}
@@ -195,6 +199,15 @@ export const ImprovedMainMenu = ({
                 onClick={() => setShowOtherModesModal(true)}
                 className="h-auto py-6 bg-gradient-to-r from-orange-500/20 to-red-500/20 hover:from-orange-500/30 hover:to-red-500/30 border-2 border-orange-500/50"
                 showStat={false}
+                animation="scaleIn"
+              />
+              <StatButton
+                icon={<Cpu className="h-5 w-5" />}
+                label="Modo Físico"
+                statValue={stats?.physicalGamesPlayed || 0}
+                statLabel="jogos"
+                onClick={() => onStartPhysicalMode?.()}
+                className="h-auto py-6"
                 animation="scaleIn"
               />
             </div>

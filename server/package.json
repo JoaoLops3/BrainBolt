@@ -6,7 +6,9 @@
   "scripts": {
     "start": "tsx hardware-websocket.ts",
     "dev": "tsx watch hardware-websocket.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "bridge": "node simple-bridge.js",
+    "bridge:dev": "node simple-bridge.js --verbose"
   },
   "keywords": [
     "websocket",
@@ -19,6 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",
+    "commander": "^11.1.0",
     "dotenv": "^16.4.5",
     "ws": "^8.18.0"
   },

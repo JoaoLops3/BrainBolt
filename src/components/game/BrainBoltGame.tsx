@@ -24,6 +24,7 @@ import { AchievementNotification } from "@/components/achievements/AchievementNo
 import { TeacherDashboard } from "@/components/classroom/TeacherDashboard";
 import { StudentDashboard } from "@/components/classroom/StudentDashboard";
 import { SurvivalMode } from "./SurvivalMode";
+import { PhysicalMode } from "./PhysicalMode";
 import { useAchievements } from "@/hooks/useAchievements";
 import { useRetentionNotifications } from "@/hooks/useRetentionNotifications";
 import { useNativeNotifications } from "@/hooks/useNativeNotifications";
@@ -93,6 +94,7 @@ export const BrainBoltGame = () => {
   );
   const [multiplayerRoomId, setMultiplayerRoomId] = useState<string>("");
   const [isMultiplayerHost, setIsMultiplayerHost] = useState(false);
+  const [physicalModeActive, setPhysicalModeActive] = useState(false);
 
   const [gameQuestions, setGameQuestions] = useState<Question[]>([]);
   const [stats, setStats] = useState<GameStats>({
@@ -387,16 +389,32 @@ export const BrainBoltGame = () => {
     }));
   };
 
+  const startPhysicalMode = () => {
+    setPhysicalModeActive(true);
+  };
+
   if (gameState.gamePhase === "survival") {
     return <SurvivalMode onBack={backToMenu} />;
   }
 
+  if (physicalModeActive) {
+    return (
+      <PhysicalMode
+        onBackToMenu={() => setPhysicalModeActive(false)}
+        onStartGame={(mode) => {
+          // Aqui você pode implementar a lógica para iniciar o jogo físico
+          console.log("Iniciando jogo físico:", mode);
+        }}
+      />
+    );
+  }
   if (gameState.gamePhase === "menu") {
     return (
       <>
         <ImprovedMainMenu
           onSelectMode={startGame}
           onStartMultiplayer={startMultiplayer}
+          onStartPhysicalMode={startPhysicalMode}
           onOpenSettings={() => setSettingsOpen(true)}
           onViewStats={() => setStatsOpen(true)}
           onViewAdvancedStats={() => setAdvancedStatsOpen(true)}
@@ -448,12 +466,25 @@ export const BrainBoltGame = () => {
     return <StudentDashboard onBack={backToMenu} />;
   }
 
+  if (physicalModeActive) {
+    return (
+      <PhysicalMode
+        onBackToMenu={() => setPhysicalModeActive(false)}
+        onStartGame={(mode) => {
+          // Aqui você pode implementar a lógica para iniciar o jogo físico
+          console.log("Iniciando jogo físico:", mode);
+        }}
+      />
+    );
+  }
+
   if (gameState.gamePhase === "multiplayer") {
     if (multiplayerPhase === "menu") {
       return (
         <ImprovedMultiplayerMenu
           onStartMultiplayer={handleMultiplayerStart}
           onBackToMenu={backToMenu}
+          onStartPhysicalMode={startPhysicalMode}
         />
       );
     }
