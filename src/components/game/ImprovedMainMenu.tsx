@@ -176,7 +176,6 @@ export const ImprovedMainMenu = ({
                 animation="scaleIn"
               />
               <StatButton
-<<<<<<< Updated upstream
                 icon={<Users className="h-5 w-5" />}
                 label="Multiplayer"
                 statValue={stats?.multiplayerWins || 0}
