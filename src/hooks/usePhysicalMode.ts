@@ -182,6 +182,33 @@ export const usePhysicalMode = (): PhysicalModeHook => {
           }
           break;
 
+        case "test_buttons_start":
+          toast({
+            title: "Teste iniciado",
+            description: message.message,
+          });
+          break;
+
+        case "test_feedback":
+          toast({
+            title: "Teste concluído",
+            description: message.message,
+          });
+          break;
+
+        case "led_control":
+          console.log(
+            `💡 LED ${message.led} ${message.action} por ${message.duration}ms`
+          );
+          break;
+
+        case "game_start":
+          toast({
+            title: "Jogo iniciado",
+            description: message.message,
+          });
+          break;
+
         case "error":
           console.error("❌ Erro do servidor:", message.message);
           toast({

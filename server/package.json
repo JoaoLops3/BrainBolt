@@ -8,7 +8,9 @@
     "dev": "tsx watch hardware-websocket.ts",
     "build": "tsc",
     "bridge": "node simple-bridge.js",
-    "bridge:dev": "node simple-bridge.js --verbose"
+    "bridge:dev": "node simple-bridge.js --verbose",
+    "bridge:arduino": "node serial-bridge-simple.js",
+    "bridge:arduino:dev": "node serial-bridge-simple.js --verbose"
   },
   "keywords": [
     "websocket",
@@ -23,6 +25,8 @@
     "@supabase/supabase-js": "^2.39.0",
     "commander": "^11.1.0",
     "dotenv": "^16.4.5",
+    "serialport": "^12.0.0",
+    "@serialport/parser-readline": "^12.0.0",
     "ws": "^8.18.0"
   },
   "devDependencies": {

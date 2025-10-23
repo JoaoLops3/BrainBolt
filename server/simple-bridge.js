@@ -79,7 +79,10 @@ function setupKeyboardSimulation() {
   console.log('⌨️  Simulação de botões via teclado:');
   console.log('   A, B, C, D - Botões de resposta');
   console.log('   F - Botão rápido');
-  console.log('   Ctrl+C - Sair');
+  console.log('   LED A, B, C, D, FAST - Testar LEDs');
+  console.log('   TEST - Iniciar teste de botões');
+  console.log('   help - Mostrar ajuda completa');
+  console.log('   quit - Sair');
   console.log('');
   
   const readline = require('readline');
@@ -110,8 +113,36 @@ function setupKeyboardSimulation() {
       console.log('⌨️  Comandos disponíveis:');
       console.log('   A, B, C, D - Botões de resposta');
       console.log('   F - Botão rápido');
+      console.log('   LED A, B, C, D, FAST - Testar LEDs');
+      console.log('   TEST - Iniciar teste de botões');
       console.log('   help - Mostrar esta ajuda');
       console.log('   quit - Sair');
+    } else if (key.startsWith('LED ')) {
+      const led = key.replace('LED ', '');
+      if (['A', 'B', 'C', 'D', 'FAST'].includes(led)) {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({
+            type: 'control_leds',
+            led: led,
+            action: 'on',
+            duration: 1000
+          }));
+          console.log(`💡 LED ${led} ligado!`);
+        } else {
+          console.log('❌ WebSocket não conectado');
+        }
+      } else {
+        console.log('❓ LED inválido. Use: LED A, LED B, LED C, LED D, LED FAST');
+      }
+    } else if (key === 'TEST') {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({
+          type: 'test_buttons'
+        }));
+        console.log('🧪 Teste de botões iniciado!');
+      } else {
+        console.log('❌ WebSocket não conectado');
+      }
     } else if (key === 'QUIT' || key === 'Q') {
       console.log('👋 Encerrando bridge...');
       process.exit(0);

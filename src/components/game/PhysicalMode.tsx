@@ -46,6 +46,14 @@ export const PhysicalMode = ({
   const [lastButtonPressed, setLastButtonPressed] = useState<string | null>(
     null
   );
+  const [testMode, setTestMode] = useState(false);
+  const [ledStates, setLedStates] = useState({
+    A: false,
+    B: false,
+    C: false,
+    D: false,
+    FAST: false,
+  });
 
   // Registrar callback para botões físicos
   useEffect(() => {
@@ -88,6 +96,8 @@ export const PhysicalMode = ({
   const testButtons = () => {
     if (!isConnected) return;
 
+    setTestMode(true);
+
     // Enviar comando de teste para o Arduino
     sendToDevice({
       type: "test_buttons",
@@ -96,6 +106,57 @@ export const PhysicalMode = ({
     toast({
       title: "Teste iniciado",
       description: "Pressione os botões no Arduino para testar",
+    });
+
+    // Parar modo de teste após 10 segundos
+    setTimeout(() => {
+      setTestMode(false);
+    }, 10000);
+  };
+
+  const controlLED = (
+    led: string,
+    action: "on" | "off" | "blink",
+    duration = 1000
+  ) => {
+    if (!isConnected) return;
+
+    sendToDevice({
+      type: "control_leds",
+      led,
+      action,
+      duration,
+    });
+
+    // Atualizar estado local do LED
+    setLedStates((prev) => ({
+      ...prev,
+      [led]: action === "on" || action === "blink",
+    }));
+
+    toast({
+      title: `LED ${led} ${action}`,
+      description: `Controlando LED ${led} - ${action}`,
+    });
+  };
+
+  const testAllLEDs = () => {
+    if (!isConnected) return;
+
+    const leds = ["A", "B", "C", "D", "FAST"];
+
+    leds.forEach((led, index) => {
+      setTimeout(() => {
+        controlLED(led, "on", 500);
+        setTimeout(() => {
+          controlLED(led, "off", 0);
+        }, 500);
+      }, index * 200);
+    });
+
+    toast({
+      title: "Teste de LEDs",
+      description: "Testando todos os LEDs sequencialmente",
     });
   };
 
@@ -218,29 +279,89 @@ export const PhysicalMode = ({
                     <Button
                       onClick={testButtons}
                       variant="outline"
-                      className="text-white border-white/50 bg-white/10 hover:bg-white/20"
+                      className={cn(
+                        "text-white border-white/50 bg-white/10 hover:bg-white/20",
+                        testMode && "bg-yellow-500/20 border-yellow-400/50"
+                      )}
                     >
                       <Settings className="h-4 w-4 mr-2" />
-                      Testar Botões
+                      {testMode ? "Testando..." : "Testar Botões"}
+                    </Button>
+                    <Button
+                      onClick={testAllLEDs}
+                      variant="outline"
+                      className="text-white border-white/50 bg-white/10 hover:bg-white/20"
+                    >
+                      <Zap className="h-4 w-4 mr-2" />
+                      Testar LEDs
                     </Button>
                   </>
                 )}
               </div>
             </div>
 
-            {/* Informações do dispositivo */}
-            {device && (
-              <div className="bg-white/10 rounded-xl p-4 space-y-2">
-                <h4 className="font-semibold text-white">
-                  Informações do Dispositivo
+            {/* Status dos LEDs */}
+            {isConnected && (
+              <div className="bg-white/10 rounded-xl p-4 space-y-3">
+                <h4 className="font-semibold text-white text-center">
+                  Status dos LEDs
                 </h4>
-                <div className="grid grid-cols-2 gap-2 text-sm text-white/80">
-                  <div>ID: {device.id}</div>
-                  <div>Tipo: {device.type}</div>
-                  <div>
-                    Status: {device.connected ? "Conectado" : "Desconectado"}
-                  </div>
-                  <div>Sala: {device.roomId || "Nenhuma"}</div>
+                <div className="grid grid-cols-5 gap-2">
+                  {Object.entries(ledStates).map(([led, isOn]) => (
+                    <div key={led} className="text-center">
+                      <div
+                        className={cn(
+                          "w-8 h-8 rounded-full mx-auto mb-1 transition-all duration-300",
+                          isOn
+                            ? "bg-yellow-400 shadow-lg shadow-yellow-400/50"
+                            : "bg-gray-600"
+                        )}
+                      />
+                      <div className="text-xs text-white/80">{led}</div>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-2 justify-center">
+                  <Button
+                    onClick={() => controlLED("A", "on")}
+                    size="sm"
+                    variant="outline"
+                    className="text-white border-white/50 bg-white/10 hover:bg-white/20"
+                  >
+                    LED A
+                  </Button>
+                  <Button
+                    onClick={() => controlLED("B", "on")}
+                    size="sm"
+                    variant="outline"
+                    className="text-white border-white/50 bg-white/10 hover:bg-white/20"
+                  >
+                    LED B
+                  </Button>
+                  <Button
+                    onClick={() => controlLED("C", "on")}
+                    size="sm"
+                    variant="outline"
+                    className="text-white border-white/50 bg-white/10 hover:bg-white/20"
+                  >
+                    LED C
+                  </Button>
+                  <Button
+                    onClick={() => controlLED("D", "on")}
+                    size="sm"
+                    variant="outline"
+                    className="text-white border-white/50 bg-white/10 hover:bg-white/20"
+                  >
+                    LED D
+                  </Button>
+                  <Button
+                    onClick={() => controlLED("FAST", "on")}
+                    size="sm"
+                    variant="outline"
+                    className="text-white border-white/50 bg-white/10 hover:bg-white/20"
+                  >
+                    LED FAST
+                  </Button>
                 </div>
               </div>
             )}

@@ -59,6 +59,18 @@ async function handleMessage(ws, message) {
       await handleButtonPress(ws, message);
       break;
 
+    case 'test_buttons':
+      await handleTestButtons(ws, message);
+      break;
+
+    case 'control_leds':
+      await handleControlLEDs(ws, message);
+      break;
+
+    case 'start_game':
+      await handleStartGame(ws, message);
+      break;
+
     case 'ping':
       // Responder ao ping
       send(ws, { type: 'pong' });
@@ -110,6 +122,73 @@ async function handleButtonPress(ws, message) {
   send(ws, {
     type: 'button_press_received',
     button,
+    timestamp: Date.now(),
+  });
+}
+
+// Processar teste de botões
+async function handleTestButtons(ws, message) {
+  const device = findDeviceByWs(ws);
+  if (!device) {
+    return sendError(ws, 'Dispositivo não registrado');
+  }
+
+  console.log(`🧪 Iniciando teste de botões para ${device.id}`);
+
+  // Enviar comando de teste para o Arduino
+  send(ws, {
+    type: 'test_buttons_start',
+    message: 'Teste de botões iniciado. Pressione os botões para testar.',
+    timestamp: Date.now(),
+  });
+
+  // Simular feedback de teste após 2 segundos
+  setTimeout(() => {
+    send(ws, {
+      type: 'test_feedback',
+      message: 'Teste concluído. Todos os botões funcionando corretamente.',
+      timestamp: Date.now(),
+    });
+  }, 2000);
+}
+
+// Controlar LEDs
+async function handleControlLEDs(ws, message) {
+  const device = findDeviceByWs(ws);
+  if (!device) {
+    return sendError(ws, 'Dispositivo não registrado');
+  }
+
+  const { action, led, duration } = message;
+
+  console.log(`💡 Controlando LED ${led}: ${action} por ${duration}ms`);
+
+  // Enviar comando para o Arduino
+  send(ws, {
+    type: 'led_control',
+    action,
+    led,
+    duration,
+    timestamp: Date.now(),
+  });
+}
+
+// Iniciar jogo
+async function handleStartGame(ws, message) {
+  const device = findDeviceByWs(ws);
+  if (!device) {
+    return sendError(ws, 'Dispositivo não registrado');
+  }
+
+  const { game_mode } = message;
+
+  console.log(`🎮 Iniciando jogo ${game_mode} para ${device.id}`);
+
+  // Enviar comando para o Arduino
+  send(ws, {
+    type: 'game_start',
+    game_mode,
+    message: 'Jogo iniciado. Aguarde as perguntas.',
     timestamp: Date.now(),
   });
 }

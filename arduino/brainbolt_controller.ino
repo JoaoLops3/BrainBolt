@@ -173,6 +173,29 @@ void handleMessage(String payload)
     Serial.println(F("🔌 Desconectado do Brain Bolt"));
     allLEDsOff();
   }
+  else if (strcmp(type, "test_buttons_start") == 0)
+  {
+    Serial.println(F("🧪 Teste de botões iniciado!"));
+    Serial.println(F("Pressione os botões para testar..."));
+    testButtons();
+  }
+  else if (strcmp(type, "led_control") == 0)
+  {
+    const char *led = doc["led"];
+    const char *action = doc["action"];
+    int duration = doc["duration"] | 1000;
+
+    controlLED(led, action, duration);
+  }
+  else if (strcmp(type, "game_start") == 0)
+  {
+    gameActive = true;
+    Serial.println(F("🎮 Jogo iniciado!"));
+    allLEDsOn();
+    playSuccess();
+    delay(500);
+    allLEDsOff();
+  }
 }
 
 void checkButtons()
@@ -349,4 +372,87 @@ void testHardware()
   Serial.println(F("OK"));
 
   Serial.println(F("✅ Teste de hardware concluído!\n"));
+}
+
+// Função para testar botões
+void testButtons()
+{
+  Serial.println(F("🧪 Teste de botões iniciado"));
+  Serial.println(F("Pressione cada botão para testar..."));
+
+  // Acender todos os LEDs para indicar modo de teste
+  allLEDsOn();
+  playTone(1000, 200);
+  delay(500);
+  allLEDsOff();
+
+  // Aguardar 10 segundos para teste
+  unsigned long testStart = millis();
+  while (millis() - testStart < 10000)
+  {
+    checkButtons();
+    delay(10);
+  }
+
+  Serial.println(F("✅ Teste de botões concluído"));
+  playSuccess();
+}
+
+// Função para controlar LEDs individualmente
+void controlLED(const char *led, const char *action, int duration)
+{
+  int ledPin = -1;
+
+  // Identificar qual LED controlar
+  if (strcmp(led, "A") == 0)
+    ledPin = LED_A;
+  else if (strcmp(led, "B") == 0)
+    ledPin = LED_B;
+  else if (strcmp(led, "C") == 0)
+    ledPin = LED_C;
+  else if (strcmp(led, "D") == 0)
+    ledPin = LED_D;
+  else if (strcmp(led, "FAST") == 0)
+    ledPin = LED_FAST;
+
+  if (ledPin == -1)
+  {
+    Serial.print(F("❌ LED inválido: "));
+    Serial.println(led);
+    return;
+  }
+
+  // Executar ação
+  if (strcmp(action, "on") == 0)
+  {
+    digitalWrite(ledPin, HIGH);
+    Serial.print(F("💡 LED "));
+    Serial.print(led);
+    Serial.println(F(" ligado"));
+    playTone(800, 100);
+  }
+  else if (strcmp(action, "off") == 0)
+  {
+    digitalWrite(ledPin, LOW);
+    Serial.print(F("💡 LED "));
+    Serial.print(led);
+    Serial.println(F(" desligado"));
+  }
+  else if (strcmp(action, "blink") == 0)
+  {
+    Serial.print(F("💡 LED "));
+    Serial.print(led);
+    Serial.print(F(" piscando por "));
+    Serial.print(duration);
+    Serial.println(F("ms"));
+
+    unsigned long startTime = millis();
+    while (millis() - startTime < duration)
+    {
+      digitalWrite(ledPin, HIGH);
+      delay(100);
+      digitalWrite(ledPin, LOW);
+      delay(100);
+    }
+  }
 }
