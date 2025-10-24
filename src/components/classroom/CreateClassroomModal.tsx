@@ -19,7 +19,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useClassrooms } from "@/hooks/useClassrooms";
-import { CreateClassroomData, GradeLevel, ClassroomSubject } from "@/types/classroom";
+import {
+  CreateClassroomData,
+  GradeLevel,
+  ClassroomSubject,
+} from "@/types/classroom";
 import { Loader2, School } from "lucide-react";
 
 interface CreateClassroomModalProps {
@@ -50,8 +54,12 @@ export const CreateClassroomModal = ({
 
     const result = await createClassroom({
       ...formData,
-      competition_start_date: new Date(formData.competition_start_date).toISOString(),
-      competition_end_date: new Date(formData.competition_end_date).toISOString(),
+      competition_start_date: new Date(
+        formData.competition_start_date
+      ).toISOString(),
+      competition_end_date: new Date(
+        formData.competition_end_date
+      ).toISOString(),
     });
 
     if (result) {
@@ -73,14 +81,15 @@ export const CreateClassroomModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto backdrop-blur-lg bg-white/20 border-white/30">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <School className="h-5 w-5" />
             Criar Nova Sala de Aula
           </DialogTitle>
           <DialogDescription>
-            Configure sua sala educacional e comece a competição com seus alunos!
+            Configure sua sala educacional e comece a competição com seus
+            alunos!
           </DialogDescription>
         </DialogHeader>
 
@@ -97,6 +106,7 @@ export const CreateClassroomModal = ({
                 setFormData({ ...formData, name: e.target.value })
               }
               required
+              className="backdrop-blur-sm bg-white/20 border-white/30 text-white placeholder:text-white/60"
             />
           </div>
 
@@ -110,6 +120,7 @@ export const CreateClassroomModal = ({
                 setFormData({ ...formData, description: e.target.value })
               }
               rows={3}
+              className="backdrop-blur-sm bg-white/20 border-white/30 text-white placeholder:text-white/60"
             />
           </div>
 
@@ -123,6 +134,7 @@ export const CreateClassroomModal = ({
                 onChange={(e) =>
                   setFormData({ ...formData, school_name: e.target.value })
                 }
+                className="backdrop-blur-sm bg-white/20 border-white/30 text-white placeholder:text-white/60"
               />
             </div>
 
@@ -140,6 +152,7 @@ export const CreateClassroomModal = ({
                     max_students: parseInt(e.target.value),
                   })
                 }
+                className="backdrop-blur-sm bg-white/20 border-white/30 text-white placeholder:text-white/60"
               />
             </div>
           </div>
@@ -153,10 +166,13 @@ export const CreateClassroomModal = ({
                   setFormData({ ...formData, grade_level: value })
                 }
               >
-                <SelectTrigger id="grade_level">
+                <SelectTrigger
+                  id="grade_level"
+                  className="backdrop-blur-sm bg-white/20 border-white/30 text-white"
+                >
                   <SelectValue placeholder="Selecione..." />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="backdrop-blur-lg bg-white/20 border-white/30">
                   <SelectItem value="elementary">Ensino Fundamental</SelectItem>
                   <SelectItem value="middle">Ensino Médio</SelectItem>
                   <SelectItem value="high">Pré-Vestibular</SelectItem>
@@ -174,10 +190,13 @@ export const CreateClassroomModal = ({
                   setFormData({ ...formData, subject: value })
                 }
               >
-                <SelectTrigger id="subject">
+                <SelectTrigger
+                  id="subject"
+                  className="backdrop-blur-sm bg-white/20 border-white/30 text-white"
+                >
                   <SelectValue placeholder="Selecione..." />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="backdrop-blur-lg bg-white/20 border-white/30">
                   <SelectItem value="general">Geral</SelectItem>
                   <SelectItem value="science">Ciências</SelectItem>
                   <SelectItem value="history">História</SelectItem>
@@ -208,6 +227,7 @@ export const CreateClassroomModal = ({
                   })
                 }
                 required
+                className="backdrop-blur-sm bg-white/20 border-white/30 text-white placeholder:text-white/60"
               />
             </div>
 
@@ -227,11 +247,12 @@ export const CreateClassroomModal = ({
                 }
                 required
                 min={formData.competition_start_date}
+                className="backdrop-blur-sm bg-white/20 border-white/30 text-white placeholder:text-white/60"
               />
             </div>
           </div>
 
-          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
+          <div className="bg-blue-50/80 dark:bg-blue-900/40 p-4 rounded-lg backdrop-blur-sm border border-blue-200/80 dark:border-blue-800/80">
             <p className="text-sm text-blue-900 dark:text-blue-100">
               💡 <strong>Dica:</strong> As datas de competição não podem ser
               alteradas após a criação da sala. Escolha com cuidado!
@@ -244,10 +265,15 @@ export const CreateClassroomModal = ({
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={loading}
+              className="backdrop-blur-sm bg-white/20 border-white/30 text-white hover:bg-white/30 hover:text-white"
             >
               Cancelar
             </Button>
-            <Button type="submit" disabled={loading}>
+            <Button
+              type="submit"
+              disabled={loading}
+              className="backdrop-blur-sm bg-white/20 border-white/30 text-white hover:bg-white/30 hover:text-white"
+            >
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -263,4 +289,3 @@ export const CreateClassroomModal = ({
     </Dialog>
   );
 };
-

@@ -197,7 +197,7 @@ export const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
       />
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent className="max-w-sm w-[90vw] rounded-2xl p-5 gap-3">
+        <AlertDialogContent className="max-w-sm w-[90vw] rounded-2xl p-5 gap-3 backdrop-blur-lg bg-white/20 border-white/30">
           <AlertDialogHeader className="space-y-2">
             <AlertDialogTitle className="text-center text-base">
               Excluir sala?
@@ -207,7 +207,7 @@ export const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
                 "{classroomToDelete?.name}"
               </p>
 
-              <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 rounded-lg p-2.5">
+              <div className="bg-red-50/80 dark:bg-red-950/50 border border-red-200/80 dark:border-red-900/80 rounded-lg p-2.5 backdrop-blur-sm">
                 <p className="text-xs text-red-700 dark:text-red-400 font-medium text-center">
                   ⚠️ Ação irreversível!
                 </p>
@@ -225,12 +225,12 @@ export const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="gap-2 flex-row">
-            <AlertDialogCancel className="flex-1 m-0">
+            <AlertDialogCancel className="flex-1 m-0 backdrop-blur-sm bg-white/20 border-white/30 text-white hover:bg-white/30 hover:text-white">
               Cancelar
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDelete}
-              className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+              className="flex-1 bg-red-600/90 hover:bg-red-700/90 text-white backdrop-blur-sm border border-red-500/30"
             >
               Excluir
             </AlertDialogAction>

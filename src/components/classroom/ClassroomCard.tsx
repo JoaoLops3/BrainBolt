@@ -259,7 +259,7 @@ export const ClassroomCard = ({
             variant="outline"
             size="icon"
             onClick={() => onDelete(classroom)}
-            className="border-red-500/50 bg-red-500/20 text-red-300 hover:bg-red-500/30 hover:text-red-200"
+            className="border-red-500/50 bg-red-600/90 text-red-300 hover:bg-red-500/30 hover:text-red-200"
             title="Excluir sala"
           >
             <Trash2 className="h-4 w-4" />
