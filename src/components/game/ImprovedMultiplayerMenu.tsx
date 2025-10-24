@@ -75,7 +75,8 @@ export const ImprovedMultiplayerMenu = ({
 
     setLoading(true); // Ativa estado de carregamento
     try {
-      const newRoomCode = generateRoomCode(); // Gera código único
+      const newRoomCode = generateRoomCode().toUpperCase(); // Gera código único em maiúsculas
+      console.log("🏠 Criando sala com código:", newRoomCode);
 
       // Insere nova sala no banco de dados
       const { data, error } = await supabase
@@ -83,11 +84,17 @@ export const ImprovedMultiplayerMenu = ({
         .insert({
           room_code: newRoomCode,
           host_id: user.id, // Define usuário atual como host
+          last_activity: new Date().toISOString(),
         })
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("❌ Erro ao criar sala:", error);
+        throw error;
+      }
+
+      console.log("✅ Sala criada com sucesso:", data);
 
       // Define sala atual com dados retornados
       setCurrentRoom({
@@ -101,11 +108,13 @@ export const ImprovedMultiplayerMenu = ({
         description: "Compartilhe o código com seus amigos",
       });
     } catch (error) {
-      console.error("Erro ao criar sala:", error);
+      console.error("❌ Erro geral ao criar sala:", error);
       // Mostra notificação de erro
       toast({
         title: "Erro",
-        description: "Não foi possível criar a sala",
+        description: `Não foi possível criar a sala: ${
+          error.message || "Erro desconhecido"
+        }`,
         variant: "destructive",
       });
     } finally {
@@ -118,18 +127,33 @@ export const ImprovedMultiplayerMenu = ({
 
     setLoading(true);
     try {
+      console.log("🔍 Buscando sala com código:", roomCode.trim());
+
       // First, check if room exists and is available
       const { data: rooms, error: fetchError } = await supabase
         .from("multiplayer_rooms")
         .select("*")
-        .eq("room_code", roomCode.trim())
+        .eq("room_code", roomCode.trim().toUpperCase())
         .eq("game_status", "waiting")
         .is("guest_id", null)
         .limit(1);
 
+      console.log("📊 Resultado da busca:", { rooms, fetchError });
+
+      if (fetchError) {
+        console.error("❌ Erro na busca:", fetchError);
+        toast({
+          title: "Erro de conexão",
+          description: `Erro ao buscar sala: ${fetchError.message}`,
+          variant: "destructive",
+        });
+        return;
+      }
+
       const room = rooms && Array.isArray(rooms) ? rooms[0] : null;
 
-      if (fetchError || !room) {
+      if (!room) {
+        console.log("❌ Sala não encontrada ou indisponível");
         toast({
           title: "Sala indisponível",
           description: "Código inválido, sala cheia ou já iniciada",
@@ -138,15 +162,32 @@ export const ImprovedMultiplayerMenu = ({
         return;
       }
 
+      console.log("✅ Sala encontrada:", room);
+
       // Join the room
       const { data, error } = await supabase
         .from("multiplayer_rooms")
-        .update({ guest_id: user.id })
+        .update({
+          guest_id: user.id,
+          last_activity: new Date().toISOString(),
+        })
         .eq("id", room.id)
+        .eq("game_status", "waiting")
+        .is("guest_id", null)
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("❌ Erro ao entrar na sala:", error);
+        toast({
+          title: "Erro ao entrar",
+          description: `Erro: ${error.message}`,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      console.log("🎉 Entrou na sala com sucesso:", data);
 
       setCurrentRoom({
         ...data,
@@ -158,7 +199,12 @@ export const ImprovedMultiplayerMenu = ({
         description: "Aguardando o host iniciar o jogo",
       });
     } catch (error) {
-      console.error("Erro ao entrar na sala:", error);
+      console.error("❌ Erro geral ao entrar na sala:", error);
+      toast({
+        title: "Erro inesperado",
+        description: "Ocorreu um erro ao tentar entrar na sala",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
