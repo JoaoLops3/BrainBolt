@@ -88,14 +88,14 @@ export const FriendComparisonModal = ({
         .from("global_rankings")
         .select("*")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
 
       // Fetch friend profile with ranking
       const { data: friendData } = await supabase
         .from("global_rankings")
         .select("*")
         .eq("user_id", friendId)
-        .single();
+        .maybeSingle();
 
       // Fetch user category performance
       const { data: userCategoryData } = await supabase
@@ -200,7 +200,7 @@ export const FriendComparisonModal = ({
   if (loading || !userStats || !friendStats) {
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-4xl max-h-[80vh] allow-scroll">
+        <DialogContent className="max-w-4xl max-h-[80vh] allow-scroll backdrop-blur-lg bg-white/20 border-white/30">
           <DialogHeader>
             <DialogTitle>Carregando Comparação</DialogTitle>
             <DialogDescription>
@@ -217,7 +217,7 @@ export const FriendComparisonModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[80vh] allow-scroll">
+      <DialogContent className="max-w-4xl max-h-[80vh] allow-scroll backdrop-blur-lg bg-white/20 border-white/30">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Users className="h-5 w-5" />
@@ -232,7 +232,7 @@ export const FriendComparisonModal = ({
         <div className="space-y-6">
           {/* Player headers */}
           <div className="grid grid-cols-2 gap-4">
-            <Card>
+            <Card className="backdrop-blur-sm bg-white/20 border-white/30">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <Avatar className="h-12 w-12">
@@ -253,7 +253,7 @@ export const FriendComparisonModal = ({
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="backdrop-blur-sm bg-white/20 border-white/30">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <Avatar className="h-12 w-12">

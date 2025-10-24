@@ -350,16 +350,16 @@ export const CharactersModal = ({
           defaultValue="unlocked"
           className="w-full flex flex-col flex-1 min-h-0"
         >
-          <TabsList className="grid w-full grid-cols-2 h-10 flex-shrink-0 bg-white/5 backdrop-blur-sm border-white/20">
+          <TabsList className="grid w-full grid-cols-2 h-10 flex-shrink-0 bg-white/20 backdrop-blur-lg border-white/30 p-1">
             <TabsTrigger
               value="unlocked"
-              className="text-xs sm:text-sm text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
+              className="text-xs sm:text-sm text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white rounded-sm"
             >
               Coletados ({unlockedCharacters.length})
             </TabsTrigger>
             <TabsTrigger
               value="locked"
-              className="text-xs sm:text-sm text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
+              className="text-xs sm:text-sm text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white rounded-sm"
             >
               Bloqueados ({lockedCharacters.length})
             </TabsTrigger>

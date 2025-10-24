@@ -30,6 +30,7 @@ interface Profile {
   user_id: string;
   display_name: string | null;
   avatar_url: string;
+  user_role?: string | null;
   total_score: number;
   games_played: number;
   games_won: number;
@@ -292,10 +293,28 @@ export const ImprovedFriendsModal = ({
                             </AvatarFallback>
                           </Avatar>
                           <div className="min-w-0 flex-1">
-                            <h4 className="font-semibold text-sm sm:text-base text-white">
-                              {friendship.friend_profile.display_name ||
-                                "Jogador"}
-                            </h4>
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-semibold text-sm sm:text-base text-white">
+                                {friendship.friend_profile.display_name ||
+                                  "Jogador"}
+                              </h4>
+                              {friendship.friend_profile.user_role && (
+                                <Badge
+                                  variant="outline"
+                                  className={`text-xs ${
+                                    friendship.friend_profile.user_role ===
+                                    "teacher"
+                                      ? "bg-blue-500/20 text-blue-300 border-blue-400/50"
+                                      : "bg-green-500/20 text-green-300 border-green-400/50"
+                                  }`}
+                                >
+                                  {friendship.friend_profile.user_role ===
+                                  "teacher"
+                                    ? "Professor"
+                                    : "Estudante"}
+                                </Badge>
+                              )}
+                            </div>
                             <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-white/80">
                               <span className="flex items-center gap-1">
                                 <Trophy className="h-3 w-3" />
@@ -375,10 +394,28 @@ export const ImprovedFriendsModal = ({
                             </AvatarFallback>
                           </Avatar>
                           <div className="min-w-0 flex-1">
-                            <h4 className="font-semibold text-sm sm:text-base text-white">
-                              {request.requester_profile.display_name ||
-                                "Jogador"}
-                            </h4>
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-semibold text-sm sm:text-base text-white">
+                                {request.requester_profile.display_name ||
+                                  "Jogador"}
+                              </h4>
+                              {request.requester_profile.user_role && (
+                                <Badge
+                                  variant="outline"
+                                  className={`text-xs ${
+                                    request.requester_profile.user_role ===
+                                    "teacher"
+                                      ? "bg-blue-500/20 text-blue-300 border-blue-400/50"
+                                      : "bg-green-500/20 text-green-300 border-green-400/50"
+                                  }`}
+                                >
+                                  {request.requester_profile.user_role ===
+                                  "teacher"
+                                    ? "Professor"
+                                    : "Estudante"}
+                                </Badge>
+                              )}
+                            </div>
                             <p className="text-xs sm:text-sm text-white/80">
                               Quer ser seu amigo
                             </p>

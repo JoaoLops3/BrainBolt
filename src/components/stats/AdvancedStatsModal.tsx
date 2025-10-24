@@ -98,7 +98,7 @@ export const AdvancedStatsModal = ({
         .from("global_rankings")
         .select("*")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
 
       setSessions(sessionsData || []);
       setCategoryStats(categoryData || []);

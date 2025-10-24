@@ -70,7 +70,7 @@ export const FriendProfileModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md max-h-[80vh] allow-scroll">
+      <DialogContent className="max-w-md max-h-[80vh] allow-scroll backdrop-blur-lg bg-white/20 border-white/30">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <User className="h-5 w-5" />
@@ -92,9 +92,25 @@ export const FriendProfileModal = ({
             </Avatar>
 
             <div>
-              <h2 className="text-2xl font-bold">
-                {profile.display_name || "Jogador"}
-              </h2>
+              <div className="flex items-center justify-center gap-2">
+                <h2 className="text-2xl font-bold">
+                  {profile.display_name || "Jogador"}
+                </h2>
+                {profile.user_role && (
+                  <Badge
+                    variant="outline"
+                    className={`text-xs ${
+                      profile.user_role === "teacher"
+                        ? "bg-blue-500/20 text-blue-300 border-blue-400/50"
+                        : "bg-green-500/20 text-green-300 border-green-400/50"
+                    }`}
+                  >
+                    {profile.user_role === "teacher"
+                      ? "Professor"
+                      : "Estudante"}
+                  </Badge>
+                )}
+              </div>
               <Badge className={`${rank.color} text-white mt-2`}>
                 {rank.icon} {rank.rank}
               </Badge>
@@ -103,7 +119,7 @@ export const FriendProfileModal = ({
 
           {/* Main Stats */}
           <div className="grid grid-cols-2 gap-4">
-            <Card className="text-center">
+            <Card className="text-center backdrop-blur-sm bg-white/20 border-white/30">
               <CardContent className="pt-4">
                 <div className="flex flex-col items-center">
                   <Trophy className="h-6 w-6 text-yellow-500 mb-2" />
@@ -117,7 +133,7 @@ export const FriendProfileModal = ({
               </CardContent>
             </Card>
 
-            <Card className="text-center">
+            <Card className="text-center backdrop-blur-sm bg-white/20 border-white/30">
               <CardContent className="pt-4">
                 <div className="flex flex-col items-center">
                   <Target className="h-6 w-6 text-blue-500 mb-2" />
@@ -133,7 +149,7 @@ export const FriendProfileModal = ({
           </div>
 
           {/* Detailed Stats */}
-          <Card>
+          <Card className="backdrop-blur-sm bg-white/20 border-white/30">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
                 <Award className="h-5 w-5" />
@@ -181,7 +197,14 @@ export const FriendProfileModal = ({
                 <h4 className="text-sm font-medium mb-3">
                   Progresso de Vitórias
                 </h4>
-                <Progress value={profile.win_percentage} className="mb-2" />
+                <div className="relative h-4 w-full overflow-hidden rounded-full bg-white/10 border border-white/20 mb-2">
+                  <div
+                    className="h-full bg-gradient-to-r from-blue-500/80 to-purple-500/80 transition-all backdrop-blur-sm rounded-full"
+                    style={{
+                      width: `${profile.win_percentage || 0}%`,
+                    }}
+                  />
+                </div>
                 <div className="flex justify-between text-xs text-muted-foreground">
                   <span>0%</span>
                   <span>100%</span>
@@ -191,7 +214,7 @@ export const FriendProfileModal = ({
           </Card>
 
           {/* Game Mode Stats */}
-          <Card>
+          <Card className="backdrop-blur-sm bg-white/20 border-white/30">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
                 <Zap className="h-5 w-5" />

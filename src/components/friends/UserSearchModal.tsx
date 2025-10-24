@@ -30,6 +30,7 @@ interface SearchResult {
   username: string | null;
   email: string | null;
   avatar_url: string;
+  user_role?: string | null;
   games_played: number;
   total_score: number;
 }
@@ -323,6 +324,20 @@ export const UserSearchModal = ({
                           <h4 className="font-semibold text-white">
                             {result.display_name || "Jogador Anônimo"}
                           </h4>
+                          {result.user_role && (
+                            <Badge
+                              variant="outline"
+                              className={`text-xs ${
+                                result.user_role === "teacher"
+                                  ? "bg-blue-500/20 text-blue-300 border-blue-400/50"
+                                  : "bg-green-500/20 text-green-300 border-green-400/50"
+                              }`}
+                            >
+                              {result.user_role === "teacher"
+                                ? "Professor"
+                                : "Estudante"}
+                            </Badge>
+                          )}
                           {result.username && (
                             <Badge
                               variant="outline"
