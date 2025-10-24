@@ -67,8 +67,8 @@ async function handleMessage(ws, message) {
       await handleControlLEDs(ws, message);
       break;
 
-    case 'start_game':
-      await handleStartGame(ws, message);
+    case 'question_update':
+      await handleQuestionUpdate(ws, message);
       break;
 
     case 'ping':
@@ -85,24 +85,27 @@ async function handleMessage(ws, message) {
 async function handleRegister(ws, message) {
   const { device, mac } = message;
   const deviceId = `device_${mac.replace(/:/g, '_')}`;
+  const isRealArduino = device === 'arduino_real';
 
   const newDevice = {
     id: deviceId,
     ws,
     type: device,
     mac,
+    isRealArduino,
     connectedAt: new Date(),
     lastActivity: new Date(),
   };
 
   devices.set(deviceId, newDevice);
 
-  console.log(`✅ Dispositivo registrado: ${deviceId} (${mac})`);
+  console.log(`✅ Dispositivo registrado: ${deviceId} (${mac}) - ${isRealArduino ? 'Arduino Real' : 'Simulado'}`);
   console.log(`📊 Total de dispositivos: ${devices.size}`);
 
   send(ws, {
     type: 'registered',
     device_id: deviceId,
+    is_real_arduino: isRealArduino,
     server_time: new Date().toISOString(),
   });
 }
@@ -116,7 +119,7 @@ async function handleButtonPress(ws, message) {
 
   const { button, timestamp } = message;
 
-  console.log(`🔘 Botão pressionado: ${button} por ${device.id}`);
+  console.log(`🔘 Botão ${button} pressionado por ${device.isRealArduino ? 'Arduino Real' : 'Hardware Simulado'} (${device.id})`);
 
   // Feedback para o dispositivo
   send(ws, {
@@ -133,7 +136,7 @@ async function handleTestButtons(ws, message) {
     return sendError(ws, 'Dispositivo não registrado');
   }
 
-  console.log(`🧪 Iniciando teste de botões para ${device.id}`);
+  console.log(`🧪 Iniciando teste de botões para ${device.isRealArduino ? 'Arduino Real' : 'Hardware Simulado'} (${device.id})`);
 
   // Enviar comando de teste para o Arduino
   send(ws, {
@@ -161,7 +164,7 @@ async function handleControlLEDs(ws, message) {
 
   const { action, led, duration } = message;
 
-  console.log(`💡 Controlando LED ${led}: ${action} por ${duration}ms`);
+  console.log(`💡 ${device.isRealArduino ? 'Arduino Real' : 'Hardware Simulado'} - LED ${led}: ${action} por ${duration}ms`);
 
   // Enviar comando para o Arduino
   send(ws, {
@@ -182,13 +185,41 @@ async function handleStartGame(ws, message) {
 
   const { game_mode } = message;
 
-  console.log(`🎮 Iniciando jogo ${game_mode} para ${device.id}`);
+  console.log(`🎮 Iniciando jogo ${game_mode} para ${device.isRealArduino ? 'Arduino Real' : 'Hardware Simulado'} (${device.id})`);
 
   // Enviar comando para o Arduino
   send(ws, {
     type: 'game_start',
     game_mode,
     message: 'Jogo iniciado. Aguarde as perguntas.',
+    timestamp: Date.now(),
+  });
+}
+
+// Processar atualização de pergunta
+async function handleQuestionUpdate(ws, message) {
+  const device = findDeviceByWs(ws);
+  if (!device) {
+    return sendError(ws, 'Dispositivo não registrado');
+  }
+
+  const { question } = message;
+
+  console.log(`📝 ${device.isRealArduino ? 'Arduino Real' : 'Hardware Simulado'} - Nova pergunta: "${question.text}"`);
+  console.log(`   Opções: A) ${question.options[0]} | B) ${question.options[1]} | C) ${question.options[2]} | D) ${question.options[3]}`);
+  console.log(`   Resposta correta: ${String.fromCharCode(65 + question.correctAnswer)} (${question.options[question.correctAnswer]})`);
+
+  // Enviar pergunta para o Arduino
+  send(ws, {
+    type: 'question_update',
+    question: {
+      id: question.id,
+      text: question.text,
+      options: question.options,
+      correctAnswer: question.correctAnswer,
+      difficulty: question.difficulty,
+      category: question.category
+    },
     timestamp: Date.now(),
   });
 }

@@ -43,6 +43,13 @@ String roomCode = "";
 String playerId = "";
 bool gameActive = false;
 
+// Pergunta atual
+String currentQuestionId = "";
+String currentQuestionText = "";
+int currentCorrectAnswer = -1;
+String currentDifficulty = "";
+String currentCategory = "";
+
 void setup()
 {
   Serial.begin(115200);
@@ -187,14 +194,58 @@ void handleMessage(String payload)
 
     controlLED(led, action, duration);
   }
-  else if (strcmp(type, "game_start") == 0)
+  else if (strcmp(type, "question_update") == 0)
   {
-    gameActive = true;
-    Serial.println(F("🎮 Jogo iniciado!"));
-    allLEDsOn();
-    playSuccess();
-    delay(500);
-    allLEDsOff();
+    // Armazenar pergunta atual
+    JsonObject question = doc["question"];
+    currentQuestionId = question["id"];
+    currentQuestionText = question["text"];
+    currentCorrectAnswer = question["correctAnswer"];
+    currentDifficulty = question["difficulty"];
+    currentCategory = question["category"];
+
+    Serial.println(F("📝 Nova pergunta recebida:"));
+    Serial.print(F("   Pergunta: "));
+    Serial.println(currentQuestionText);
+    Serial.print(F("   Resposta correta: "));
+    Serial.print((char)('A' + currentCorrectAnswer));
+    Serial.print(F(" (índice "));
+    Serial.print(currentCorrectAnswer);
+    Serial.println(F(")"));
+    Serial.print(F("   Dificuldade: "));
+    Serial.println(currentDifficulty);
+    Serial.print(F("   Categoria: "));
+    Serial.println(currentCategory);
+
+    // Piscar LED da resposta correta
+    int correctLedPin = -1;
+    switch (currentCorrectAnswer)
+    {
+    case 0:
+      correctLedPin = LED_A;
+      break;
+    case 1:
+      correctLedPin = LED_B;
+      break;
+    case 2:
+      correctLedPin = LED_C;
+      break;
+    case 3:
+      correctLedPin = LED_D;
+      break;
+    }
+
+    if (correctLedPin != -1)
+    {
+      // Piscar LED da resposta correta 3 vezes
+      for (int i = 0; i < 3; i++)
+      {
+        digitalWrite(correctLedPin, HIGH);
+        delay(200);
+        digitalWrite(correctLedPin, LOW);
+        delay(200);
+      }
+    }
   }
 }
 
@@ -234,20 +285,13 @@ void checkButton(int index, int buttonPin, int ledPin, const char *buttonName)
 
 void onButtonPress(const char *button, int ledPin)
 {
-  // Só aceitar botões se conectado e jogo ativo
-  if (!connected || !gameActive)
-  {
-    playTone(200, 100); // Som de erro
-    return;
-  }
-
-  // Acender LED
+  // Acender LED físico
   digitalWrite(ledPin, HIGH);
 
   // Som de clique
   playTone(800, 50);
 
-  // Enviar para o computador via Serial
+  // Enviar para o computador via Serial (sempre, mesmo sem jogo ativo)
   StaticJsonDocument<200> doc;
   doc["type"] = "button_press";
   doc["button"] = button;

@@ -40,7 +40,7 @@ function connectWebSocket() {
     console.log('✅ Conectado ao WebSocket!');
     isConnected = true;
     
-    // Registrar dispositivo
+    // Registrar dispositivo como simulado
     ws.send(JSON.stringify({
       type: 'register',
       device: 'web_client',

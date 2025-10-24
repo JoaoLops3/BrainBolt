@@ -40,6 +40,7 @@ export const PhysicalMode = ({
     disconnectDevice,
     sendToDevice,
     onButtonPress,
+    sendQuestionToArduino,
   } = usePhysicalMode();
   const { toast } = useToast();
   const [gameActive, setGameActive] = useState(false);
@@ -54,18 +55,56 @@ export const PhysicalMode = ({
     D: false,
     FAST: false,
   });
+  const [buttonStates, setButtonStates] = useState({
+    A: false,
+    B: false,
+    C: false,
+    D: false,
+    FAST: false,
+  });
+  const [buttonPressed, setButtonPressed] = useState<string | null>(null);
 
   // Registrar callback para botões físicos
   useEffect(() => {
     onButtonPress((button: string) => {
       setLastButtonPressed(button);
+      setButtonPressed(button);
+
+      // Acender LED correspondente (seção LEDs)
+      setLedStates((prev) => ({
+        ...prev,
+        [button]: true,
+      }));
+
+      // Acender botão correspondente (seção Botões de Resposta)
+      setButtonStates((prev) => ({
+        ...prev,
+        [button]: true,
+      }));
 
       toast({
         title: "Botão pressionado!",
         description: `Botão ${button} detectado`,
       });
 
-      // Simular resposta do jogo
+      // Apagar LED após 500ms
+      setTimeout(() => {
+        setLedStates((prev) => ({
+          ...prev,
+          [button]: false,
+        }));
+      }, 500);
+
+      // Apagar botão após 500ms
+      setTimeout(() => {
+        setButtonStates((prev) => ({
+          ...prev,
+          [button]: false,
+        }));
+        setButtonPressed(null);
+      }, 500);
+
+      // Limpar último botão pressionado após 1s
       setTimeout(() => {
         setLastButtonPressed(null);
       }, 1000);
@@ -112,6 +151,32 @@ export const PhysicalMode = ({
     setTimeout(() => {
       setTestMode(false);
     }, 10000);
+  };
+
+  const testQuestion = () => {
+    if (!isConnected) return;
+
+    // Pergunta de exemplo
+    const exampleQuestion = {
+      id: "test-question-1",
+      question: "Quantos jogadores tem um time de futebol em campo?",
+      options: ["10 jogadores", "11 jogadores", "12 jogadores", "9 jogadores"],
+      correctAnswer: 1, // Resposta correta é B (11 jogadores)
+      difficulty: "easy",
+      category: "sports",
+    };
+
+    // Enviar pergunta para o Arduino
+    sendQuestionToArduino(exampleQuestion);
+
+    toast({
+      title: "Pergunta enviada!",
+      description: `"${
+        exampleQuestion.question
+      }" - Resposta correta: ${String.fromCharCode(
+        65 + exampleQuestion.correctAnswer
+      )}`,
+    });
   };
 
   const controlLED = (
@@ -244,12 +309,16 @@ export const PhysicalMode = ({
                   <div>
                     <div className="font-semibold">
                       {isConnected
-                        ? "Hardware Conectado"
+                        ? device?.isRealArduino
+                          ? "Arduino Real Conectado"
+                          : "Hardware Simulado Conectado"
                         : "Hardware Desconectado"}
                     </div>
                     <div className="text-sm opacity-80">
                       {isConnected
-                        ? "Arduino pronto para uso"
+                        ? device?.isRealArduino
+                          ? "Arduino físico pronto para uso"
+                          : "Dispositivo simulado para teste"
                         : "Conecte o Arduino via USB"}
                     </div>
                   </div>
@@ -295,17 +364,41 @@ export const PhysicalMode = ({
                       <Zap className="h-4 w-4 mr-2" />
                       Testar LEDs
                     </Button>
+                    <Button
+                      onClick={testQuestion}
+                      variant="outline"
+                      className="text-white border-white/50 bg-white/10 hover:bg-white/20"
+                    >
+                      <Play className="h-4 w-4 mr-2" />
+                      Testar Pergunta
+                    </Button>
                   </>
                 )}
               </div>
             </div>
 
-            {/* Status dos LEDs */}
+            {/* Aviso para Arduino Real */}
+            {isConnected && !device?.isRealArduino && (
+              <div className="bg-yellow-500/20 border border-yellow-400/50 rounded-xl p-4">
+                <div className="flex items-center gap-3 text-yellow-100">
+                  <AlertCircle className="h-6 w-6" />
+                  <div>
+                    <div className="font-semibold">Modo Simulado Ativo</div>
+                    <div className="text-sm opacity-80">
+                      Para usar Arduino real, execute:{" "}
+                      <code className="bg-white/20 px-1 rounded">
+                        npm run bridge:arduino
+                      </code>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* LEDs */}
             {isConnected && (
               <div className="bg-white/10 rounded-xl p-4 space-y-3">
-                <h4 className="font-semibold text-white text-center">
-                  Status dos LEDs
-                </h4>
+                <h4 className="font-semibold text-white text-center">LEDs</h4>
                 <div className="grid grid-cols-5 gap-2">
                   {Object.entries(ledStates).map(([led, isOn]) => (
                     <div key={led} className="text-center">
@@ -313,14 +406,24 @@ export const PhysicalMode = ({
                         className={cn(
                           "w-8 h-8 rounded-full mx-auto mb-1 transition-all duration-300",
                           isOn
-                            ? "bg-yellow-400 shadow-lg shadow-yellow-400/50"
+                            ? "bg-yellow-400 shadow-lg shadow-yellow-400/50 animate-pulse"
                             : "bg-gray-600"
                         )}
                       />
-                      <div className="text-xs text-white/80">{led}</div>
+                      <div
+                        className={cn(
+                          "text-xs transition-colors duration-300",
+                          isOn
+                            ? "text-yellow-400 font-semibold"
+                            : "text-white/80"
+                        )}
+                      >
+                        {led}
+                      </div>
                     </div>
                   ))}
                 </div>
+
                 <div className="flex gap-2 justify-center">
                   <Button
                     onClick={() => controlLED("A", "on")}
@@ -363,6 +466,46 @@ export const PhysicalMode = ({
                     LED FAST
                   </Button>
                 </div>
+              </div>
+            )}
+
+            {/* Botões de Resposta */}
+            {isConnected && (
+              <div className="bg-white/10 rounded-xl p-4 space-y-3">
+                <h4 className="font-semibold text-white text-center">
+                  Botões de Resposta
+                </h4>
+                <div className="grid grid-cols-5 gap-2">
+                  {Object.entries(buttonStates).map(([button, isOn]) => (
+                    <div key={button} className="text-center">
+                      <div
+                        className={cn(
+                          "w-8 h-8 rounded-full mx-auto mb-1 transition-all duration-300",
+                          isOn
+                            ? "bg-blue-400 shadow-lg shadow-blue-400/50 animate-pulse"
+                            : "bg-gray-600"
+                        )}
+                      />
+                      <div
+                        className={cn(
+                          "text-xs transition-colors duration-300",
+                          isOn ? "text-blue-400 font-semibold" : "text-white/80"
+                        )}
+                      >
+                        {button}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Feedback do botão pressionado */}
+                {buttonPressed && (
+                  <div className="text-center mt-2">
+                    <div className="text-sm text-blue-400 font-semibold">
+                      Botão {buttonPressed} pressionado!
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 

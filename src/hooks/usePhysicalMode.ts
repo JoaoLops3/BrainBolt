@@ -5,6 +5,7 @@ interface PhysicalDevice {
   id: string;
   type: "arduino" | "esp32";
   connected: boolean;
+  isRealArduino?: boolean;
   roomId?: string;
   playerId?: string;
 }
@@ -23,6 +24,7 @@ interface PhysicalModeHook {
   disconnectDevice: () => void;
   sendToDevice: (message: any) => void;
   onButtonPress: (callback: (button: string) => void) => void;
+  sendQuestionToArduino: (question: any) => void;
 }
 
 export const usePhysicalMode = (): PhysicalModeHook => {
@@ -140,11 +142,16 @@ export const usePhysicalMode = (): PhysicalModeHook => {
             id: message.device_id,
             type: "arduino",
             connected: true,
+            isRealArduino: message.is_real_arduino || false,
           });
 
           toast({
-            title: "Hardware conectado!",
-            description: "Dispositivo físico pronto para uso",
+            title: message.is_real_arduino
+              ? "Arduino Real Conectado!"
+              : "Hardware Simulado Conectado!",
+            description: message.is_real_arduino
+              ? "Arduino físico pronto para uso"
+              : "Dispositivo simulado pronto para teste",
           });
           break;
 
@@ -250,6 +257,33 @@ export const usePhysicalMode = (): PhysicalModeHook => {
     return () => clearInterval(interval);
   }, [ws]);
 
+  // Enviar pergunta atual para o Arduino
+  const sendQuestionToArduino = useCallback(
+    (question: any) => {
+      if (!ws || ws.readyState !== WebSocket.OPEN) {
+        console.warn("⚠️ WebSocket não conectado");
+        return;
+      }
+
+      const message = {
+        type: "question_update",
+        question: {
+          id: question.id,
+          text: question.question,
+          options: question.options,
+          correctAnswer: question.correctAnswer,
+          difficulty: question.difficulty,
+          category: question.category,
+        },
+        timestamp: Date.now(),
+      };
+
+      ws.send(JSON.stringify(message));
+      console.log("📤 Enviando pergunta para Arduino:", question.question);
+    },
+    [ws]
+  );
+
   return {
     device,
     isConnected,
@@ -257,5 +291,6 @@ export const usePhysicalMode = (): PhysicalModeHook => {
     disconnectDevice,
     sendToDevice,
     onButtonPress,
+    sendQuestionToArduino,
   };
 };

@@ -32,7 +32,7 @@ function connectWebSocket() {
     console.log('✅ Conectado ao WebSocket!');
     isConnected = true;
     
-    // Registrar dispositivo Arduino
+    // Registrar dispositivo Arduino real
     ws.send(JSON.stringify({
       type: 'register',
       device: 'arduino_real',
@@ -85,9 +85,10 @@ function handleWebSocketMessage(message) {
       sendToArduino(`{"type":"led_control","led":"${message.led}","action":"${message.action}","duration":${message.duration}}\n`);
       break;
 
-    case 'game_start':
-      console.log('🎮 Iniciando jogo no Arduino');
-      sendToArduino(`{"type":"game_start","game_mode":"${message.game_mode}"}\n`);
+    case 'question_update':
+      console.log(`📝 Nova pergunta enviada para Arduino: "${message.question.text}"`);
+      console.log(`   Resposta correta: ${String.fromCharCode(65 + message.question.correctAnswer)}`);
+      sendToArduino(`{"type":"question_update","question":${JSON.stringify(message.question)}}\n`);
       break;
 
     default:
