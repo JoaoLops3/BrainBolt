@@ -354,8 +354,16 @@ export const MultiplayerGame = ({
 
   if (!room) {
     return (
-      <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4 sm:p-6 safe-top safe-bottom">
-        <div className="text-white">Carregando...</div>
+      <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4">
+        <Card className="w-full max-w-sm text-center backdrop-blur-lg bg-white/95 border-white/30 shadow-2xl">
+          <CardContent className="pt-8 pb-8 px-6">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">
+              Conectando...
+            </h2>
+            <p className="text-gray-600">Carregando informações da sala</p>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -372,16 +380,44 @@ export const MultiplayerGame = ({
 
   if (room.game_status === "waiting") {
     return (
-      <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4 sm:p-6 safe-top safe-bottom">
-        <Card className="w-full max-w-md text-center backdrop-blur-lg bg-white/20 border-white/30">
-          <CardContent className="pt-6 text-white">
-            <Users className="h-16 w-16 mx-auto mb-4 text-white" />
-            <h2 className="text-2xl font-bold mb-2">Aguardando...</h2>
-            <p className="text-white/80">
-              {!room.guest_id
-                ? "Esperando outro jogador entrar"
-                : "Preparando o jogo"}
-            </p>
+      <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4">
+        <Card className="w-full max-w-md text-center backdrop-blur-lg bg-white/95 border-white/30 shadow-2xl">
+          <CardContent className="pt-8 pb-8 px-6">
+            <div className="mb-6">
+              <Users className="h-16 w-16 mx-auto mb-4 text-primary" />
+              <h2 className="text-2xl font-bold mb-2 text-gray-800">
+                Aguardando Jogador
+              </h2>
+              <p className="text-gray-600 mb-4">
+                {!room.guest_id
+                  ? "Esperando outro jogador entrar na sala"
+                  : "Preparando o jogo..."}
+              </p>
+            </div>
+
+            {/* Informações da sala */}
+            <div className="bg-gray-50 rounded-lg p-4 mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm text-gray-600">Código da Sala:</span>
+                <span className="font-mono font-bold text-lg text-primary">
+                  {room.room_code}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">Jogadores:</span>
+                <span className="text-sm font-medium">
+                  {room.guest_id ? "2/2" : "1/2"}
+                </span>
+              </div>
+            </div>
+
+            {/* Botão de sair */}
+            <button
+              onClick={onBackToMenu}
+              className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 py-3 px-4 rounded-lg transition-colors duration-200 font-medium"
+            >
+              Sair da Sala
+            </button>
           </CardContent>
         </Card>
       </div>
@@ -390,8 +426,16 @@ export const MultiplayerGame = ({
 
   if (!currentQuestion) {
     return (
-      <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4 sm:p-6 safe-top safe-bottom">
-        <div className="text-white">Carregando pergunta...</div>
+      <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4">
+        <Card className="w-full max-w-sm text-center backdrop-blur-lg bg-white/95 border-white/30 shadow-2xl">
+          <CardContent className="pt-8 pb-8 px-6">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <h2 className="text-xl font-semibold text-gray-800 mb-2">
+              Carregando...
+            </h2>
+            <p className="text-gray-600">Preparando próxima pergunta</p>
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -402,96 +446,109 @@ export const MultiplayerGame = ({
     user?.id === room.host_id ? room.guest_answer : room.host_answer;
 
   return (
-    <div className="min-h-screen bg-gradient-primary relative no-scroll">
-      {/* Connection Status */}
-      <MultiplayerConnectionStatus
-        isConnected={!!room}
-        roomCode={room?.room_code}
-        playersCount={room?.guest_id ? 2 : 1}
-        ping={timeLeft > 0 ? Math.floor(Math.random() * 150) + 50 : undefined}
-      />
+    <div className="min-h-screen bg-gradient-primary relative">
+      {/* Header com informações da sala */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-md border-b border-white/20">
+        <div className="flex items-center justify-between p-3 sm:p-4">
+          {/* Botão de sair */}
+          <button
+            onClick={onBackToMenu}
+            className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-3 py-2 rounded-lg transition-all duration-200 backdrop-blur-sm border border-white/30"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+            <span className="hidden sm:inline text-sm font-medium">Sair</span>
+          </button>
 
-      {/* Exit button */}
-      <button
-        onClick={onBackToMenu}
-        className="fixed top-12 sm:top-8 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
-      >
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
-
-      {/* Score display */}
-      <div className="fixed top-12 sm:top-8 left-16 right-4 z-10">
-        <div className="flex justify-between items-center">
-          <Card className="px-4 py-2">
-            <div className="flex items-center gap-2">
-              <Trophy className="h-4 w-4 text-primary" />
-              <span className="font-bold">
-                Você:{" "}
-                {user?.id === room.host_id ? room.host_score : room.guest_score}
-              </span>
+          {/* Status da conexão */}
+          <div className="flex items-center gap-2">
+            <div className="hidden sm:flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full text-white text-sm">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span>Sala: {room?.room_code}</span>
             </div>
-          </Card>
-
-          <GameTimer
-            timeLeft={timeLeft}
-            totalTime={15}
-            isActive={
-              selectedAnswer === null &&
-              !showAnswer &&
-              room.game_status === "playing" &&
-              timeLeft > 0
-            }
-            onTimeUp={() => {}}
-            onTick={() => {}}
-          />
-
-          <Card className="px-4 py-2">
-            <div className="flex items-center gap-2">
-              <Trophy className="h-4 w-4 text-secondary" />
-              <span className="font-bold">
-                Oponente:{" "}
-                {user?.id === room.host_id ? room.guest_score : room.host_score}
-              </span>
+            <div className="flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full text-white text-sm">
+              <Users className="w-4 h-4" />
+              <span>{room?.guest_id ? 2 : 1}/2</span>
             </div>
-          </Card>
+          </div>
         </div>
       </div>
 
-      {/* Answer status */}
-      <div className="fixed top-20 left-1/2 -translate-x-1/2 z-10">
-        <Card className="px-4 py-2">
-          <div className="text-sm text-center">
-            <span
-              className={`inline-block w-2 h-2 rounded-full mr-2 ${
-                userAnswer !== null ? "bg-green-500" : "bg-yellow-500"
-              }`}
-            />
-            Você {userAnswer !== null ? "respondeu" : "respondendo"}
-            <span className="mx-2">•</span>
-            <span
-              className={`inline-block w-2 h-2 rounded-full mr-2 ${
-                opponentAnswer !== null ? "bg-green-500" : "bg-yellow-500"
-              }`}
-            />
-            Oponente {opponentAnswer !== null ? "respondeu" : "respondendo"}
+      {/* Placar e Timer */}
+      <div className="fixed top-24 sm:top-28 left-0 right-0 z-40 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+            {/* Seu placar */}
+            <Card className="bg-white/95 backdrop-blur-sm border-white/30">
+              <CardContent className="p-3 sm:p-4">
+                <div className="flex items-center gap-2">
+                  <Trophy className="h-4 w-4 text-blue-600" />
+                  <div className="min-w-0">
+                    <div className="text-xs text-gray-600 hidden sm:block">
+                      Você
+                    </div>
+                    <div className="font-bold text-lg text-blue-600">
+                      {user?.id === room.host_id
+                        ? room.host_score
+                        : room.guest_score}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Timer central */}
+            <div className="flex justify-center">
+              <GameTimer
+                timeLeft={timeLeft}
+                totalTime={15}
+                isActive={
+                  selectedAnswer === null &&
+                  !showAnswer &&
+                  room.game_status === "playing" &&
+                  timeLeft > 0
+                }
+                onTimeUp={() => {}}
+                onTick={() => {}}
+              />
+            </div>
+
+            {/* Placar do oponente */}
+            <Card className="bg-white/95 backdrop-blur-sm border-white/30">
+              <CardContent className="p-3 sm:p-4">
+                <div className="flex items-center gap-2">
+                  <Trophy className="h-4 w-4 text-purple-600" />
+                  <div className="min-w-0">
+                    <div className="text-xs text-gray-600 hidden sm:block">
+                      Oponente
+                    </div>
+                    <div className="font-bold text-lg text-purple-600">
+                      {user?.id === room.host_id
+                        ? room.guest_score
+                        : room.host_score}
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
-        </Card>
+        </div>
       </div>
 
-      <div className="flex flex-col items-center justify-center min-h-screen p-4 pt-24 sm:pt-20">
-        <div className="w-full max-w-2xl">
+      {/* Conteúdo principal */}
+      <div className="pt-40 sm:pt-44 pb-8 px-4">
+        <div className="max-w-4xl mx-auto">
           <QuestionCard
             question={currentQuestion}
             questionNumber={room.current_question_index + 1}
