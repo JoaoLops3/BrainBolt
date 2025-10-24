@@ -163,7 +163,18 @@ export const ImprovedMultiplayerMenu = ({
 
       console.log("✅ Sala encontrada:", room);
 
-      // Join the room
+      // Double-check that the room is still available
+      if (room.guest_id !== null) {
+        console.log("❌ Sala já tem um convidado:", room.guest_id);
+        toast({
+          title: "Sala ocupada",
+          description: "Esta sala já tem um jogador",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Join the room - use a more reliable approach
       const { data, error } = await supabase
         .from("multiplayer_rooms")
         .update({
@@ -171,17 +182,26 @@ export const ImprovedMultiplayerMenu = ({
         })
         .eq("id", room.id)
         .eq("game_status", "waiting")
-        .is("guest_id", null)
         .select()
         .single();
 
       if (error) {
         console.error("❌ Erro ao entrar na sala:", error);
-        toast({
-          title: "Erro ao entrar",
-          description: `Erro: ${error.message}`,
-          variant: "destructive",
-        });
+
+        // Handle specific error cases
+        if (error.code === "PGRST116") {
+          toast({
+            title: "Sala indisponível",
+            description: "A sala foi ocupada por outro jogador",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Erro ao entrar",
+            description: `Erro: ${error.message}`,
+            variant: "destructive",
+          });
+        }
         return;
       }
 
