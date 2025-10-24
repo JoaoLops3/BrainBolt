@@ -84,7 +84,6 @@ export const ImprovedMultiplayerMenu = ({
         .insert({
           room_code: newRoomCode,
           host_id: user.id, // Define usuário atual como host
-          last_activity: new Date().toISOString(),
         })
         .select()
         .single();
@@ -169,7 +168,6 @@ export const ImprovedMultiplayerMenu = ({
         .from("multiplayer_rooms")
         .update({
           guest_id: user.id,
-          last_activity: new Date().toISOString(),
         })
         .eq("id", room.id)
         .eq("game_status", "waiting")
