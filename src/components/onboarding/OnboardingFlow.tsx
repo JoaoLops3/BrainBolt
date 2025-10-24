@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Dialog,
   DialogContent,
@@ -14,7 +13,6 @@ import {
 } from "@/components/ui/dialog";
 import {
   Bell,
-  Shield,
   Heart,
   Trophy,
   Users,
@@ -31,17 +29,10 @@ interface OnboardingFlowProps {
   onComplete: () => void;
 }
 
-type OnboardingStep =
-  | "welcome"
-  | "terms"
-  | "permissions"
-  | "features"
-  | "ready";
+type OnboardingStep = "welcome" | "permissions" | "features" | "ready";
 
 export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
   const [currentStep, setCurrentStep] = useState<OnboardingStep>("welcome");
-  const [termsAccepted, setTermsAccepted] = useState(false);
-  const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
@@ -59,20 +50,6 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
       onComplete();
     }
   }, [onComplete]);
-
-  const handleTermsNext = () => {
-    if (isNative) {
-      // No iOS, aceitar termos automaticamente (pois é mostrado na App Store)
-      setTermsAccepted(true);
-      setPrivacyAccepted(true);
-      setCurrentStep("permissions");
-    } else {
-      // Na web, verificar se aceitou
-      if (termsAccepted && privacyAccepted) {
-        setCurrentStep("permissions");
-      }
-    }
-  };
 
   const handlePermissionsNext = async () => {
     setIsLoading(true);
@@ -157,90 +134,11 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
           </div>
         </div>
         <Button
-          onClick={() => setCurrentStep(isNative ? "permissions" : "terms")}
+          onClick={() => setCurrentStep("permissions")}
           className="w-full"
           size="lg"
         >
           Começar
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
-      </CardContent>
-    </Card>
-  );
-
-  const renderTermsStep = () => (
-    <Card className="w-full max-w-md mx-auto backdrop-blur-lg bg-white/95 border-white/30 shadow-2xl">
-      <CardHeader className="text-center pb-4">
-        <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-          <Shield className="h-8 w-8 text-white" />
-        </div>
-        <CardTitle className="text-xl font-bold">
-          Termos e Privacidade
-        </CardTitle>
-        <p className="text-gray-600 text-sm">
-          Precisamos que você aceite nossos termos para continuar
-        </p>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <ScrollArea className="h-40 w-full rounded border p-4 bg-gray-50">
-          <div className="text-sm space-y-2">
-            <h4 className="font-semibold">Termos de Uso - Brain Bolt</h4>
-            <p>Ao usar o Brain Bolt, você concorda com:</p>
-            <ul className="list-disc list-inside space-y-1 text-xs">
-              <li>Usar o aplicativo para fins educativos e entretenimento</li>
-              <li>Não compartilhar conteúdo inadequado</li>
-              <li>Respeitar outros jogadores no modo multiplayer</li>
-              <li>Não tentar burlar o sistema de pontuação</li>
-            </ul>
-
-            <h4 className="font-semibold mt-4">Política de Privacidade</h4>
-            <p className="text-xs">
-              Coletamos apenas dados necessários para melhorar sua experiência:
-              estatísticas de jogo, preferências e progresso. Não compartilhamos
-              seus dados pessoais com terceiros.
-            </p>
-          </div>
-        </ScrollArea>
-
-        <div className="space-y-3">
-          <div className="flex items-start space-x-2">
-            <Checkbox
-              id="terms"
-              checked={termsAccepted}
-              onCheckedChange={(checked) =>
-                setTermsAccepted(checked as boolean)
-              }
-            />
-            <label htmlFor="terms" className="text-sm leading-relaxed">
-              Aceito os{" "}
-              <span className="font-semibold text-primary">Termos de Uso</span>
-            </label>
-          </div>
-
-          <div className="flex items-start space-x-2">
-            <Checkbox
-              id="privacy"
-              checked={privacyAccepted}
-              onCheckedChange={(checked) =>
-                setPrivacyAccepted(checked as boolean)
-              }
-            />
-            <label htmlFor="privacy" className="text-sm leading-relaxed">
-              Aceito a{" "}
-              <span className="font-semibold text-primary">
-                Política de Privacidade
-              </span>
-            </label>
-          </div>
-        </div>
-
-        <Button
-          onClick={handleTermsNext}
-          disabled={!termsAccepted || !privacyAccepted}
-          className="w-full"
-          size="lg"
-        >
-          Continuar
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </CardContent>
@@ -476,7 +374,6 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
 
   const stepContent = {
     welcome: renderWelcomeStep,
-    terms: renderTermsStep,
     permissions: renderPermissionsStep,
     features: renderFeaturesStep,
     ready: renderReadyStep,
@@ -493,24 +390,26 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
           {/* Progress indicator */}
           <div className="flex justify-center mt-4">
             <div className="flex space-x-2">
-              {(isNative
-                ? ["welcome", "permissions", "features", "ready"]
-                : ["welcome", "terms", "permissions", "features", "ready"]
-              ).map((step, index) => {
-                const allSteps = isNative
-                  ? ["welcome", "permissions", "features", "ready"]
-                  : ["welcome", "terms", "permissions", "features", "ready"];
-                const currentIndex = allSteps.indexOf(currentStep);
+              {["welcome", "permissions", "features", "ready"].map(
+                (step, index) => {
+                  const allSteps = [
+                    "welcome",
+                    "permissions",
+                    "features",
+                    "ready",
+                  ];
+                  const currentIndex = allSteps.indexOf(currentStep);
 
-                return (
-                  <div
-                    key={step}
-                    className={`w-2 h-2 rounded-full transition-colors ${
-                      currentIndex >= index ? "bg-primary" : "bg-gray-300"
-                    }`}
-                  />
-                );
-              })}
+                  return (
+                    <div
+                      key={step}
+                      className={`w-2 h-2 rounded-full transition-colors ${
+                        currentIndex >= index ? "bg-primary" : "bg-gray-300"
+                      }`}
+                    />
+                  );
+                }
+              )}
             </div>
           </div>
         </DialogContent>
