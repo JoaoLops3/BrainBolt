@@ -82,9 +82,13 @@ export const StatsProvider: React.FC<{ children: React.ReactNode }> = ({
         .from("profiles")
         .select("*")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
 
       if (profileError) throw profileError;
+      if (!profile) {
+        console.warn("Profile not found for user:", user.id);
+        return;
+      }
 
       // Buscar conquistas
       const { data: achievements, error: achievementsError } = await supabase

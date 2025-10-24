@@ -449,9 +449,7 @@ const Auth = () => {
                     </Label>
                     <Select
                       value={signupForm.userRole}
-                      onValueChange={(
-                        value: "teacher" | "leader" | "student"
-                      ) =>
+                      onValueChange={(value: "teacher" | "student") =>
                         setSignupForm((prev) => ({
                           ...prev,
                           userRole: value,
@@ -468,12 +466,6 @@ const Auth = () => {
                             <span>Professor</span>
                           </div>
                         </SelectItem>
-                        <SelectItem value="leader">
-                          <div className="flex items-center gap-2">
-                            <Users className="h-4 w-4" />
-                            <span>Líder</span>
-                          </div>
-                        </SelectItem>
                         <SelectItem value="student">
                           <div className="flex items-center gap-2">
                             <User className="h-4 w-4" />
@@ -485,8 +477,6 @@ const Auth = () => {
                     <p className="text-xs text-white/70">
                       {signupForm.userRole === "teacher" &&
                         "Crie e gerencie salas de aula para seus alunos"}
-                      {signupForm.userRole === "leader" &&
-                        "Gerencie grupos de estudo e competições"}
                       {signupForm.userRole === "student" &&
                         "Entre em salas e participe de competições"}
                     </p>

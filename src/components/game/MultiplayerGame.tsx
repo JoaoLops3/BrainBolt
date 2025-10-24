@@ -47,10 +47,15 @@ export const MultiplayerGame = ({
       .from("multiplayer_rooms")
       .select("*")
       .eq("id", roomId)
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.error("Error fetching room:", error);
+      return;
+    }
+
+    if (!data) {
+      console.error("Room not found:", roomId);
       return;
     }
 

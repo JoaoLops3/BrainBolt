@@ -129,11 +129,27 @@ export const ImprovedMainMenu = ({
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <CardTitle className="text-white text-lg sm:text-xl truncate">
-                  {profile?.display_name ||
-                    user?.user_metadata?.display_name ||
-                    "Jogador"}
-                </CardTitle>
+                <div className="flex items-center gap-2">
+                  <CardTitle className="text-white text-lg sm:text-xl truncate">
+                    {profile?.display_name ||
+                      user?.user_metadata?.display_name ||
+                      "Jogador"}
+                  </CardTitle>
+                  {profile?.user_role && (
+                    <Badge
+                      variant="outline"
+                      className={`text-xs ${
+                        profile.user_role === "teacher"
+                          ? "bg-blue-500/20 text-blue-300 border-blue-400/50"
+                          : "bg-green-500/20 text-green-300 border-green-400/50"
+                      }`}
+                    >
+                      {profile.user_role === "teacher"
+                        ? "Professor"
+                        : "Estudante"}
+                    </Badge>
+                  )}
+                </div>
                 <p className="text-white/80 text-xs sm:text-sm">
                   Nível {stats ? Math.floor(stats.totalScore / 1000) + 1 : 1}
                 </p>

@@ -209,17 +209,18 @@ export const useClassrooms = () => {
       setError(null);
 
       try {
-        const { data: classroom, error: findError } = await sb
+        const { data, error: findError } = await sb
           .from("classrooms")
           .select("*")
           .eq("class_code", classCode.toUpperCase())
           .eq("is_active", true)
-          .single();
+          .maybeSingle();
 
-        if (findError) throw new Error("Código de sala inválido");
+        if (findError) throw new Error("Erro ao buscar sala");
+        if (!data) throw new Error("Código de sala inválido");
 
         // Verificar se o usuário é o professor desta sala
-        if (classroom.teacher_id === user.id) {
+        if (data.teacher_id === user.id) {
           toast({
             title: "❌ Acesso negado",
             description:
@@ -233,9 +234,9 @@ export const useClassrooms = () => {
         const { data: existing } = await sb
           .from("classroom_students")
           .select("*")
-          .eq("classroom_id", classroom.id)
+          .eq("classroom_id", data.id)
           .eq("student_id", user.id)
-          .single();
+          .maybeSingle();
 
         if (existing) {
           toast({
@@ -251,7 +252,7 @@ export const useClassrooms = () => {
           .from("classroom_students")
           .insert([
             {
-              classroom_id: classroom.id,
+              classroom_id: data.id,
               student_id: user.id,
               status: "active",
             },

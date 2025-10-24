@@ -30,7 +30,7 @@ interface AuthContextType {
     email: string,
     password: string,
     displayName: string,
-    userRole?: "teacher" | "leader" | "student"
+    userRole?: "teacher" | "student"
   ) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signInWithOAuth: (provider: "google" | "apple") => Promise<{ error: any }>;
@@ -112,7 +112,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         .from("profiles")
         .select("*")
         .eq("user_id", userId)
-        .single();
+        .maybeSingle();
 
       clearTimeout(profileTimeout);
 
@@ -135,7 +135,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     email: string,
     password: string,
     displayName: string,
-    userRole: "teacher" | "leader" | "student" = "student"
+    userRole: "teacher" | "student" = "student"
   ) => {
     const redirectUrl = `${window.location.origin}/`;
 
