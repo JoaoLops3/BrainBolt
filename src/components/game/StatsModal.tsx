@@ -115,68 +115,68 @@ export const StatsModal = ({ open, onOpenChange }: StatsModalProps) => {
       maxHeight="screen"
     >
       <div className="space-y-4">
-        <div className="flex items-center gap-2 text-lg sm:text-xl">
+        <div className="flex items-center gap-2 text-lg sm:text-xl text-white">
           <Trophy className="h-5 w-5 sm:h-6 sm:w-6" />
           Suas Estatísticas
         </div>
-        <p className="text-sm sm:text-base text-muted-foreground">
+        <p className="text-sm sm:text-base text-white/80">
           Acompanhe seu desempenho e progresso no jogo.
         </p>
 
         <div className="space-y-6 py-4">
           {/* Overall Stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            <Card className="transition-transform duration-200 hover:scale-[1.02]">
+            <Card className="transition-transform duration-200 hover:scale-[1.02] backdrop-blur-sm bg-white/5 border-white/20">
               <CardHeader className="pb-2 p-3 sm:p-4">
-                <CardTitle className="text-xs sm:text-sm flex items-center space-x-1">
+                <CardTitle className="text-xs sm:text-sm flex items-center space-x-1 text-white">
                   <Target className="h-3 w-3 sm:h-4 sm:w-4" />
                   <span>Jogos</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="pb-2 p-3 sm:p-4 pt-0">
-                <div className="text-lg sm:text-2xl font-bold">
+                <div className="text-lg sm:text-2xl font-bold text-white">
                   {stats.totalGames}
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="transition-transform duration-200 hover:scale-[1.02]">
+            <Card className="transition-transform duration-200 hover:scale-[1.02] backdrop-blur-sm bg-white/5 border-white/20">
               <CardHeader className="pb-2 p-3 sm:p-4">
-                <CardTitle className="text-xs sm:text-sm flex items-center space-x-1">
+                <CardTitle className="text-xs sm:text-sm flex items-center space-x-1 text-white">
                   <Trophy className="h-3 w-3 sm:h-4 sm:w-4" />
                   <span>Melhor</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="pb-2 p-3 sm:p-4 pt-0">
-                <div className="text-lg sm:text-2xl font-bold">
+                <div className="text-lg sm:text-2xl font-bold text-white">
                   {stats.bestScore}
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="transition-transform duration-200 hover:scale-[1.02]">
+            <Card className="transition-transform duration-200 hover:scale-[1.02] backdrop-blur-sm bg-white/5 border-white/20">
               <CardHeader className="pb-2 p-3 sm:p-4">
-                <CardTitle className="text-xs sm:text-sm flex items-center space-x-1">
+                <CardTitle className="text-xs sm:text-sm flex items-center space-x-1 text-white">
                   <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4" />
                   <span>Precisão</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="pb-2 p-3 sm:p-4 pt-0">
-                <div className="text-lg sm:text-2xl font-bold">
+                <div className="text-lg sm:text-2xl font-bold text-white">
                   {stats.accuracy}%
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="transition-transform duration-200 hover:scale-[1.02]">
+            <Card className="transition-transform duration-200 hover:scale-[1.02] backdrop-blur-sm bg-white/5 border-white/20">
               <CardHeader className="pb-2 p-3 sm:p-4">
-                <CardTitle className="text-xs sm:text-sm flex items-center space-x-1">
+                <CardTitle className="text-xs sm:text-sm flex items-center space-x-1 text-white">
                   <Zap className="h-3 w-3 sm:h-4 sm:w-4" />
                   <span>Sequência</span>
                 </CardTitle>
               </CardHeader>
               <CardContent className="pb-2 p-3 sm:p-4 pt-0">
-                <div className="text-lg sm:text-2xl font-bold">
+                <div className="text-lg sm:text-2xl font-bold text-white">
                   {stats.bestStreak}
                 </div>
               </CardContent>
@@ -185,13 +185,13 @@ export const StatsModal = ({ open, onOpenChange }: StatsModalProps) => {
 
           {/* Recent Games */}
           <div className="space-y-3">
-            <h3 className="text-base sm:text-lg font-semibold flex items-center space-x-2">
+            <h3 className="text-base sm:text-lg font-semibold flex items-center space-x-2 text-white">
               <Clock className="h-4 w-4 sm:h-5 sm:w-5" />
               <span>Jogos Recentes</span>
             </h3>
 
             {loading ? (
-              <div className="text-center text-muted-foreground py-8">
+              <div className="text-center text-white/80 py-8">
                 Carregando estatísticas...
               </div>
             ) : sessions.length > 0 ? (
@@ -199,7 +199,7 @@ export const StatsModal = ({ open, onOpenChange }: StatsModalProps) => {
                 {sessions.map((session) => (
                   <Card
                     key={session.id}
-                    className="p-3 sm:p-4 transition-transform duration-200 hover:scale-[1.01]"
+                    className="p-3 sm:p-4 transition-transform duration-200 hover:scale-[1.01] backdrop-blur-sm bg-white/5 border-white/20"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                       <div className="flex items-center space-x-3">
@@ -219,7 +219,7 @@ export const StatsModal = ({ open, onOpenChange }: StatsModalProps) => {
 
                         <div className="min-w-0 flex-1">
                           <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                            <span className="font-medium text-sm sm:text-base">
+                            <span className="font-medium text-sm sm:text-base text-white">
                               {session.final_score} pontos
                             </span>
                             <Badge
@@ -228,14 +228,14 @@ export const StatsModal = ({ open, onOpenChange }: StatsModalProps) => {
                                   ? "destructive"
                                   : "default"
                               }
-                              className="text-xs w-fit"
+                              className="text-xs w-fit bg-white/20 text-white border-white/20"
                             >
                               {session.game_mode === "speed"
                                 ? "Veloz"
                                 : "Normal"}
                             </Badge>
                           </div>
-                          <div className="text-xs sm:text-sm text-muted-foreground">
+                          <div className="text-xs sm:text-sm text-white/80">
                             {Math.min(
                               session.correct_answers,
                               session.questions_answered
@@ -247,7 +247,7 @@ export const StatsModal = ({ open, onOpenChange }: StatsModalProps) => {
                         </div>
                       </div>
 
-                      <div className="text-xs sm:text-sm text-muted-foreground">
+                      <div className="text-xs sm:text-sm text-white/80">
                         {new Date(session.completed_at).toLocaleDateString(
                           "pt-BR"
                         )}
@@ -257,7 +257,7 @@ export const StatsModal = ({ open, onOpenChange }: StatsModalProps) => {
                 ))}
               </div>
             ) : (
-              <div className="text-center text-muted-foreground py-8">
+              <div className="text-center text-white/80 py-8">
                 <p className="text-sm sm:text-base">
                   Nenhum jogo jogado ainda. Que tal começar agora?
                 </p>

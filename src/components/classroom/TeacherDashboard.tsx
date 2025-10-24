@@ -99,7 +99,7 @@ export const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
                 <Button
                   onClick={() => setCreateModalOpen(true)}
                   size="lg"
-                  className="bg-white text-primary hover:bg-white/90"
+                  className="bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm border-white/20"
                 >
                   <Plus className="h-5 w-5 mr-2" />
                   Nova Sala
@@ -129,7 +129,7 @@ export const TeacherDashboard = ({ onBack }: TeacherDashboardProps) => {
                 <Button
                   onClick={() => setCreateModalOpen(true)}
                   size="lg"
-                  className="bg-white text-primary hover:bg-white/90"
+                  className="bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm border-white/20"
                 >
                   <Plus className="h-5 w-5 mr-2" />
                   Criar Primeira Sala

@@ -1,10 +1,5 @@
 import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ClassroomWithDetails } from "@/types/classroom";
 import { ClassroomRankings } from "./ClassroomRankings";
@@ -41,37 +36,46 @@ export const ClassroomDetails = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
-        <DialogHeader>
+    <ResponsiveDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      maxWidth="5xl"
+      maxHeight="screen"
+    >
+      <div className="flex flex-col h-[90vh] max-h-[90vh]">
+        <div className="flex flex-col space-y-1.5 text-center sm:text-left flex-shrink-0">
           <div className="flex items-start gap-3">
-            <School className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
+            <School className="h-6 w-6 text-white mt-1 flex-shrink-0" />
             <div className="flex-1 min-w-0">
-              <DialogTitle className="text-xl mb-2">
+              <h2 className="font-semibold tracking-tight text-xl mb-2 text-white">
                 {classroom.name}
-              </DialogTitle>
+              </h2>
               {classroom.description && (
-                <p className="text-sm text-muted-foreground">
-                  {classroom.description}
-                </p>
+                <p className="text-sm text-white/80">{classroom.description}</p>
               )}
               <div className="flex flex-wrap items-center gap-2 mt-3">
                 {isActive() ? (
-                  <Badge className="bg-green-500">Em Andamento</Badge>
+                  <Badge className="bg-white/20 text-white border-white/20 hover:bg-white/30">
+                    Em Andamento
+                  </Badge>
                 ) : (
-                  <Badge variant="secondary">Finalizada</Badge>
+                  <Badge className="bg-white/5 text-white/80 border-white/20 hover:bg-white/20">
+                    Finalizada
+                  </Badge>
                 )}
                 {classroom.school_name && (
-                  <Badge variant="outline">{classroom.school_name}</Badge>
+                  <Badge className="bg-white/5 text-white/80 border-white/20 hover:bg-white/20">
+                    {classroom.school_name}
+                  </Badge>
                 )}
                 {classroom.subject && (
-                  <Badge variant="outline">
+                  <Badge className="bg-white/5 text-white/80 border-white/20 hover:bg-white/20">
                     {classroom.subject.charAt(0).toUpperCase() +
                       classroom.subject.slice(1)}
                   </Badge>
                 )}
               </div>
-              <div className="mt-2 text-sm text-muted-foreground">
+              <div className="mt-2 text-sm text-white/80">
                 📅{" "}
                 {format(
                   new Date(classroom.competition_start_date),
@@ -90,18 +94,16 @@ export const ClassroomDetails = ({
                 )}
               </div>
               {isTeacher && (
-                <div className="mt-2 flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground">
-                    Código da sala:
-                  </span>
-                  <code className="px-3 py-1 bg-muted rounded font-mono text-lg font-bold">
+                <div className="mt-2 mb-2 flex items-center gap-2">
+                  <span className="text-sm text-white/80">Código da sala:</span>
+                  <code className="px-3 py-1 bg-white/5 backdrop-blur-sm rounded font-mono text-base font-bold text-white">
                     {classroom.class_code}
                   </code>
                 </div>
               )}
             </div>
           </div>
-        </DialogHeader>
+        </div>
 
         <Tabs
           value={activeTab}
@@ -111,14 +113,20 @@ export const ClassroomDetails = ({
           <TabsList
             className={`grid w-full ${
               isTeacher ? "grid-cols-4" : "grid-cols-2"
-            }`}
+            } bg-white/5 backdrop-blur-sm border-white/20`}
           >
-            <TabsTrigger value="rankings" className="flex items-center gap-2">
+            <TabsTrigger
+              value="rankings"
+              className="flex items-center gap-2 text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
+            >
               <Trophy className="h-4 w-4" />
               <span className="hidden sm:inline">Rankings</span>
               <span className="sm:hidden">Rank</span>
             </TabsTrigger>
-            <TabsTrigger value="statistics" className="flex items-center gap-2">
+            <TabsTrigger
+              value="statistics"
+              className="flex items-center gap-2 text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
+            >
               <BarChart3 className="h-4 w-4" />
               <span className="hidden sm:inline">Estatísticas</span>
               <span className="sm:hidden">Stats</span>
@@ -127,7 +135,7 @@ export const ClassroomDetails = ({
               <>
                 <TabsTrigger
                   value="students"
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
                 >
                   <Users className="h-4 w-4" />
                   <span className="hidden sm:inline">Alunos</span>
@@ -135,7 +143,7 @@ export const ClassroomDetails = ({
                 </TabsTrigger>
                 <TabsTrigger
                   value="questions"
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
                 >
                   <HelpCircle className="h-4 w-4" />
                   <span className="hidden sm:inline">Perguntas</span>
@@ -167,7 +175,7 @@ export const ClassroomDetails = ({
             )}
           </div>
         </Tabs>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </ResponsiveDialog>
   );
 };

@@ -69,6 +69,8 @@ export const ResponsiveDialog = ({
           maxWidthClasses[maxWidth],
           maxHeightClasses[maxHeight],
           "overflow-y-auto",
+          // Glass effect
+          "backdrop-blur-xl bg-white/10 border-white/20 shadow-2xl",
           className
         )}
       >

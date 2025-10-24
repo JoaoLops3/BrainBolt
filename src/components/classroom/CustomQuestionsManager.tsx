@@ -241,43 +241,49 @@ export const CustomQuestionsManager = ({
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold">Banco de Perguntas</h2>
-          <p className="text-muted-foreground">
+          <h2 className="text-2xl font-bold text-white">Banco de Perguntas</h2>
+          <p className="text-white/80">
             Gerencie as perguntas customizadas da sala
           </p>
         </div>
-        <Button onClick={() => setIsCreateModalOpen(true)} size="sm">
+        <Button
+          onClick={() => setIsCreateModalOpen(true)}
+          size="sm"
+          className="bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm border-white/20"
+        >
           <Plus className="mr-2 h-4 w-4" />
           Nova Pergunta
         </Button>
       </div>
 
       {/* Filters */}
-      <Card>
+      <Card className="backdrop-blur-sm bg-white/5 border-white/20">
         <CardHeader>
-          <CardTitle className="text-base">Filtros</CardTitle>
+          <CardTitle className="text-base text-white">Filtros</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
               <Input
                 placeholder="Buscar pergunta..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
+                className="pl-10 bg-white/5 border-white/20 backdrop-blur-sm placeholder:text-white/60 text-white focus:bg-white/20 focus:border-white/40"
               />
             </div>
 
             <Select value={filterCategory} onValueChange={setFilterCategory}>
-              <SelectTrigger>
+              <SelectTrigger className="bg-white/5 border-white/20 backdrop-blur-sm text-white">
                 <SelectValue placeholder="Todas as categorias" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todas as categorias</SelectItem>
+              <SelectContent className="backdrop-blur-sm bg-white/5 border-white/20">
+                <SelectItem value="all" className="text-white">
+                  Todas as categorias
+                </SelectItem>
                 {Object.entries(categoryLabels).map(
                   ([key, { label, emoji }]) => (
-                    <SelectItem key={key} value={key}>
+                    <SelectItem key={key} value={key} className="text-white">
                       {emoji} {label}
                     </SelectItem>
                   )
@@ -289,13 +295,15 @@ export const CustomQuestionsManager = ({
               value={filterDifficulty}
               onValueChange={setFilterDifficulty}
             >
-              <SelectTrigger>
+              <SelectTrigger className="bg-white/5 border-white/20 backdrop-blur-sm text-white">
                 <SelectValue placeholder="Todas as dificuldades" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todas as dificuldades</SelectItem>
+              <SelectContent className="backdrop-blur-sm bg-white/5 border-white/20">
+                <SelectItem value="all" className="text-white">
+                  Todas as dificuldades
+                </SelectItem>
                 {Object.entries(difficultyLabels).map(([key, { label }]) => (
-                  <SelectItem key={key} value={key}>
+                  <SelectItem key={key} value={key} className="text-white">
                     {label}
                   </SelectItem>
                 ))}
@@ -303,7 +311,7 @@ export const CustomQuestionsManager = ({
             </Select>
           </div>
 
-          <div className="flex items-center justify-between text-sm text-muted-foreground">
+          <div className="flex items-center justify-between text-sm text-white/80">
             <span>
               {filteredQuestions.length} de {questions.length} perguntas
             </span>
@@ -317,18 +325,21 @@ export const CustomQuestionsManager = ({
       {/* Questions List */}
       {isLoading ? (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">Carregando perguntas...</p>
+          <p className="text-white/80">Carregando perguntas...</p>
         </div>
       ) : filteredQuestions.length === 0 ? (
-        <Card>
+        <Card className="backdrop-blur-sm bg-white/5 border-white/20">
           <CardContent className="py-12 text-center">
-            <p className="text-muted-foreground mb-4">
+            <p className="text-white/80 mb-4">
               {questions.length === 0
                 ? "Nenhuma pergunta criada ainda."
                 : "Nenhuma pergunta encontrada com os filtros aplicados."}
             </p>
             {questions.length === 0 && (
-              <Button onClick={() => setIsCreateModalOpen(true)}>
+              <Button
+                onClick={() => setIsCreateModalOpen(true)}
+                className="bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm border-white/20"
+              >
                 <Plus className="mr-2 h-4 w-4" />
                 Criar Primeira Pergunta
               </Button>
@@ -345,25 +356,34 @@ export const CustomQuestionsManager = ({
             return (
               <Card
                 key={question.id}
-                className={!question.is_active ? "opacity-60" : ""}
+                className={`backdrop-blur-sm bg-white/5 border-white/20 ${
+                  !question.is_active ? "opacity-60" : ""
+                }`}
               >
                 <CardHeader>
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 space-y-2">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <Badge className={categoryInfo.color}>
+                        <Badge
+                          className={`${categoryInfo.color} border-white/20`}
+                        >
                           {categoryInfo.emoji} {categoryInfo.label}
                         </Badge>
-                        <Badge className={difficultyInfo.color}>
+                        <Badge
+                          className={`${difficultyInfo.color} border-white/20`}
+                        >
                           {difficultyInfo.label}
                         </Badge>
                         {!question.is_active && (
-                          <Badge variant="outline" className="bg-gray-100">
+                          <Badge
+                            variant="outline"
+                            className="bg-white/5 text-white/80 border-white/20"
+                          >
                             Inativa
                           </Badge>
                         )}
                       </div>
-                      <CardTitle className="text-base font-medium">
+                      <CardTitle className="text-base font-medium text-white">
                         {question.question}
                       </CardTitle>
                     </div>
@@ -376,6 +396,7 @@ export const CustomQuestionsManager = ({
                           handleToggleActive(question.id, question.is_active)
                         }
                         title={question.is_active ? "Desativar" : "Ativar"}
+                        className="text-white hover:bg-white/20"
                       >
                         {question.is_active ? (
                           <Eye className="h-4 w-4" />
@@ -388,6 +409,7 @@ export const CustomQuestionsManager = ({
                         size="icon"
                         onClick={() => handleEdit(question)}
                         title="Editar"
+                        className="text-white hover:bg-white/20"
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -396,7 +418,7 @@ export const CustomQuestionsManager = ({
                         size="icon"
                         onClick={() => setDeleteQuestionId(question.id)}
                         title="Excluir"
-                        className="text-destructive hover:text-destructive"
+                        className="text-red-300 hover:bg-red-500/20 hover:text-red-200"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -412,16 +434,16 @@ export const CustomQuestionsManager = ({
                         key={index}
                         className={`p-2 rounded-md text-sm flex items-center gap-2 ${
                           index === question.correct_answer
-                            ? "bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800"
-                            : "bg-muted/30"
+                            ? "bg-green-500/20 border border-green-500/50 backdrop-blur-sm"
+                            : "bg-white/5 backdrop-blur-sm"
                         }`}
                       >
-                        <span className="font-mono text-xs font-bold">
+                        <span className="font-mono text-xs font-bold text-white">
                           {String.fromCharCode(65 + index)}
                         </span>
-                        <span className="flex-1">{option}</span>
+                        <span className="flex-1 text-white">{option}</span>
                         {index === question.correct_answer && (
-                          <CheckCircle2 className="h-4 w-4 text-green-600" />
+                          <CheckCircle2 className="h-4 w-4 text-green-300" />
                         )}
                       </div>
                     ))}
@@ -429,18 +451,18 @@ export const CustomQuestionsManager = ({
 
                   {/* Explanation */}
                   {question.explanation && (
-                    <div className="bg-blue-50 dark:bg-blue-950 p-3 rounded-md">
-                      <p className="text-xs font-medium text-blue-700 dark:text-blue-300 mb-1">
+                    <div className="bg-blue-500/20 p-3 rounded-md backdrop-blur-sm border border-blue-500/50">
+                      <p className="text-xs font-medium text-blue-300 mb-1">
                         💡 Explicação:
                       </p>
-                      <p className="text-sm text-blue-600 dark:text-blue-400">
+                      <p className="text-sm text-blue-200">
                         {question.explanation}
                       </p>
                     </div>
                   )}
 
                   {/* Stats */}
-                  <div className="flex items-center gap-4 pt-2 border-t text-xs text-muted-foreground">
+                  <div className="flex items-center gap-4 pt-2 border-t border-white/20 text-xs text-white/80">
                     <div className="flex items-center gap-1">
                       <BarChart3 className="h-3 w-3" />
                       <span>{question.usage_count} usos</span>
@@ -450,8 +472,8 @@ export const CustomQuestionsManager = ({
                         <span
                           className={
                             accuracy >= 70
-                              ? "text-green-600"
-                              : "text-yellow-600"
+                              ? "text-green-300"
+                              : "text-yellow-300"
                           }
                         >
                           {accuracy}% de acertos
@@ -480,19 +502,23 @@ export const CustomQuestionsManager = ({
         open={!!deleteQuestionId}
         onOpenChange={(open) => !open && setDeleteQuestionId(null)}
       >
-        <AlertDialogContent>
+        <AlertDialogContent className="backdrop-blur-sm bg-white/5 border-white/20">
           <AlertDialogHeader>
-            <AlertDialogTitle>Excluir pergunta?</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogTitle className="text-white">
+              Excluir pergunta?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-white/80">
               Esta ação não pode ser desfeita. A pergunta será removida
               permanentemente do banco de perguntas da sala.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel className="border-white/20 bg-white/5 text-white hover:bg-white/20">
+              Cancelar
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={() => deleteQuestionId && handleDelete(deleteQuestionId)}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="bg-red-500/20 text-red-300 hover:bg-red-500/30 border-red-500/50"
             >
               Excluir
             </AlertDialogAction>

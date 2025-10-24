@@ -146,16 +146,18 @@ export const ClassroomCard = ({
   };
 
   return (
-    <Card className="hover:shadow-lg transition-all duration-300 border-2">
+    <Card className="hover:shadow-lg transition-all duration-300 border-2 backdrop-blur-sm bg-white/5 border-white/20">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-2">
               <School className="h-5 w-5 text-primary flex-shrink-0" />
-              <h3 className="font-bold text-lg truncate">{classroom.name}</h3>
+              <h3 className="font-bold text-lg truncate text-white">
+                {classroom.name}
+              </h3>
             </div>
             {classroom.description && (
-              <p className="text-sm text-muted-foreground line-clamp-2">
+              <p className="text-sm text-white/80 line-clamp-2">
                 {classroom.description}
               </p>
             )}
@@ -167,14 +169,19 @@ export const ClassroomCard = ({
       <CardContent className="space-y-3 pb-3">
         {classroom.school_name && (
           <div className="flex items-center gap-2 text-sm">
-            <School className="h-4 w-4 text-muted-foreground" />
-            <span className="truncate">{classroom.school_name}</span>
+            <School className="h-4 w-4 text-white/60" />
+            <span className="truncate text-white/80">
+              {classroom.school_name}
+            </span>
           </div>
         )}
 
         <div className="flex items-center gap-2">
           {classroom.grade_level && (
-            <Badge variant="outline" className="text-xs">
+            <Badge
+              variant="outline"
+              className="text-xs bg-white/20 text-white border-white/20"
+            >
               {getGradeLevelLabel()}
             </Badge>
           )}
@@ -188,7 +195,7 @@ export const ClassroomCard = ({
           )}
         </div>
 
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <div className="flex items-center gap-2 text-sm text-white/80">
           <Users className="h-4 w-4" />
           <span>
             {classroom.student_count || 0} aluno
@@ -197,7 +204,7 @@ export const ClassroomCard = ({
           </span>
         </div>
 
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+        <div className="flex items-center gap-2 text-sm text-white/80">
           <Calendar className="h-4 w-4" />
           <span>
             {format(new Date(classroom.competition_start_date), "dd/MMM", {
@@ -212,14 +219,14 @@ export const ClassroomCard = ({
 
         {isTeacher && (
           <div className="flex items-center gap-2 pt-2">
-            <div className="flex-1 bg-muted rounded px-3 py-2 font-mono text-center text-lg font-bold tracking-wider">
+            <div className="flex-1 bg-white/5 backdrop-blur-sm rounded px-3 py-2 font-mono text-center text-lg font-bold tracking-wider text-white">
               {classroom.class_code}
             </div>
             <Button
               size="sm"
               variant="outline"
               onClick={copyClassCode}
-              className="flex-shrink-0"
+              className="flex-shrink-0 border-white/20 bg-white/5 text-white hover:bg-white/20 hover:text-white"
             >
               <Copy className="h-4 w-4" />
             </Button>
@@ -230,7 +237,7 @@ export const ClassroomCard = ({
       <CardFooter className="gap-2 pt-3">
         <Button
           variant="default"
-          className="flex-1"
+          className="flex-1 bg-white/20 text-white hover:bg-white/30"
           onClick={() => onViewDetails(classroom)}
         >
           <Eye className="h-4 w-4 mr-2" />
@@ -242,6 +249,7 @@ export const ClassroomCard = ({
             size="icon"
             onClick={() => onSettings(classroom)}
             title="Configurações"
+            className="border-white/20 bg-white/5 text-white hover:bg-white/20 hover:text-white"
           >
             <Settings className="h-4 w-4" />
           </Button>
@@ -251,7 +259,7 @@ export const ClassroomCard = ({
             variant="outline"
             size="icon"
             onClick={() => onDelete(classroom)}
-            className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:text-red-400 dark:hover:text-red-300 dark:hover:bg-red-950"
+            className="border-red-500/50 bg-red-500/20 text-red-300 hover:bg-red-500/30 hover:text-red-200"
             title="Excluir sala"
           >
             <Trash2 className="h-4 w-4" />

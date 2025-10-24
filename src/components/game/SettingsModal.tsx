@@ -130,8 +130,8 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
                   onClick={() => setSelectedAvatar(avatar)}
                   className={`relative p-1 rounded-lg transition-all ${
                     selectedAvatar === avatar
-                      ? "ring-2 ring-primary bg-primary/10"
-                      : "hover:bg-muted"
+                      ? "ring-2 ring-white bg-white/20"
+                      : "hover:bg-white/10"
                   }`}
                 >
                   <Avatar className="h-10 w-10 sm:h-12 sm:w-12">
@@ -156,7 +156,7 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="Digite seu nome"
               maxLength={30}
-              className="text-sm sm:text-base"
+              className="text-sm sm:text-base bg-white/10 border-white/20 backdrop-blur-sm placeholder:text-white/60 text-white focus:bg-white/20 focus:border-white/40"
             />
           </div>
 
@@ -170,11 +170,11 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
             </div>
 
             {permission === "denied" && (
-              <div className="bg-muted/50 rounded-lg p-3 space-y-2">
+              <div className="bg-blue-50/20 backdrop-blur-sm border border-blue-200/30 rounded-lg p-3 space-y-2">
                 <div className="flex items-center gap-2">
-                  <BellOff className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-xs text-muted-foreground">
-                    Notificações desativadas
+                  <Bell className="h-4 w-4 text-blue-300" />
+                  <span className="text-xs text-blue-200">
+                    Receba lembretes para jogar!
                   </span>
                 </div>
                 <Button
@@ -182,11 +182,11 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
                   size="sm"
                   onClick={requestPermission}
                   disabled={notificationLoading}
-                  className="w-full"
+                  className="w-full border-blue-200/50 bg-blue-100/20 text-blue-200 hover:bg-blue-100/30 hover:text-blue-100"
                 >
                   {notificationLoading
                     ? "Solicitando..."
-                    : "Ativar Notificações"}
+                    : "Permitir Notificações"}
                 </Button>
               </div>
             )}
@@ -290,10 +290,10 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
             )}
 
             {permission === "default" && (
-              <div className="bg-blue-50 rounded-lg p-3 space-y-2">
+              <div className="bg-blue-50/20 backdrop-blur-sm border border-blue-200/30 rounded-lg p-3 space-y-2">
                 <div className="flex items-center gap-2">
-                  <Bell className="h-4 w-4 text-blue-600" />
-                  <span className="text-xs text-blue-700">
+                  <Bell className="h-4 w-4 text-blue-300" />
+                  <span className="text-xs text-blue-200">
                     Receba lembretes para jogar!
                   </span>
                 </div>
@@ -302,7 +302,7 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
                   size="sm"
                   onClick={requestPermission}
                   disabled={notificationLoading}
-                  className="w-full border-blue-200 text-blue-700 hover:bg-blue-100"
+                  className="w-full border-blue-200/50 bg-blue-100/20 text-blue-200 hover:bg-blue-100/30 hover:text-blue-100"
                 >
                   {notificationLoading
                     ? "Solicitando..."
@@ -317,14 +317,14 @@ export const SettingsModal = ({ open, onOpenChange }: SettingsModalProps) => {
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
-            className="text-xs sm:text-sm"
+            className="text-xs sm:text-sm border-white/20 bg-white/10 text-white hover:bg-white/20 hover:text-white"
           >
             Cancelar
           </Button>
           <Button
             onClick={handleSave}
             disabled={isLoading}
-            className="text-xs sm:text-sm"
+            className="text-xs sm:text-sm bg-white/20 text-white hover:bg-white/30"
           >
             <Save className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
             {isLoading ? "Salvando..." : "Salvar"}

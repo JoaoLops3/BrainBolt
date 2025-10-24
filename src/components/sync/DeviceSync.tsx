@@ -281,7 +281,7 @@ export const DeviceSync = () => {
 
           {/* Sync Status Indicator */}
           {syncStatus !== "idle" && (
-            <div className="flex items-center gap-2 p-2 rounded-lg bg-white/10">
+            <div className="flex items-center gap-2 p-2 rounded-lg bg-white/5">
               {syncStatus === "syncing" && (
                 <RefreshCw className="h-4 w-4 animate-spin text-blue-500" />
               )}

@@ -69,7 +69,7 @@ export const StudentDashboard = ({ onBack }: StudentDashboardProps) => {
                 <Button
                   onClick={() => setJoinModalOpen(true)}
                   size="lg"
-                  className="bg-white text-primary hover:bg-white/90"
+                  className="bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm border-white/20"
                 >
                   <Plus className="h-5 w-5 mr-2" />
                   Entrar em Sala
@@ -94,12 +94,13 @@ export const StudentDashboard = ({ onBack }: StudentDashboardProps) => {
                   Você não está em nenhuma sala ainda
                 </h3>
                 <p className="text-white/80 mb-6">
-                  Peça o código ao seu professor e entre em uma sala para começar!
+                  Peça o código ao seu professor e entre em uma sala para
+                  começar!
                 </p>
                 <Button
                   onClick={() => setJoinModalOpen(true)}
                   size="lg"
-                  className="bg-white text-primary hover:bg-white/90"
+                  className="bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm border-white/20"
                 >
                   <Plus className="h-5 w-5 mr-2" />
                   Entrar em Sala
@@ -152,7 +153,10 @@ export const StudentDashboard = ({ onBack }: StudentDashboardProps) => {
         )}
       </div>
 
-      <JoinClassroomModal open={joinModalOpen} onOpenChange={setJoinModalOpen} />
+      <JoinClassroomModal
+        open={joinModalOpen}
+        onOpenChange={setJoinModalOpen}
+      />
 
       <ClassroomDetails
         classroom={selectedClassroom}
@@ -163,4 +167,3 @@ export const StudentDashboard = ({ onBack }: StudentDashboardProps) => {
     </div>
   );
 };
-

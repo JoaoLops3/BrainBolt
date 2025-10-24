@@ -58,15 +58,15 @@ export const ClassroomRankings = ({ classroomId }: ClassroomRankingsProps) => {
 
   if (loading) {
     return (
-      <Card>
+      <Card className="backdrop-blur-sm bg-white/5 border-white/20">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-white">
             <Trophy className="h-5 w-5" />
             Rankings da Sala
           </CardTitle>
         </CardHeader>
         <CardContent className="flex items-center justify-center py-8">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          <Loader2 className="h-8 w-8 animate-spin text-white" />
         </CardContent>
       </Card>
     );
@@ -74,15 +74,15 @@ export const ClassroomRankings = ({ classroomId }: ClassroomRankingsProps) => {
 
   if (rankings.length === 0) {
     return (
-      <Card>
+      <Card className="backdrop-blur-sm bg-white/5 border-white/20">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-white">
             <Trophy className="h-5 w-5" />
             Rankings da Sala
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-8 text-muted-foreground">
+          <div className="text-center py-8 text-white/80">
             <Trophy className="h-12 w-12 mx-auto mb-4 opacity-50" />
             <p>Nenhum jogo registrado ainda.</p>
             <p className="text-sm">
@@ -95,9 +95,9 @@ export const ClassroomRankings = ({ classroomId }: ClassroomRankingsProps) => {
   }
 
   return (
-    <Card>
+    <Card className="backdrop-blur-sm bg-white/5 border-white/20">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 text-white">
           <Trophy className="h-5 w-5" />
           Rankings da Sala
         </CardTitle>
@@ -108,13 +108,15 @@ export const ClassroomRankings = ({ classroomId }: ClassroomRankingsProps) => {
             {rankings.map((student) => (
               <Card
                 key={student.student_id}
-                className={`${student.rank <= 3 ? "border-2" : ""} ${
+                className={`backdrop-blur-sm bg-white/5 border-white/20 ${
+                  student.rank <= 3 ? "border-2" : ""
+                } ${
                   student.rank === 1
-                    ? "border-yellow-500 bg-yellow-50 dark:bg-yellow-900/10"
+                    ? "border-yellow-500/50 bg-yellow-500/20"
                     : student.rank === 2
-                    ? "border-gray-400 bg-gray-50 dark:bg-gray-900/10"
+                    ? "border-gray-400/50 bg-gray-500/20"
                     : student.rank === 3
-                    ? "border-amber-700 bg-amber-50 dark:bg-amber-900/10"
+                    ? "border-amber-700/50 bg-amber-500/20"
                     : ""
                 }`}
               >
@@ -128,11 +130,15 @@ export const ClassroomRankings = ({ classroomId }: ClassroomRankingsProps) => {
                     {/* Student Info */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <h4 className="font-semibold truncate">
+                        <h4 className="font-semibold truncate text-white">
                           {student.student_name || "Sem nome"}
                         </h4>
                         {student.rank <= 3 && (
-                          <Badge className={getRankBadgeColor(student.rank)}>
+                          <Badge
+                            className={`${getRankBadgeColor(
+                              student.rank
+                            )} border-white/20`}
+                          >
                             {student.rank === 1
                               ? "🥇 Campeão"
                               : student.rank === 2
@@ -145,16 +151,16 @@ export const ClassroomRankings = ({ classroomId }: ClassroomRankingsProps) => {
                       {/* Stats Grid */}
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                         <div className="flex items-center gap-1">
-                          <Trophy className="h-3 w-3 text-yellow-600" />
-                          <span className="font-bold">
+                          <Trophy className="h-3 w-3 text-yellow-300" />
+                          <span className="font-bold text-white">
                             {student.total_score.toLocaleString()}
                           </span>
-                          <span className="text-muted-foreground">pts</span>
+                          <span className="text-white/80">pts</span>
                         </div>
 
                         <div className="flex items-center gap-1">
-                          <Target className="h-3 w-3 text-green-600" />
-                          <span className="font-bold">
+                          <Target className="h-3 w-3 text-green-300" />
+                          <span className="font-bold text-white">
                             {Math.min(student.accuracy_percentage, 100).toFixed(
                               1
                             )}
@@ -163,14 +169,14 @@ export const ClassroomRankings = ({ classroomId }: ClassroomRankingsProps) => {
                         </div>
 
                         <div className="flex items-center gap-1">
-                          <Flame className="h-3 w-3 text-orange-600" />
-                          <span className="font-bold">
+                          <Flame className="h-3 w-3 text-orange-300" />
+                          <span className="font-bold text-white">
                             {student.best_streak}
                           </span>
-                          <span className="text-muted-foreground">streak</span>
+                          <span className="text-white/80">streak</span>
                         </div>
 
-                        <div className="flex items-center gap-1 text-muted-foreground">
+                        <div className="flex items-center gap-1 text-white/80">
                           <span>{student.games_played}</span>
                           <span>
                             jogo{student.games_played !== 1 ? "s" : ""}

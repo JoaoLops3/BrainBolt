@@ -90,10 +90,10 @@ export const OtherModesModal = ({
             </Card>
 
             {/* Modos futuros (desabilitados) */}
-            <Card className="backdrop-blur-lg bg-white/10 border-0 opacity-60 cursor-not-allowed rounded-2xl">
+            <Card className="backdrop-blur-lg bg-white/5 border-0 opacity-60 cursor-not-allowed rounded-2xl">
               <CardContent className="p-4 sm:p-6">
                 <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
-                  <div className="p-2 sm:p-3 rounded-lg bg-white/10">
+                  <div className="p-2 sm:p-3 rounded-lg bg-white/5">
                     <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                   </div>
                   <div className="flex-1 w-full">
@@ -112,10 +112,10 @@ export const OtherModesModal = ({
               </CardContent>
             </Card>
 
-            <Card className="backdrop-blur-lg bg-white/10 border-0 opacity-60 cursor-not-allowed rounded-2xl">
+            <Card className="backdrop-blur-lg bg-white/5 border-0 opacity-60 cursor-not-allowed rounded-2xl">
               <CardContent className="p-4 sm:p-6">
                 <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
-                  <div className="p-2 sm:p-3 rounded-lg bg-white/10">
+                  <div className="p-2 sm:p-3 rounded-lg bg-white/5">
                     <Target className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
                   </div>
                   <div className="flex-1 w-full">

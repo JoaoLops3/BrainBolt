@@ -295,7 +295,7 @@ export const ImprovedMainMenu = ({
             onClick={onOpenSettings}
             className="group relative overflow-hidden transition-all glass-button text-white hover:bg-white/30 shadow-lg hover:shadow-xl hover:shadow-primary/20 border border-white/20 hover:border-white/40 rounded-full"
           >
-            <div className="p-1 rounded-md bg-white/10 group-hover:bg-white/20 transition-colors duration-200">
+            <div className="p-1 rounded-md bg-white/5 group-hover:bg-white/20 transition-colors duration-200">
               <svg
                 className="h-6 w-6"
                 fill="none"
@@ -326,7 +326,7 @@ export const ImprovedMainMenu = ({
             onClick={() => setShowTutorial(true)}
             className="group relative overflow-hidden transition-all glass-button text-white hover:bg-white/30 shadow-lg hover:shadow-xl hover:shadow-primary/20 border border-white/20 hover:border-white/40 rounded-full"
           >
-            <div className="p-1 rounded-md bg-white/10 group-hover:bg-white/20 transition-colors duration-200">
+            <div className="p-1 rounded-md bg-white/5 group-hover:bg-white/20 transition-colors duration-200">
               <CircleHelp className="h-6 w-6" />
             </div>
             <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out pointer-events-none" />
@@ -338,7 +338,7 @@ export const ImprovedMainMenu = ({
             onClick={handleSignOut}
             className="group relative overflow-hidden transition-all glass-button text-white hover:bg-white/30 shadow-lg hover:shadow-xl hover:shadow-primary/20 border border-white/20 hover:border-white/40 rounded-full"
           >
-            <div className="p-1 rounded-md bg-white/10 group-hover:bg-white/20 transition-colors duration-200">
+            <div className="p-1 rounded-md bg-white/5 group-hover:bg-white/20 transition-colors duration-200">
               <LogOut className="h-6 w-6" />
             </div>
             <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out pointer-events-none" />

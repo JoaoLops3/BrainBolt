@@ -1,10 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -219,9 +214,9 @@ export const CharactersModal = ({
     return (
       <Card
         key={character.id}
-        className={`transition-transform duration-200 hover:scale-[1.02] hover:shadow-md ${
+        className={`transition-transform duration-200 hover:scale-[1.02] hover:shadow-md backdrop-blur-sm bg-white/5 border-white/20 ${
           isLocked ? "opacity-60" : ""
-        } h-fit border-2 hover:border-primary/20`}
+        } h-fit border-2 hover:border-white/40`}
       >
         <CardHeader className="pb-3 p-4 sm:p-5">
           <div className="flex items-start justify-between gap-3">
@@ -241,7 +236,7 @@ export const CharactersModal = ({
                 </AvatarFallback>
               </Avatar>
               <div className="min-w-0 flex-1">
-                <CardTitle className="text-sm sm:text-base font-semibold leading-tight mb-2">
+                <CardTitle className="text-sm sm:text-base font-semibold leading-tight mb-2 text-white">
                   {character.name}
                 </CardTitle>
                 <div className="flex items-center gap-1 flex-wrap">
@@ -284,23 +279,23 @@ export const CharactersModal = ({
           </div>
         </CardHeader>
         <CardContent className="p-4 sm:p-5 pt-0 space-y-3">
-          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+          <p className="text-xs sm:text-sm text-white/80 leading-relaxed">
             {character.description}
           </p>
 
           {character.special_ability && (
-            <div className="bg-primary/5 border border-primary/10 p-3 rounded-lg">
-              <p className="text-xs font-semibold text-primary mb-1">
+            <div className="bg-white/5 border border-white/20 p-3 rounded-lg backdrop-blur-sm">
+              <p className="text-xs font-semibold text-white mb-1">
                 Habilidade Especial:
               </p>
-              <p className="text-xs text-primary/90">
+              <p className="text-xs text-white/80">
                 {character.special_ability}
               </p>
             </div>
           )}
 
           {isLocked ? (
-            <div className="flex items-center gap-2 text-muted-foreground bg-muted/50 p-2 rounded-lg">
+            <div className="flex items-center gap-2 text-white/80 bg-white/5 p-2 rounded-lg backdrop-blur-sm">
               <Target className="h-4 w-4 flex-shrink-0" />
               <span className="text-xs">
                 Acerte {character.unlock_requirement} perguntas de{" "}
@@ -309,7 +304,7 @@ export const CharactersModal = ({
             </div>
           ) : (
             userCharacter && (
-              <div className="flex items-center gap-2 text-green-600 bg-green-50 p-2 rounded-lg">
+              <div className="flex items-center gap-2 text-green-300 bg-green-500/20 p-2 rounded-lg backdrop-blur-sm">
                 <Trophy className="h-4 w-4 flex-shrink-0" />
                 <span className="text-xs font-medium">
                   Desbloqueado em{" "}
@@ -331,30 +326,41 @@ export const CharactersModal = ({
       : 0;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[95vw] max-w-6xl h-[90vh] max-h-[90vh] flex flex-col p-2 sm:p-6">
-        <DialogHeader className="flex-shrink-0">
-          <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
+    <ResponsiveDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      maxWidth="6xl"
+      maxHeight="screen"
+    >
+      <div className="flex flex-col h-[90vh] max-h-[90vh]">
+        <div className="flex-shrink-0">
+          <div className="flex items-center gap-2 text-base sm:text-lg text-white">
             <Users className="h-4 w-4 sm:h-5 sm:w-5" />
             Coleção de Personagens
-          </DialogTitle>
-          <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
+          </div>
+          <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm text-white/80">
             <span>
               {unlockedCharacters.length}/{allCharacters.length} coletados
             </span>
             <span>{collectionRate}% completo</span>
           </div>
-        </DialogHeader>
+        </div>
 
         <Tabs
           defaultValue="unlocked"
           className="w-full flex flex-col flex-1 min-h-0"
         >
-          <TabsList className="grid w-full grid-cols-2 h-10 flex-shrink-0">
-            <TabsTrigger value="unlocked" className="text-xs sm:text-sm">
+          <TabsList className="grid w-full grid-cols-2 h-10 flex-shrink-0 bg-white/5 backdrop-blur-sm border-white/20">
+            <TabsTrigger
+              value="unlocked"
+              className="text-xs sm:text-sm text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
+            >
               Coletados ({unlockedCharacters.length})
             </TabsTrigger>
-            <TabsTrigger value="locked" className="text-xs sm:text-sm">
+            <TabsTrigger
+              value="locked"
+              className="text-xs sm:text-sm text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
+            >
               Bloqueados ({lockedCharacters.length})
             </TabsTrigger>
           </TabsList>
@@ -370,7 +376,7 @@ export const CharactersModal = ({
                 size="md"
               />
             ) : unlockedCharacters.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground">
+              <div className="text-center py-12 text-white/80">
                 <Users className="h-16 w-16 mx-auto mb-4 opacity-50" />
                 <p className="text-lg font-medium mb-2">
                   Nenhum personagem coletado ainda
@@ -385,7 +391,7 @@ export const CharactersModal = ({
                   ([category, characters]) => (
                     <div key={category} className="space-y-4">
                       <div className="flex items-center gap-3">
-                        <h3 className="text-lg sm:text-xl font-bold capitalize">
+                        <h3 className="text-lg sm:text-xl font-bold capitalize text-white">
                           {category}
                         </h3>
                         <Badge
@@ -427,7 +433,7 @@ export const CharactersModal = ({
                 size="md"
               />
             ) : lockedCharacters.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground">
+              <div className="text-center py-12 text-white/80">
                 <Crown className="h-16 w-16 mx-auto mb-4 opacity-50" />
                 <p className="text-lg font-medium mb-2">
                   Todos os personagens foram coletados!
@@ -439,7 +445,7 @@ export const CharactersModal = ({
                 {Object.entries(groupedLocked).map(([category, characters]) => (
                   <div key={category} className="space-y-4">
                     <div className="flex items-center gap-3">
-                      <h3 className="text-lg sm:text-xl font-bold capitalize">
+                      <h3 className="text-lg sm:text-xl font-bold capitalize text-white">
                         {category}
                       </h3>
                       <Badge
@@ -470,7 +476,7 @@ export const CharactersModal = ({
             )}
           </TabsContent>
         </Tabs>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </ResponsiveDialog>
   );
 };

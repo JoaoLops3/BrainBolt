@@ -174,36 +174,36 @@ export const AdvancedStatsModal = ({
       maxHeight="screen"
     >
       <div className="space-y-4">
-        <div className="flex items-center gap-2 text-lg sm:text-xl">
+        <div className="flex items-center gap-2 text-lg sm:text-xl text-white">
           <BarChart3 className="h-5 w-5 sm:h-6 sm:w-6" />
           Estatísticas Avançadas
         </div>
 
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto p-1 gap-1">
+          <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto p-1 gap-1 bg-white/5 backdrop-blur-sm border-white/20">
             <TabsTrigger
               value="overview"
-              className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap"
+              className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
             >
               <span className="hidden sm:inline">Visão Geral</span>
               <span className="sm:hidden">Geral</span>
             </TabsTrigger>
             <TabsTrigger
               value="categories"
-              className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap"
+              className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
             >
               <span className="hidden sm:inline">Por Categoria</span>
               <span className="sm:hidden">Categoria</span>
             </TabsTrigger>
             <TabsTrigger
               value="history"
-              className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap"
+              className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
             >
               Histórico
             </TabsTrigger>
             <TabsTrigger
               value="rankings"
-              className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap"
+              className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
             >
               Rankings
             </TabsTrigger>
@@ -211,15 +211,15 @@ export const AdvancedStatsModal = ({
 
           <TabsContent value="overview" className="space-y-6">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-              <Card className="transition-transform duration-200 hover:scale-[1.02]">
+              <Card className="transition-transform duration-200 hover:scale-[1.02] backdrop-blur-sm bg-white/5 border-white/20">
                 <CardHeader className="pb-2 p-3 sm:p-4">
-                  <CardTitle className="text-xs sm:text-sm flex items-center gap-1">
+                  <CardTitle className="text-xs sm:text-sm flex items-center gap-1 text-white">
                     <Target className="h-3 w-3 sm:h-4 sm:w-4" />
                     Precisão
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pb-2 p-3 sm:p-4 pt-0">
-                  <div className="text-lg sm:text-2xl font-bold text-primary">
+                  <div className="text-lg sm:text-2xl font-bold text-white">
                     {overallStats?.accuracy || 0}%
                   </div>
                   <Progress
@@ -229,43 +229,43 @@ export const AdvancedStatsModal = ({
                 </CardContent>
               </Card>
 
-              <Card className="transition-transform duration-200 hover:scale-[1.02]">
+              <Card className="transition-transform duration-200 hover:scale-[1.02] backdrop-blur-sm bg-white/5 border-white/20">
                 <CardHeader className="pb-2 p-3 sm:p-4">
-                  <CardTitle className="text-xs sm:text-sm flex items-center gap-1">
+                  <CardTitle className="text-xs sm:text-sm flex items-center gap-1 text-white">
                     <Zap className="h-3 w-3 sm:h-4 sm:w-4" />
                     Melhor Streak
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pb-2 p-3 sm:p-4 pt-0">
-                  <div className="text-lg sm:text-2xl font-bold text-yellow-500">
+                  <div className="text-lg sm:text-2xl font-bold text-white">
                     {overallStats?.bestStreak || 0}
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="transition-transform duration-200 hover:scale-[1.02]">
+              <Card className="transition-transform duration-200 hover:scale-[1.02] backdrop-blur-sm bg-white/5 border-white/20">
                 <CardHeader className="pb-2 p-3 sm:p-4">
-                  <CardTitle className="text-xs sm:text-sm flex items-center gap-1">
+                  <CardTitle className="text-xs sm:text-sm flex items-center gap-1 text-white">
                     <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
                     Tempo Médio
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pb-2 p-3 sm:p-4 pt-0">
-                  <div className="text-lg sm:text-2xl font-bold text-blue-500">
+                  <div className="text-lg sm:text-2xl font-bold text-white">
                     {overallStats?.averageTime || 0}s
                   </div>
                 </CardContent>
               </Card>
 
-              <Card className="transition-transform duration-200 hover:scale-[1.02]">
+              <Card className="transition-transform duration-200 hover:scale-[1.02] backdrop-blur-sm bg-white/5 border-white/20">
                 <CardHeader className="pb-2 p-3 sm:p-4">
-                  <CardTitle className="text-xs sm:text-sm flex items-center gap-1">
+                  <CardTitle className="text-xs sm:text-sm flex items-center gap-1 text-white">
                     <Trophy className="h-3 w-3 sm:h-4 sm:w-4" />
                     Pontuação Média
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pb-2 p-3 sm:p-4 pt-0">
-                  <div className="text-lg sm:text-2xl font-bold text-green-500">
+                  <div className="text-lg sm:text-2xl font-bold text-white">
                     {overallStats?.averageScore || 0}
                   </div>
                 </CardContent>
@@ -273,9 +273,11 @@ export const AdvancedStatsModal = ({
             </div>
 
             {/* Performance por modo de jogo */}
-            <Card>
+            <Card className="backdrop-blur-sm bg-white/5 border-white/20">
               <CardHeader>
-                <CardTitle className="text-lg">Performance por Modo</CardTitle>
+                <CardTitle className="text-lg text-white">
+                  Performance por Modo
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -299,21 +301,27 @@ export const AdvancedStatsModal = ({
                         : 0;
 
                     return (
-                      <div key={mode} className="p-4 rounded-lg border">
+                      <div
+                        key={mode}
+                        className="p-4 rounded-lg border backdrop-blur-sm bg-white/5 border-white/20"
+                      >
                         <div className="flex items-center justify-between mb-2">
-                          <span className="font-medium capitalize">
+                          <span className="font-medium capitalize text-white">
                             {mode === "multiplayer"
                               ? "Multiplayer"
                               : mode === "speed"
                               ? "Velocidade"
                               : "Normal"}
                           </span>
-                          <Badge variant="secondary">
+                          <Badge
+                            variant="secondary"
+                            className="bg-white/20 text-white border-white/20"
+                          >
                             {modeSessions.length} jogos
                           </Badge>
                         </div>
                         <div className="space-y-2">
-                          <div className="flex justify-between text-sm">
+                          <div className="flex justify-between text-sm text-white/80">
                             <span>Precisão:</span>
                             <span>{modeAccuracy}%</span>
                           </div>
@@ -330,9 +338,12 @@ export const AdvancedStatsModal = ({
           <TabsContent value="categories" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {categoryStats.map((category) => (
-                <Card key={category.category}>
+                <Card
+                  key={category.category}
+                  className="backdrop-blur-sm bg-white/5 border-white/20"
+                >
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-lg flex items-center justify-between">
+                    <CardTitle className="text-lg flex items-center justify-between text-white">
                       <span>
                         {
                           categoryNames[
@@ -340,7 +351,10 @@ export const AdvancedStatsModal = ({
                           ]
                         }
                       </span>
-                      <Badge variant="outline">
+                      <Badge
+                        variant="outline"
+                        className="bg-white/20 text-white/80 border-white/20"
+                      >
                         {category.questions_answered} perguntas
                       </Badge>
                     </CardTitle>
@@ -348,7 +362,7 @@ export const AdvancedStatsModal = ({
                   <CardContent>
                     <div className="space-y-3">
                       <div>
-                        <div className="flex justify-between text-sm mb-1">
+                        <div className="flex justify-between text-sm mb-1 text-white/80">
                           <span>Precisão</span>
                           <span>
                             {Math.min(
@@ -364,19 +378,17 @@ export const AdvancedStatsModal = ({
                       </div>
 
                       <div className="grid grid-cols-2 gap-2 text-sm">
-                        <div className="text-center p-2 bg-muted rounded">
-                          <div className="font-bold text-green-600">
+                        <div className="text-center p-2 bg-white/5 rounded backdrop-blur-sm">
+                          <div className="font-bold text-green-300">
                             {category.correct_answers}
                           </div>
-                          <div className="text-xs text-muted-foreground">
-                            Acertos
-                          </div>
+                          <div className="text-xs text-white/80">Acertos</div>
                         </div>
-                        <div className="text-center p-2 bg-muted rounded">
-                          <div className="font-bold text-yellow-600">
+                        <div className="text-center p-2 bg-white/5 rounded backdrop-blur-sm">
+                          <div className="font-bold text-yellow-300">
                             {category.best_streak}
                           </div>
-                          <div className="text-xs text-muted-foreground">
+                          <div className="text-xs text-white/80">
                             Melhor Streak
                           </div>
                         </div>
@@ -391,7 +403,10 @@ export const AdvancedStatsModal = ({
           <TabsContent value="history" className="space-y-4">
             <div className="space-y-3">
               {sessions.map((session) => (
-                <Card key={session.id}>
+                <Card
+                  key={session.id}
+                  className="backdrop-blur-sm bg-white/5 border-white/20"
+                >
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -415,7 +430,7 @@ export const AdvancedStatsModal = ({
 
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="font-bold">
+                            <span className="font-bold text-white">
                               {session.final_score} pontos
                             </span>
                             <Badge
@@ -426,6 +441,7 @@ export const AdvancedStatsModal = ({
                                   ? "destructive"
                                   : "secondary"
                               }
+                              className="bg-white/20 text-white border-white/20"
                             >
                               {session.game_result === "win"
                                 ? "Vitória"
@@ -437,7 +453,7 @@ export const AdvancedStatsModal = ({
                             </Badge>
                           </div>
 
-                          <div className="text-sm text-muted-foreground">
+                          <div className="text-sm text-white/80">
                             {Math.min(
                               session.correct_answers,
                               session.questions_answered
@@ -456,7 +472,7 @@ export const AdvancedStatsModal = ({
                         </div>
                       </div>
 
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-white/80">
                         {new Date(session.completed_at).toLocaleDateString(
                           "pt-BR",
                           {
@@ -477,9 +493,9 @@ export const AdvancedStatsModal = ({
           <TabsContent value="rankings" className="space-y-6">
             {ranking && (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Card>
+                <Card className="backdrop-blur-sm bg-white/5 border-white/20">
                   <CardHeader className="text-center pb-2">
-                    <CardTitle className="text-lg flex items-center justify-center gap-2">
+                    <CardTitle className="text-lg flex items-center justify-center gap-2 text-white">
                       <Crown className="h-5 w-5 text-yellow-500" />
                       Ranking Geral
                     </CardTitle>
@@ -488,15 +504,15 @@ export const AdvancedStatsModal = ({
                     <div className="text-3xl font-bold text-yellow-500 mb-1">
                       #{ranking.global_rank}
                     </div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-sm text-white/80">
                       {ranking.total_score} pontos totais
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="backdrop-blur-sm bg-white/5 border-white/20">
                   <CardHeader className="text-center pb-2">
-                    <CardTitle className="text-lg flex items-center justify-center gap-2">
+                    <CardTitle className="text-lg flex items-center justify-center gap-2 text-white">
                       <Target className="h-5 w-5 text-green-500" />
                       Taxa de Vitória
                     </CardTitle>
@@ -505,16 +521,16 @@ export const AdvancedStatsModal = ({
                     <div className="text-3xl font-bold text-green-500 mb-1">
                       #{ranking.win_rate_rank}
                     </div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-sm text-white/80">
                       {Math.min(ranking.win_percentage, 100).toFixed(1)}%
                       vitórias
                     </div>
                   </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="backdrop-blur-sm bg-white/5 border-white/20">
                   <CardHeader className="text-center pb-2">
-                    <CardTitle className="text-lg flex items-center justify-center gap-2">
+                    <CardTitle className="text-lg flex items-center justify-center gap-2 text-white">
                       <Zap className="h-5 w-5 text-orange-500" />
                       Melhor Streak
                     </CardTitle>
@@ -523,7 +539,7 @@ export const AdvancedStatsModal = ({
                     <div className="text-3xl font-bold text-orange-500 mb-1">
                       #{ranking.streak_rank}
                     </div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-sm text-white/80">
                       {ranking.best_streak} sequência máxima
                     </div>
                   </CardContent>
@@ -531,15 +547,15 @@ export const AdvancedStatsModal = ({
               </div>
             )}
 
-            <Card>
+            <Card className="backdrop-blur-sm bg-white/5 border-white/20">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-white">
                   <TrendingUp className="h-5 w-5" />
                   Progresso Temporal
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-center text-muted-foreground py-8">
+                <div className="text-center text-white/80 py-8">
                   <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
                   <p>Gráfico de progresso em desenvolvimento</p>
                   <p className="text-sm">

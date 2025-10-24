@@ -39,7 +39,7 @@ export const GameTimer = ({
     <div className="w-full flex justify-end">
       <div
         className={cn(
-          "bg-white/10 backdrop-blur-lg border border-white/20 rounded-xl p-2 sm:p-3 transition-all inline-flex items-center gap-2",
+          "bg-white/5 backdrop-blur-lg border border-white/20 rounded-xl p-2 sm:p-3 transition-all inline-flex items-center gap-2",
           isLowTime && "animate-pulse",
           isCritical && "border-red-400/50 bg-red-500/10"
         )}

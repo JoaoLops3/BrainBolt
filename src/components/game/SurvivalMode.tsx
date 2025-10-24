@@ -293,7 +293,7 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
             </CardHeader>
             <CardContent className="space-y-4 sm:space-y-6 p-4 sm:p-6">
               {/* Regras */}
-              <div className="bg-white/10 p-4 sm:p-6 rounded-lg border-2 border-white/20">
+              <div className="bg-white/5 p-4 sm:p-6 rounded-lg border-2 border-white/20">
                 <h3 className="font-bold text-lg sm:text-xl mb-3 sm:mb-4 flex items-center gap-2 text-white">
                   <Target className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                   Como Jogar
@@ -334,7 +334,7 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
 
               {/* Estatísticas */}
               <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                <Card className="bg-white/10 border-white/20">
+                <Card className="bg-white/5 border-white/20">
                   <CardContent className="p-3 sm:p-4">
                     <div className="text-center">
                       <Trophy className="h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-1 sm:mb-2 text-white" />
@@ -348,7 +348,7 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-white/10 border-white/20">
+                <Card className="bg-white/5 border-white/20">
                   <CardContent className="p-3 sm:p-4">
                     <div className="text-center">
                       <Crown className="h-6 w-6 sm:h-8 sm:w-8 mx-auto mb-1 sm:mb-2 text-white" />
@@ -377,7 +377,7 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
                         className={`flex items-center justify-between p-2 sm:p-3 rounded-lg ${
                           index === 0
                             ? "bg-white/30 border-2 border-white/40"
-                            : "bg-white/10 border border-white/20"
+                            : "bg-white/5 border border-white/20"
                         }`}
                       >
                         <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
@@ -593,7 +593,7 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
                         ? "bg-red-500 hover:bg-red-500 text-white border-2 border-red-600"
                         : isSelected
                         ? "bg-white/30 border-2 border-white/50 text-white"
-                        : "bg-white/10 border-white/20 hover:bg-white/20 text-white active:bg-white/30"
+                        : "bg-white/5 border-white/20 hover:bg-white/20 text-white active:bg-white/30"
                     }`}
                     variant={showCorrect || showWrong ? "default" : "outline"}
                   >

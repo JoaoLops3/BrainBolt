@@ -1,10 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -261,37 +256,40 @@ export const UserSearchModal = ({
   }, [open]);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[80vh] allow-scroll">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Search className="h-5 w-5" />
-            Buscar Usuários
-          </DialogTitle>
-        </DialogHeader>
+    <ResponsiveDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      maxWidth="2xl"
+      maxHeight="screen"
+    >
+      <div className="space-y-4">
+        <div className="flex items-center gap-2 text-lg font-semibold text-white">
+          <Search className="h-5 w-5" />
+          Buscar Usuários
+        </div>
 
         <div className="space-y-4">
           {/* Search input */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60" />
             <Input
               placeholder="Busque por nome, username ou email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9"
+              className="pl-9 bg-white/5 border-white/20 backdrop-blur-sm placeholder:text-white/60 text-white focus:bg-white/20 focus:border-white/40"
             />
           </div>
 
           {/* Search results */}
           {loading && (
-            <div className="text-center py-8 text-muted-foreground">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
+            <div className="text-center py-8 text-white/80">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white mx-auto mb-2"></div>
               Buscando usuários...
             </div>
           )}
 
           {!loading && searchQuery.trim() && searchResults.length === 0 && (
-            <div className="text-center py-8 text-muted-foreground">
+            <div className="text-center py-8 text-white/80">
               <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>Nenhum usuário encontrado</p>
               <p className="text-sm">
@@ -302,12 +300,15 @@ export const UserSearchModal = ({
 
           {!loading && searchResults.length > 0 && (
             <div className="space-y-3">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-white/80">
                 {searchResults.length} usuário(s) encontrado(s)
               </p>
 
               {searchResults.map((result) => (
-                <Card key={result.user_id} className="p-4">
+                <Card
+                  key={result.user_id}
+                  className="p-4 backdrop-blur-sm bg-white/5 border-white/20"
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <Avatar className="h-12 w-12">
@@ -319,11 +320,14 @@ export const UserSearchModal = ({
 
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <h4 className="font-semibold">
+                          <h4 className="font-semibold text-white">
                             {result.display_name || "Jogador Anônimo"}
                           </h4>
                           {result.username && (
-                            <Badge variant="outline" className="text-xs">
+                            <Badge
+                              variant="outline"
+                              className="text-xs bg-white/5 text-white/80 border-white/20"
+                            >
                               <AtSign className="h-3 w-3 mr-1" />
                               {result.username}
                             </Badge>
@@ -341,13 +345,13 @@ export const UserSearchModal = ({
                         </div>
 
                         {result.email && (
-                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <div className="flex items-center gap-1 text-xs text-white/80">
                             <Mail className="h-3 w-3" />
                             {result.email}
                           </div>
                         )}
 
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-4 text-sm text-white/80">
                           <span className="flex items-center gap-1">
                             <Trophy className="h-3 w-3" />
                             {result.total_score} pts
@@ -361,33 +365,46 @@ export const UserSearchModal = ({
                     </div>
 
                     {friendshipStatus[result.user_id] === "accepted" ? (
-                      <Button size="sm" className="gap-2" disabled>
+                      <Button
+                        size="sm"
+                        className="gap-2 bg-white/20 text-white"
+                        disabled
+                      >
                         Amigo
                       </Button>
                     ) : friendshipStatus[result.user_id] === "pending" &&
                       pendingDirection[result.user_id] === "sent" ? (
                       <div className="flex items-center gap-2">
-                        <Button size="sm" className="gap-2" disabled>
+                        <Button
+                          size="sm"
+                          className="gap-2 bg-white/20 text-white"
+                          disabled
+                        >
                           Já enviado
                         </Button>
                         <Button
                           size="sm"
                           variant="outline"
                           onClick={() => cancelFriendRequest(result.user_id)}
+                          className="border-white/20 bg-white/5 text-white hover:bg-white/20 hover:text-white"
                         >
                           Cancelar
                         </Button>
                       </div>
                     ) : friendshipStatus[result.user_id] === "pending" &&
                       pendingDirection[result.user_id] === "received" ? (
-                      <Button size="sm" className="gap-2" disabled>
+                      <Button
+                        size="sm"
+                        className="gap-2 bg-white/20 text-white"
+                        disabled
+                      >
                         Pendente
                       </Button>
                     ) : (
                       <Button
                         onClick={() => sendFriendRequest(result.user_id)}
                         size="sm"
-                        className="gap-2"
+                        className="gap-2 bg-white/20 text-white hover:bg-white/30"
                       >
                         <UserPlus className="h-4 w-4" />
                         Adicionar
@@ -399,7 +416,7 @@ export const UserSearchModal = ({
             </div>
           )}
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </ResponsiveDialog>
   );
 };

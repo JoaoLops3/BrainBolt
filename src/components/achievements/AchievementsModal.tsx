@@ -174,7 +174,7 @@ export const AchievementsModal = ({
     return (
       <Card
         key={achievement.id}
-        className={`transition-all hover:scale-105 ${
+        className={`transition-all hover:scale-105 backdrop-blur-sm bg-white/5 border-white/20 ${
           isLocked ? "opacity-60" : ""
         }`}
       >
@@ -183,7 +183,7 @@ export const AchievementsModal = ({
             <div className="flex items-center gap-3">
               <div
                 className={`p-2 rounded-full ${
-                  isLocked ? "bg-muted" : "bg-primary/10"
+                  isLocked ? "bg-white/5" : "bg-white/20"
                 }`}
               >
                 {isLocked ? (
@@ -195,11 +195,11 @@ export const AchievementsModal = ({
                 )}
               </div>
               <div className="min-w-0 flex-1">
-                <CardTitle className="text-sm sm:text-base font-semibold">
+                <CardTitle className="text-sm sm:text-base font-semibold text-white">
                   {achievement.name}
                 </CardTitle>
                 {userAchievement?.unlocked_at && (
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-white/70">
                     Desbloqueado em{" "}
                     {new Date(userAchievement.unlocked_at).toLocaleDateString()}
                   </p>
@@ -216,13 +216,13 @@ export const AchievementsModal = ({
           </div>
         </CardHeader>
         <CardContent className="p-4 sm:p-6 pt-0">
-          <p className="text-sm text-muted-foreground mb-3">
+          <p className="text-sm text-white/80 mb-3">
             {achievement.description}
           </p>
 
           {userAchievement && !userAchievement.is_completed && (
             <div className="space-y-2">
-              <div className="flex justify-between text-xs">
+              <div className="flex justify-between text-xs text-white/80">
                 <span>Progresso</span>
                 <span>
                   {progress}/{achievement.requirement_value}
@@ -233,7 +233,7 @@ export const AchievementsModal = ({
           )}
 
           {userAchievement?.is_completed && (
-            <div className="flex items-center gap-1 text-green-600">
+            <div className="flex items-center gap-1 text-green-300">
               <Trophy className="h-4 w-4" />
               <span className="text-sm font-medium">Concluída!</span>
             </div>
@@ -251,11 +251,11 @@ export const AchievementsModal = ({
       maxHeight="screen"
     >
       <div className="space-y-4">
-        <div className="flex items-center gap-2 text-lg sm:text-xl">
+        <div className="flex items-center gap-2 text-lg sm:text-xl text-white">
           <Trophy className="h-5 w-5 sm:h-6 sm:w-6" />
           Conquistas
         </div>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 text-sm text-muted-foreground">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 text-sm text-white/80">
           <span className="whitespace-nowrap">
             {unlockedAchievements.length}/{allAchievements.length} desbloqueadas
           </span>
@@ -266,10 +266,10 @@ export const AchievementsModal = ({
         </div>
 
         <Tabs defaultValue="unlocked" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 h-auto p-1 gap-1">
+          <TabsList className="grid w-full grid-cols-3 h-auto p-1 gap-1 bg-white/5 backdrop-blur-sm border-white/20">
             <TabsTrigger
               value="unlocked"
-              className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap"
+              className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
             >
               <span className="hidden sm:inline">Desbloqueadas</span>
               <span className="sm:hidden">Desbl.</span>
@@ -277,7 +277,7 @@ export const AchievementsModal = ({
             </TabsTrigger>
             <TabsTrigger
               value="progress"
-              className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap"
+              className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
             >
               <span className="hidden sm:inline">Em Progresso</span>
               <span className="sm:hidden">Progresso</span>
@@ -285,7 +285,7 @@ export const AchievementsModal = ({
             </TabsTrigger>
             <TabsTrigger
               value="locked"
-              className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap"
+              className="text-xs sm:text-sm px-2 sm:px-3 py-2 sm:py-1.5 whitespace-nowrap text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
             >
               <span className="hidden sm:inline">Bloqueadas</span>
               <span className="sm:hidden">Bloq.</span>
@@ -295,7 +295,7 @@ export const AchievementsModal = ({
 
           <TabsContent value="unlocked" className="mt-4">
             {unlockedAchievements.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="text-center py-8 text-white/80">
                 <Trophy className="h-12 w-12 mx-auto mb-4 opacity-50" />
                 <p className="text-sm sm:text-base">
                   Nenhuma conquista desbloqueada ainda
@@ -315,7 +315,7 @@ export const AchievementsModal = ({
 
           <TabsContent value="progress" className="mt-4">
             {inProgressAchievements.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="text-center py-8 text-white/80">
                 <Target className="h-12 w-12 mx-auto mb-4 opacity-50" />
                 <p className="text-sm sm:text-base">
                   Nenhuma conquista em progresso
@@ -335,7 +335,7 @@ export const AchievementsModal = ({
 
           <TabsContent value="locked" className="mt-4">
             {lockedAchievements.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="text-center py-8 text-white/80">
                 <Crown className="h-12 w-12 mx-auto mb-4 opacity-50" />
                 <p className="text-sm sm:text-base">
                   Todas as conquistas foram desbloqueadas!

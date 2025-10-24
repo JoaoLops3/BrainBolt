@@ -37,7 +37,7 @@ export const StatCard = ({
     <Card
       className={cn(
         "group relative overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-primary/10",
-        "bg-white/10 backdrop-blur-sm border-white/20",
+        "bg-white/5 backdrop-blur-sm border-white/20",
         "hover:bg-white/20 hover:border-white/30",
         animationClasses[animation],
         className
@@ -47,7 +47,7 @@ export const StatCard = ({
       <CardContent className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="p-2 rounded-lg bg-white/10 group-hover:bg-white/20 transition-colors duration-200">
+            <div className="p-2 rounded-lg bg-white/5 group-hover:bg-white/20 transition-colors duration-200">
               {icon}
             </div>
             <div className="min-w-0 flex-1">

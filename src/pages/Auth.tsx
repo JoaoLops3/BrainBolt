@@ -197,7 +197,7 @@ const Auth = () => {
 
           <CardContent>
             <Tabs defaultValue="login" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 mb-6 bg-white/10">
+              <TabsList className="grid w-full grid-cols-2 mb-6 bg-white/5">
                 <TabsTrigger
                   value="login"
                   className="data-[state=active]:bg-white/20 data-[state=active]:text-white"

@@ -370,7 +370,7 @@ export const ImprovedMultiplayerMenu = ({
                     size="sm"
                     variant="outline"
                     className={cn(
-                      "gap-2 px-3 sm:px-4 text-white border-white/70 bg-white/10 hover:bg-white/30 hover:border-white/90 shadow-lg text-sm",
+                      "gap-2 px-3 sm:px-4 text-white border-white/70 bg-white/5 hover:bg-white/30 hover:border-white/90 shadow-lg text-sm",
                       copied && "bg-emerald-600/20 border-emerald-400/70"
                     )}
                   >
@@ -386,7 +386,7 @@ export const ImprovedMultiplayerMenu = ({
                     onClick={regenerateRoomCode}
                     size="sm"
                     variant="outline"
-                    className="gap-2 px-3 sm:px-4 text-white border-white/70 bg-white/10 hover:bg-white/30 hover:border-white/90 shadow-lg text-sm"
+                    className="gap-2 px-3 sm:px-4 text-white border-white/70 bg-white/5 hover:bg-white/30 hover:border-white/90 shadow-lg text-sm"
                   >
                     <RefreshCw className="h-4 w-4" />
                   </Button>
@@ -506,7 +506,7 @@ export const ImprovedMultiplayerMenu = ({
                 onClick={createRoom}
                 disabled={loading}
                 size="lg"
-                className="w-full h-12 bg-transparent hover:bg-white/10 text-base font-bold transform hover:scale-105 transition-all duration-300 shadow-xl border-2 border-white/30"
+                className="w-full h-12 bg-transparent hover:bg-white/5 text-base font-bold transform hover:scale-105 transition-all duration-300 shadow-xl border-2 border-white/30"
               >
                 <div className="flex items-center gap-3">
                   <Plus className="h-6 w-6" />

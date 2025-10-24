@@ -32,7 +32,7 @@ export const GameMenu = ({ categories, onStartGame }: GameMenuProps) => {
         </div>
 
         {/* Categories Collection */}
-        <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-6 animate-slide-up">
+        <div className="bg-white/5 backdrop-blur-sm rounded-3xl p-6 animate-slide-up">
           <h2 className="text-2xl font-semibold text-white mb-6">
             Coleção de Personagens
           </h2>

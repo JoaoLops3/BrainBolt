@@ -340,7 +340,7 @@ export const PhysicalMode = ({
                     <Button
                       onClick={disconnectDevice}
                       variant="outline"
-                      className="text-white border-white/50 bg-white/10 hover:bg-white/20"
+                      className="text-white border-white/50 bg-white/5 hover:bg-white/20"
                     >
                       <WifiOff className="h-4 w-4 mr-2" />
                       Desconectar
@@ -349,7 +349,7 @@ export const PhysicalMode = ({
                       onClick={testButtons}
                       variant="outline"
                       className={cn(
-                        "text-white border-white/50 bg-white/10 hover:bg-white/20",
+                        "text-white border-white/50 bg-white/5 hover:bg-white/20",
                         testMode && "bg-yellow-500/20 border-yellow-400/50"
                       )}
                     >
@@ -359,7 +359,7 @@ export const PhysicalMode = ({
                     <Button
                       onClick={testAllLEDs}
                       variant="outline"
-                      className="text-white border-white/50 bg-white/10 hover:bg-white/20"
+                      className="text-white border-white/50 bg-white/5 hover:bg-white/20"
                     >
                       <Zap className="h-4 w-4 mr-2" />
                       Testar LEDs
@@ -367,7 +367,7 @@ export const PhysicalMode = ({
                     <Button
                       onClick={testQuestion}
                       variant="outline"
-                      className="text-white border-white/50 bg-white/10 hover:bg-white/20"
+                      className="text-white border-white/50 bg-white/5 hover:bg-white/20"
                     >
                       <Play className="h-4 w-4 mr-2" />
                       Testar Pergunta
@@ -397,7 +397,7 @@ export const PhysicalMode = ({
 
             {/* LEDs */}
             {isConnected && (
-              <div className="bg-white/10 rounded-xl p-4 space-y-3">
+              <div className="bg-white/5 rounded-xl p-4 space-y-3">
                 <h4 className="font-semibold text-white text-center">LEDs</h4>
                 <div className="grid grid-cols-5 gap-2">
                   {Object.entries(ledStates).map(([led, isOn]) => (
@@ -429,7 +429,7 @@ export const PhysicalMode = ({
                     onClick={() => controlLED("A", "on")}
                     size="sm"
                     variant="outline"
-                    className="text-white border-white/50 bg-white/10 hover:bg-white/20"
+                    className="text-white border-white/50 bg-white/5 hover:bg-white/20"
                   >
                     LED A
                   </Button>
@@ -437,7 +437,7 @@ export const PhysicalMode = ({
                     onClick={() => controlLED("B", "on")}
                     size="sm"
                     variant="outline"
-                    className="text-white border-white/50 bg-white/10 hover:bg-white/20"
+                    className="text-white border-white/50 bg-white/5 hover:bg-white/20"
                   >
                     LED B
                   </Button>
@@ -445,7 +445,7 @@ export const PhysicalMode = ({
                     onClick={() => controlLED("C", "on")}
                     size="sm"
                     variant="outline"
-                    className="text-white border-white/50 bg-white/10 hover:bg-white/20"
+                    className="text-white border-white/50 bg-white/5 hover:bg-white/20"
                   >
                     LED C
                   </Button>
@@ -453,7 +453,7 @@ export const PhysicalMode = ({
                     onClick={() => controlLED("D", "on")}
                     size="sm"
                     variant="outline"
-                    className="text-white border-white/50 bg-white/10 hover:bg-white/20"
+                    className="text-white border-white/50 bg-white/5 hover:bg-white/20"
                   >
                     LED D
                   </Button>
@@ -461,7 +461,7 @@ export const PhysicalMode = ({
                     onClick={() => controlLED("FAST", "on")}
                     size="sm"
                     variant="outline"
-                    className="text-white border-white/50 bg-white/10 hover:bg-white/20"
+                    className="text-white border-white/50 bg-white/5 hover:bg-white/20"
                   >
                     LED FAST
                   </Button>
@@ -471,7 +471,7 @@ export const PhysicalMode = ({
 
             {/* Botões de Resposta */}
             {isConnected && (
-              <div className="bg-white/10 rounded-xl p-4 space-y-3">
+              <div className="bg-white/5 rounded-xl p-4 space-y-3">
                 <h4 className="font-semibold text-white text-center">
                   Botões de Resposta
                 </h4>

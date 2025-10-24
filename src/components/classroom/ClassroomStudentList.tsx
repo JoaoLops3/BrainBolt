@@ -53,15 +53,15 @@ export const ClassroomStudentList = ({
 
   if (loading) {
     return (
-      <Card>
+      <Card className="backdrop-blur-sm bg-white/5 border-white/20">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-white">
             <Users className="h-5 w-5" />
             Lista de Alunos
           </CardTitle>
         </CardHeader>
         <CardContent className="flex items-center justify-center py-8">
-          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+          <Loader2 className="h-8 w-8 animate-spin text-white" />
         </CardContent>
       </Card>
     );
@@ -69,15 +69,15 @@ export const ClassroomStudentList = ({
 
   if (students.length === 0) {
     return (
-      <Card>
+      <Card className="backdrop-blur-sm bg-white/5 border-white/20">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-white">
             <Users className="h-5 w-5" />
             Lista de Alunos
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center py-8 text-muted-foreground">
+          <div className="text-center py-8 text-white/80">
             <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
             <p>Nenhum aluno na sala ainda.</p>
             <p className="text-sm">
@@ -91,9 +91,9 @@ export const ClassroomStudentList = ({
 
   return (
     <>
-      <Card>
+      <Card className="backdrop-blur-sm bg-white/5 border-white/20">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-white">
             <Users className="h-5 w-5" />
             Lista de Alunos ({students.length})
           </CardTitle>
@@ -101,26 +101,29 @@ export const ClassroomStudentList = ({
         <CardContent>
           <div className="space-y-2">
             {students.map((student: any) => (
-              <Card key={student.id} className="border">
+              <Card
+                key={student.id}
+                className="border backdrop-blur-sm bg-white/5 border-white/20"
+              >
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3 flex-1 min-w-0">
                       <Avatar className="h-10 w-10 flex-shrink-0">
-                        <AvatarFallback>
+                        <AvatarFallback className="bg-white/20 text-white">
                           {student.profiles?.display_name?.[0]?.toUpperCase() ||
                             "?"}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 min-w-0">
-                        <p className="font-semibold truncate">
+                        <p className="font-semibold truncate text-white">
                           {student.profiles?.display_name || "Sem nome"}
                         </p>
                         {student.nickname && (
-                          <p className="text-sm text-muted-foreground truncate">
+                          <p className="text-sm text-white/80 truncate">
                             @{student.nickname}
                           </p>
                         )}
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-white/80">
                           Entrou em{" "}
                           {format(new Date(student.joined_at), "dd/MM/yyyy", {
                             locale: ptBR,
@@ -132,7 +135,7 @@ export const ClassroomStudentList = ({
                       variant="outline"
                       size="sm"
                       onClick={() => setStudentToRemove(student.student_id)}
-                      className="text-destructive hover:bg-destructive hover:text-white flex-shrink-0"
+                      className="text-red-300 hover:bg-red-500/20 hover:text-red-200 border-red-500/50 bg-red-500/10 flex-shrink-0"
                     >
                       <UserMinus className="h-4 w-4 mr-2" />
                       Remover
@@ -149,20 +152,24 @@ export const ClassroomStudentList = ({
         open={studentToRemove !== null}
         onOpenChange={(open) => !open && setStudentToRemove(null)}
       >
-        <AlertDialogContent>
+        <AlertDialogContent className="backdrop-blur-sm bg-white/5 border-white/20">
           <AlertDialogHeader>
-            <AlertDialogTitle>Remover Aluno</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogTitle className="text-white">
+              Remover Aluno
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-white/80">
               Tem certeza que deseja remover este aluno da sala? Esta ação não
               pode ser desfeita e o aluno precisará entrar novamente com o
               código da sala.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogCancel className="border-white/20 bg-white/5 text-white hover:bg-white/20">
+              Cancelar
+            </AlertDialogCancel>
             <AlertDialogAction
               onClick={handleRemoveStudent}
-              className="bg-destructive hover:bg-destructive/90"
+              className="bg-red-500/20 text-red-300 hover:bg-red-500/30 border-red-500/50"
             >
               Sim, remover
             </AlertDialogAction>
@@ -172,4 +179,3 @@ export const ClassroomStudentList = ({
     </>
   );
 };
-
