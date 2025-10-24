@@ -80,15 +80,14 @@ export const MultiplayerDebugger = () => {
         .substr(2, 4)
         .toUpperCase()}`;
 
-      const { data, error } = await supabase
-        .from("multiplayer_rooms")
-        .insert({
-          room_code: testCode,
-          host_id: user.id,
-          last_activity: new Date().toISOString(),
-        })
-        .select()
-        .single();
+        const { data, error } = await supabase
+          .from("multiplayer_rooms")
+          .insert({
+            room_code: testCode,
+            host_id: user.id,
+          })
+          .select()
+          .single();
 
       if (error) {
         toast({
