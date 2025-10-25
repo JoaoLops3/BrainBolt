@@ -56,6 +56,8 @@ export const QuestionCard = ({
     science: "bg-gradient-to-r from-green-500 to-green-600",
     geography: "bg-gradient-to-r from-orange-500 to-orange-600",
     history: "bg-gradient-to-r from-amber-500 to-amber-600",
+    mathematics: "bg-gradient-to-r from-cyan-500 to-cyan-600",
+    portuguese: "bg-gradient-to-r from-indigo-500 to-indigo-600",
   };
 
   const categoryNames: Record<string, string> = {
@@ -65,6 +67,8 @@ export const QuestionCard = ({
     science: "Ciências",
     geography: "Geografia",
     history: "História",
+    mathematics: "Matemática",
+    portuguese: "Português",
   };
 
   return (

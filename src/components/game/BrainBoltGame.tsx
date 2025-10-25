@@ -31,6 +31,7 @@ import { useNativeNotifications } from "@/hooks/useNativeNotifications";
 import { useDailyNotifications } from "@/hooks/useDailyNotifications";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { useGameQuestions } from "@/hooks/useGameQuestions";
 import { useToast } from "@/hooks/use-toast";
 
 const initialCategories: CategoryInfo[] = [
@@ -70,11 +71,26 @@ const initialCategories: CategoryInfo[] = [
     icon: "history-icon",
     collected: false,
   },
+  {
+    id: "mathematics",
+    name: "Matemática",
+    color: "mathematics",
+    icon: "mathematics-icon",
+    collected: false,
+  },
+  {
+    id: "portuguese",
+    name: "Português",
+    color: "portuguese",
+    icon: "portuguese-icon",
+    collected: false,
+  },
 ];
 
 export const BrainBoltGame = () => {
   const { toast } = useToast();
   const { user } = useAuth();
+  const { selectQuestions } = useGameQuestions();
   const [gameState, setGameState] = useState<GameState>({
     currentQuestionIndex: 0,
     score: 0,
@@ -151,32 +167,14 @@ export const BrainBoltGame = () => {
     return shuffled;
   };
 
-  const selectQuestions = useCallback(() => {
-    // Select 4 questions per category (24 total)
-    const selectedQuestions: Question[] = [];
-    const categoriesOrder: CategoryType[] = [
-      "sports",
-      "entertainment",
-      "art",
-      "science",
-      "geography",
-      "history",
-    ];
-
-    categoriesOrder.forEach((category) => {
-      const categoryQuestions = questions.filter(
-        (q) => q.category === category
-      );
-      const shuffledCategoryQuestions = shuffleArray(categoryQuestions);
-      selectedQuestions.push(...shuffledCategoryQuestions.slice(0, 4));
-    });
-
-    return shuffleArray(selectedQuestions);
-  }, []);
+  const selectQuestionsCallback = useCallback(() => {
+    // Usar o sistema melhorado de seleção de perguntas
+    return selectQuestions(4);
+  }, [selectQuestions]);
 
   const startGame = useCallback(
     (mode: GameMode) => {
-      const selectedQuestions = selectQuestions();
+      const selectedQuestions = selectQuestionsCallback();
       setGameQuestions(selectedQuestions);
       const timePerQuestion = mode === "speed" ? 15 : 0;
 
@@ -196,7 +194,7 @@ export const BrainBoltGame = () => {
 
       setGameStartTime(Date.now());
     },
-    [selectQuestions, toast]
+    [selectQuestionsCallback, toast]
   );
 
   const handleAnswerSelect = useCallback(

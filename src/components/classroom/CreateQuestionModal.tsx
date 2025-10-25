@@ -33,6 +33,8 @@ const categories: { value: CategoryType; label: string; emoji: string }[] = [
   { value: "science", label: "Ciências", emoji: "🔬" },
   { value: "geography", label: "Geografia", emoji: "🌍" },
   { value: "history", label: "História", emoji: "🏛️" },
+  { value: "mathematics", label: "Matemática", emoji: "🔢" },
+  { value: "portuguese", label: "Português", emoji: "📚" },
 ];
 
 const difficulties = [

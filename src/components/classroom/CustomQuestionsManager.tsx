@@ -73,6 +73,16 @@ const categoryLabels = {
     emoji: "🏛️",
     color: "bg-amber-100 text-amber-700",
   },
+  mathematics: {
+    label: "Matemática",
+    emoji: "🔢",
+    color: "bg-cyan-100 text-cyan-700",
+  },
+  portuguese: {
+    label: "Português",
+    emoji: "📚",
+    color: "bg-indigo-100 text-indigo-700",
+  },
 };
 
 const difficultyLabels = {

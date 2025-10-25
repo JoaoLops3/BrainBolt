@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Question, MultiplayerRoom } from "@/types/game";
-import { questions } from "@/data/questions";
+import { useGameQuestions } from "@/hooks/useGameQuestions";
 import { QuestionCard } from "./QuestionCard";
 import { GameTimer } from "./GameTimer";
 import { MultiplayerResults } from "./MultiplayerResults";
@@ -24,6 +24,7 @@ export const MultiplayerGame = ({
 }: MultiplayerGameProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { selectQuestions } = useGameQuestions();
   const [room, setRoom] = useState<MultiplayerRoom | null>(null);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
@@ -34,12 +35,10 @@ export const MultiplayerGame = ({
   // Initialize game questions if host
   useEffect(() => {
     if (isHost && gameQuestions.length === 0) {
-      const shuffledQuestions = [...questions]
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 24);
+      const shuffledQuestions = selectQuestions(24);
       setGameQuestions(shuffledQuestions);
     }
-  }, [isHost, gameQuestions.length]);
+  }, [isHost, gameQuestions.length, selectQuestions]);
 
   // Fetch room data
   const fetchRoom = async () => {

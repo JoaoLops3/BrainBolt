@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Question, CategoryType } from "@/types/game";
 import { questions as defaultQuestions } from "@/data/questions";
 import { supabase } from "@/integrations/supabase/client";
+import { useQuestionTracker } from "./useQuestionTracker";
 
 interface UseGameQuestionsOptions {
   classroomId?: string | null;
@@ -15,6 +16,12 @@ export const useGameQuestions = ({
   const [allQuestions, setAllQuestions] =
     useState<Question[]>(defaultQuestions);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Usar o sistema de controle de repetições
+  const questionTracker = useQuestionTracker({
+    maxRecentQuestions: 50,
+    avoidRecentCount: 20,
+  });
 
   const loadCustomQuestions = useCallback(async () => {
     if (!classroomId || !includeCustomQuestions) {
@@ -72,6 +79,8 @@ export const useGameQuestions = ({
         "science",
         "geography",
         "history",
+        "mathematics",
+        "portuguese",
       ];
 
       categoriesOrder.forEach((category) => {
@@ -79,17 +88,31 @@ export const useGameQuestions = ({
           (q) => q.category === category
         );
 
+        // Usar o sistema de controle de repetições
+        const availableQuestions =
+          questionTracker.getAvailableQuestions(categoryQuestions);
+
+        // Se não há perguntas suficientes disponíveis, usar todas da categoria
+        const questionsToUse =
+          availableQuestions.length >= questionsPerCategory
+            ? availableQuestions
+            : categoryQuestions;
+
         // Shuffle category questions
-        const shuffled = [...categoryQuestions].sort(() => Math.random() - 0.5);
+        const shuffled = [...questionsToUse].sort(() => Math.random() - 0.5);
 
         // Take requested number of questions
-        selectedQuestions.push(...shuffled.slice(0, questionsPerCategory));
+        const selected = shuffled.slice(0, questionsPerCategory);
+        selectedQuestions.push(...selected);
+
+        // Marcar perguntas como usadas
+        selected.forEach((q) => questionTracker.addQuestion(q.id));
       });
 
       // Final shuffle of all selected questions
       return selectedQuestions.sort(() => Math.random() - 0.5);
     },
-    [allQuestions]
+    [allQuestions, questionTracker]
   );
 
   return {
@@ -97,5 +120,6 @@ export const useGameQuestions = ({
     selectQuestions,
     isLoading,
     reload: loadCustomQuestions,
+    questionTracker,
   };
 };

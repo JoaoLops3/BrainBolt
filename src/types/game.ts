@@ -4,7 +4,9 @@ export type CategoryType =
   | "art"
   | "science"
   | "geography"
-  | "history";
+  | "history"
+  | "mathematics"
+  | "portuguese";
 export type GameMode = "normal" | "speed" | "multiplayer" | "survival";
 
 export interface Question {

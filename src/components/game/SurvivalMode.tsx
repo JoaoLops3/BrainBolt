@@ -14,7 +14,7 @@ import {
   Crown,
 } from "lucide-react";
 import { Question } from "@/types/game";
-import { questions as allQuestions } from "@/data/questions";
+import { useGameQuestions } from "@/hooks/useGameQuestions";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -26,6 +26,7 @@ interface SurvivalModeProps {
 export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { allQuestions, questionTracker } = useGameQuestions();
 
   const [gameState, setGameState] = useState<"ready" | "playing" | "gameOver">(
     "ready"
@@ -118,6 +119,7 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
         resetQuestions[Math.floor(Math.random() * resetQuestions.length)];
       setCurrentQuestion(random);
       setUsedQuestions(new Set([random.id]));
+      questionTracker.addQuestion(random.id);
       return;
     }
 
@@ -125,6 +127,7 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
       availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
     setCurrentQuestion(randomQuestion);
     setUsedQuestions((prev) => new Set([...prev, randomQuestion.id]));
+    questionTracker.addQuestion(randomQuestion.id);
   };
 
   const startGame = () => {

@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS custom_questions (
   option_d TEXT NOT NULL,
   
   -- Metadados
-  category TEXT NOT NULL CHECK (category IN ('sports', 'entertainment', 'art', 'science', 'geography', 'history')),
+  category TEXT NOT NULL CHECK (category IN ('sports', 'entertainment', 'art', 'science', 'geography', 'history', 'mathematics', 'portuguese')),
   difficulty TEXT DEFAULT 'medium' CHECK (difficulty IN ('easy', 'medium', 'hard')),
   explanation TEXT, -- Explicação da resposta correta
   
@@ -34,11 +34,11 @@ CREATE TABLE IF NOT EXISTS custom_questions (
 );
 
 -- Índices para performance
-CREATE INDEX idx_custom_questions_created_by ON custom_questions(created_by);
-CREATE INDEX idx_custom_questions_classroom ON custom_questions(classroom_id);
-CREATE INDEX idx_custom_questions_category ON custom_questions(category);
-CREATE INDEX idx_custom_questions_public ON custom_questions(is_public) WHERE is_public = true;
-CREATE INDEX idx_custom_questions_active ON custom_questions(is_active) WHERE is_active = true;
+CREATE INDEX IF NOT EXISTS idx_custom_questions_created_by ON custom_questions(created_by);
+CREATE INDEX IF NOT EXISTS idx_custom_questions_classroom ON custom_questions(classroom_id);
+CREATE INDEX IF NOT EXISTS idx_custom_questions_category ON custom_questions(category);
+CREATE INDEX IF NOT EXISTS idx_custom_questions_public ON custom_questions(is_public) WHERE is_public = true;
+CREATE INDEX IF NOT EXISTS idx_custom_questions_active ON custom_questions(is_active) WHERE is_active = true;
 
 -- Tabela de uso de perguntas customizadas
 CREATE TABLE IF NOT EXISTS custom_question_usage (
@@ -56,8 +56,8 @@ CREATE TABLE IF NOT EXISTS custom_question_usage (
 );
 
 -- Índices
-CREATE INDEX idx_custom_question_usage_question ON custom_question_usage(question_id);
-CREATE INDEX idx_custom_question_usage_user ON custom_question_usage(user_id);
+CREATE INDEX IF NOT EXISTS idx_custom_question_usage_question ON custom_question_usage(question_id);
+CREATE INDEX IF NOT EXISTS idx_custom_question_usage_user ON custom_question_usage(user_id);
 
 -- Atualizar estatísticas das perguntas automaticamente
 CREATE OR REPLACE FUNCTION update_custom_question_stats()
@@ -78,6 +78,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trigger_update_custom_question_stats ON custom_question_usage;
 CREATE TRIGGER trigger_update_custom_question_stats
   AFTER INSERT ON custom_question_usage
   FOR EACH ROW
@@ -91,28 +92,34 @@ ALTER TABLE custom_questions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE custom_question_usage ENABLE ROW LEVEL SECURITY;
 
 -- Políticas para custom_questions
+DROP POLICY IF EXISTS "Usuários podem ver suas próprias perguntas" ON custom_questions;
 CREATE POLICY "Usuários podem ver suas próprias perguntas"
   ON custom_questions FOR SELECT
   USING (created_by = auth.uid() OR is_public = true);
 
+DROP POLICY IF EXISTS "Professores podem criar perguntas" ON custom_questions;
 CREATE POLICY "Professores podem criar perguntas"
   ON custom_questions FOR INSERT
   WITH CHECK (created_by = auth.uid());
 
+DROP POLICY IF EXISTS "Professores podem atualizar suas perguntas" ON custom_questions;
 CREATE POLICY "Professores podem atualizar suas perguntas"
   ON custom_questions FOR UPDATE
   USING (created_by = auth.uid())
   WITH CHECK (created_by = auth.uid());
 
+DROP POLICY IF EXISTS "Professores podem deletar suas perguntas" ON custom_questions;
 CREATE POLICY "Professores podem deletar suas perguntas"
   ON custom_questions FOR DELETE
   USING (created_by = auth.uid());
 
 -- Políticas para custom_question_usage
+DROP POLICY IF EXISTS "Usuários podem ver seu próprio histórico" ON custom_question_usage;
 CREATE POLICY "Usuários podem ver seu próprio histórico"
   ON custom_question_usage FOR SELECT
   USING (user_id = auth.uid());
 
+DROP POLICY IF EXISTS "Professores podem ver uso de suas perguntas" ON custom_question_usage;
 CREATE POLICY "Professores podem ver uso de suas perguntas"
   ON custom_question_usage FOR SELECT
   USING (
@@ -123,6 +130,7 @@ CREATE POLICY "Professores podem ver uso de suas perguntas"
     )
   );
 
+DROP POLICY IF EXISTS "Usuários podem inserir respostas" ON custom_question_usage;
 CREATE POLICY "Usuários podem inserir respostas"
   ON custom_question_usage FOR INSERT
   WITH CHECK (user_id = auth.uid());
@@ -231,7 +239,8 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- ============================================
 
 -- View para listar perguntas públicas populares
-CREATE OR REPLACE VIEW popular_custom_questions AS
+DROP VIEW IF EXISTS popular_custom_questions;
+CREATE VIEW popular_custom_questions AS
 SELECT
   cq.*,
   p.display_name as author_name,
