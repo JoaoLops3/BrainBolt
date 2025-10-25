@@ -8,7 +8,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
-import { Skull, Trophy, Flame, Target, X } from "lucide-react";
+import { Skull, Flame, X, Target, Trophy } from "lucide-react";
 
 interface OtherModesModalProps {
   open: boolean;
@@ -23,7 +23,7 @@ export const OtherModesModal = ({
 }: OtherModesModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="w-full max-w-[90vw] sm:max-w-lg max-h-[85vh] backdrop-blur-lg bg-gradient-to-br from-purple-500/95 via-pink-500/95 to-purple-600/95 border-white/30 modal-responsive safe-top safe-bottom rounded-2xl sm:rounded-3xl p-0 gap-0 overflow-hidden [&>.absolute.right-4.top-4]:!hidden">
+      <DialogContent className="w-full max-w-[90vw] sm:max-w-lg max-h-[85vh] backdrop-blur-lg bg-gradient-primary border-white/30 modal-responsive safe-top safe-bottom rounded-2xl sm:rounded-3xl p-0 gap-0 overflow-hidden [&>.absolute.right-4.top-4]:!hidden">
         {/* Botão X customizado na esquerda */}
         <DialogClose asChild>
           <button className="absolute top-4 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-1.5 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg flex items-center justify-center">
@@ -84,50 +84,6 @@ export const OtherModesModal = ({
                         <span className="xs:hidden sm:hidden">Recompensas</span>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Modos futuros (desabilitados) */}
-            <Card className="backdrop-blur-lg bg-white/5 border-0 opacity-60 cursor-not-allowed rounded-2xl">
-              <CardContent className="p-4 sm:p-6">
-                <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
-                  <div className="p-2 sm:p-3 rounded-lg bg-white/5">
-                    <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
-                  </div>
-                  <div className="flex-1 w-full">
-                    <h3 className="text-lg sm:text-xl font-bold mb-2 flex flex-wrap items-center gap-2 text-white">
-                      <span>🏆 Modo Torneio</span>
-                      <span className="text-xs bg-white/20 text-white px-2 py-1 rounded-full">
-                        EM BREVE
-                      </span>
-                    </h3>
-                    <p className="text-xs sm:text-sm text-white/70">
-                      Participe de torneios semanais e compita com jogadores do
-                      mundo todo!
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="backdrop-blur-lg bg-white/5 border-0 opacity-60 cursor-not-allowed rounded-2xl">
-              <CardContent className="p-4 sm:p-6">
-                <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
-                  <div className="p-2 sm:p-3 rounded-lg bg-white/5">
-                    <Target className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
-                  </div>
-                  <div className="flex-1 w-full">
-                    <h3 className="text-lg sm:text-xl font-bold mb-2 flex flex-wrap items-center gap-2 text-white">
-                      <span>🎯 Modo Desafio Diário</span>
-                      <span className="text-xs bg-white/20 text-white px-2 py-1 rounded-full">
-                        EM BREVE
-                      </span>
-                    </h3>
-                    <p className="text-xs sm:text-sm text-white/70">
-                      Um novo desafio todos os dias com recompensas exclusivas!
-                    </p>
                   </div>
                 </div>
               </CardContent>

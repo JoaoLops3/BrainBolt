@@ -155,7 +155,13 @@ export const InteractiveTutorial = ({
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center safe-top safe-bottom animate-in fade-in-0">
       {/* Wrapper responsivo com scroll */}
       <div className="w-full h-full flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto">
-        <Card className="w-full max-w-[95vw] sm:max-w-xl md:max-w-2xl my-auto backdrop-blur-xl bg-white/5 border-white/10 shadow-2xl animate-in slide-in-from-bottom-4">
+        <Card
+          className="w-full max-w-[95vw] sm:max-w-xl md:max-w-2xl my-auto backdrop-blur-xl border-white/10 shadow-2xl animate-in slide-in-from-bottom-4"
+          style={{
+            backgroundColor: "rgba(255, 255, 255, 0.08)",
+            color: "rgb(255, 255, 255)",
+          }}
+        >
           {/* Header com progresso */}
           <div className="p-4 sm:p-5 md:p-6 pb-0">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
