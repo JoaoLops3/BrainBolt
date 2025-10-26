@@ -18,8 +18,6 @@ const CACHE_DURATION = {
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/Brain-Bolt-Logo.png',
-  '/placeholder.svg',
 ];
 
 // Rotas da API para cache
