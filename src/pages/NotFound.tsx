@@ -4,9 +4,7 @@ import { useEffect } from "react";
 const NotFound = () => {
   const location = useLocation();
 
-  useEffect(() => {
-    console.log("Current path:", location.pathname);
-  }, [location.pathname]);
+  useEffect(() => {}, [location.pathname]);
 
   return (
     <div className="flex min-h-[100dvh] w-full items-center justify-center bg-gray-100 overflow-y-auto px-4 safe-top safe-bottom">

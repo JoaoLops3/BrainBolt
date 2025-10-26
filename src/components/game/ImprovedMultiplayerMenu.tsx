@@ -13,7 +13,6 @@ import {
   Users,
   Copy,
   ArrowLeft,
-  Gamepad2,
   Plus,
   Search,
   Sparkles,
@@ -25,7 +24,6 @@ import {
   CheckCircle2,
   UserPlus,
   Zap,
-  Cpu,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -34,11 +32,10 @@ import { MultiplayerRoom } from "@/types/game";
 import { cn } from "@/lib/utils";
 import { PhysicalModeModal } from "./PhysicalModeModal";
 
-// Props do componente de menu multiplayer melhorado
 interface ImprovedMultiplayerMenuProps {
-  onStartMultiplayer: (roomId: string, isHost: boolean) => void; // Função para iniciar o jogo multiplayer
-  onBackToMenu: () => void; // Função para voltar ao menu principal
-  onStartPhysicalMode?: () => void; // Função para iniciar o modo físico
+  onStartMultiplayer: (roomId: string, isHost: boolean) => void;
+  onBackToMenu: () => void;
+  onStartPhysicalMode?: () => void;
 }
 
 export const ImprovedMultiplayerMenu = ({
@@ -46,62 +43,48 @@ export const ImprovedMultiplayerMenu = ({
   onBackToMenu,
   onStartPhysicalMode,
 }: ImprovedMultiplayerMenuProps) => {
-  // Hooks principais
-  const { user } = useAuth(); // Usuário logado
-  const { toast } = useToast(); // Sistema de notificações toast
+  const { user } = useAuth();
+  const { toast } = useToast();
 
-  // Estados locais da interface
-  const [roomCode, setRoomCode] = useState(""); // Código da sala para entrar
-  const [loading, setLoading] = useState(false); // Carregamento de operações
-  const [currentRoom, setCurrentRoom] = useState<MultiplayerRoom | null>(null); // Sala atual
-  const [copied, setCopied] = useState(false); // Estado de cópia do código
-  const [playerCount, setPlayerCount] = useState(1); // Contador de jogadores na sala
-  const [physicalModeModalOpen, setPhysicalModeModalOpen] = useState(false); // Modal do modo físico
-
-  // Gera um código único de 6 caracteres para a sala
+  const [roomCode, setRoomCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [currentRoom, setCurrentRoom] = useState<MultiplayerRoom | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [playerCount, setPlayerCount] = useState(1);
+  const [physicalModeModalOpen, setPhysicalModeModalOpen] = useState(false);
   const generateRoomCode = () => {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; // Caracteres permitidos
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let result = "";
     for (let i = 0; i < 6; i++) {
-      // 6 caracteres de tamanho
       result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return result;
   };
 
-  // Função para criar uma nova sala multiplayer
   const createRoom = async () => {
-    if (!user) return; // Verifica se há um usuário logado
+    if (!user) return;
 
-    setLoading(true); // Ativa estado de carregamento
+    setLoading(true);
     try {
-      const newRoomCode = generateRoomCode().toUpperCase(); // Gera código único em maiúsculas
-      console.log("🏠 Criando sala com código:", newRoomCode);
+      const newRoomCode = generateRoomCode().toUpperCase();
 
-      // Insere nova sala no banco de dados
       const { data, error } = await supabase
         .from("multiplayer_rooms")
         .insert({
           room_code: newRoomCode,
-          host_id: user.id, // Define usuário atual como host
+          host_id: user.id,
         })
         .select()
         .single();
 
       if (error) {
-        console.error("❌ Erro ao criar sala:", error);
         throw error;
       }
 
-      console.log("✅ Sala criada com sucesso:", data);
-
-      // Define sala atual com dados retornados
       setCurrentRoom({
         ...data,
         game_status: data.game_status as MultiplayerRoom["game_status"],
       });
-
-      // Mostra notificação de sucesso
       toast({
         title: "Sala criada!",
         description: "Compartilhe o código com seus amigos",
@@ -126,8 +109,6 @@ export const ImprovedMultiplayerMenu = ({
 
     setLoading(true);
     try {
-      console.log("🔍 Buscando sala com código:", roomCode.trim());
-
       // First, check if room exists and is available
       const { data: rooms, error: fetchError } = await supabase
         .from("multiplayer_rooms")
@@ -136,8 +117,6 @@ export const ImprovedMultiplayerMenu = ({
         .eq("game_status", "waiting")
         .is("guest_id", null)
         .limit(1);
-
-      console.log("📊 Resultado da busca:", { rooms, fetchError });
 
       if (fetchError) {
         console.error("❌ Erro na busca:", fetchError);
@@ -152,7 +131,6 @@ export const ImprovedMultiplayerMenu = ({
       const room = rooms && Array.isArray(rooms) ? rooms[0] : null;
 
       if (!room) {
-        console.log("❌ Sala não encontrada ou indisponível");
         toast({
           title: "Sala indisponível",
           description: "Código inválido, sala cheia ou já iniciada",
@@ -161,11 +139,8 @@ export const ImprovedMultiplayerMenu = ({
         return;
       }
 
-      console.log("✅ Sala encontrada:", room);
-
       // Double-check that the room is still available
       if (room.guest_id !== null) {
-        console.log("❌ Sala já tem um convidado:", room.guest_id);
         toast({
           title: "Sala ocupada",
           description: "Esta sala já tem um jogador",
@@ -204,8 +179,6 @@ export const ImprovedMultiplayerMenu = ({
         }
         return;
       }
-
-      console.log("🎉 Entrou na sala com sucesso:", data);
 
       setCurrentRoom({
         ...data,
@@ -369,11 +342,11 @@ export const ImprovedMultiplayerMenu = ({
             {/* Botão para voltar ao menu principal */}
             <Button
               variant="ghost"
+              size="icon"
               onClick={onBackToMenu}
-              className="text-white hover:bg-white/20 backdrop-blur-lg"
+              className="bg-white/20 hover:bg-white/30 text-white p-1.5 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg flex items-center justify-center"
             >
-              <ArrowLeft className="h-5 w-5 mr-2" />
-              Voltar
+              <ArrowLeft className="h-4 w-4" />
             </Button>
 
             {/* Badge indicando sala ativa */}
@@ -404,7 +377,7 @@ export const ImprovedMultiplayerMenu = ({
               <div className="text-center">
                 <div className="relative mb-4">
                   {/* Card destacado com o código da sala */}
-                  <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-300">
+                  <div className="glass-card p-4 rounded-2xl shadow-2xl transform hover:scale-105 transition-all duration-300">
                     <div className="flex items-center justify-center gap-4">
                       <QrCode className="h-8 w-8 text-white/60" />
                       {/* Código da sala em fonte monospace */}
@@ -631,36 +604,6 @@ export const ImprovedMultiplayerMenu = ({
           </CardContent>
         </Card>
 
-        {/* Physical Mode Option */}
-        <Card className="bg-white/20 backdrop-blur-xl border-white/30 shadow-2xl mb-4">
-          <CardContent className="p-4 sm:p-6">
-            <div className="text-center space-y-4">
-              <div className="mx-auto p-3 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl w-fit">
-                <Cpu className="h-8 w-8 text-white" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-white mb-2">
-                  Modo Físico
-                </h3>
-                <p className="text-white/70 text-sm">
-                  Use botões físicos conectados ao Arduino para responder
-                </p>
-              </div>
-
-              <Button
-                onClick={() => setPhysicalModeModalOpen(true)}
-                size="lg"
-                className="w-full h-12 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold transform hover:scale-105 transition-all duration-300 shadow-xl"
-              >
-                <div className="flex items-center gap-3">
-                  <Gamepad2 className="h-6 w-6" />
-                  <span>Selecionar "Modo Físico"</span>
-                </div>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Features Info */}
         <Card className="bg-white/20 backdrop-blur-xl border-white/30 shadow-2xl mb-4">
           <CardContent className="p-4">
@@ -694,14 +637,13 @@ export const ImprovedMultiplayerMenu = ({
           </CardContent>
         </Card>
 
-        {/* Back Button */}
         <Button
           variant="ghost"
+          size="icon"
           onClick={onBackToMenu}
-          className="w-full text-white/90 hover:text-white hover:bg-white/20 border border-white/30 hover:border-white/50"
+          className="absolute top-4 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-1.5 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg flex items-center justify-center"
         >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          Voltar ao Menu Principal
+          <ArrowLeft className="h-4 w-4" />
         </Button>
 
         {/* Physical Mode Modal */}

@@ -64,19 +64,16 @@ export const PhysicalMode = ({
   });
   const [buttonPressed, setButtonPressed] = useState<string | null>(null);
 
-  // Registrar callback para botões físicos
   useEffect(() => {
     onButtonPress((button: string) => {
       setLastButtonPressed(button);
       setButtonPressed(button);
 
-      // Acender LED correspondente (seção LEDs)
       setLedStates((prev) => ({
         ...prev,
         [button]: true,
       }));
 
-      // Acender botão correspondente (seção Botões de Resposta)
       setButtonStates((prev) => ({
         ...prev,
         [button]: true,
@@ -87,7 +84,6 @@ export const PhysicalMode = ({
         description: `Botão ${button} detectado`,
       });
 
-      // Apagar LED após 500ms
       setTimeout(() => {
         setLedStates((prev) => ({
           ...prev,
@@ -95,7 +91,6 @@ export const PhysicalMode = ({
         }));
       }, 500);
 
-      // Apagar botão após 500ms
       setTimeout(() => {
         setButtonStates((prev) => ({
           ...prev,
@@ -104,7 +99,6 @@ export const PhysicalMode = ({
         setButtonPressed(null);
       }, 500);
 
-      // Limpar último botão pressionado após 1s
       setTimeout(() => {
         setLastButtonPressed(null);
       }, 1000);
@@ -123,7 +117,6 @@ export const PhysicalMode = ({
 
     setGameActive(true);
 
-    // Enviar comando para iniciar jogo no dispositivo
     sendToDevice({
       type: "start_game",
       game_mode: "physical",
@@ -137,7 +130,6 @@ export const PhysicalMode = ({
 
     setTestMode(true);
 
-    // Enviar comando de teste para o Arduino
     sendToDevice({
       type: "test_buttons",
     });
@@ -147,7 +139,6 @@ export const PhysicalMode = ({
       description: "Pressione os botões no Arduino para testar",
     });
 
-    // Parar modo de teste após 10 segundos
     setTimeout(() => {
       setTestMode(false);
     }, 10000);
@@ -156,17 +147,15 @@ export const PhysicalMode = ({
   const testQuestion = () => {
     if (!isConnected) return;
 
-    // Pergunta de exemplo
     const exampleQuestion = {
       id: "test-question-1",
       question: "Quantos jogadores tem um time de futebol em campo?",
       options: ["10 jogadores", "11 jogadores", "12 jogadores", "9 jogadores"],
-      correctAnswer: 1, // Resposta correta é B (11 jogadores)
+      correctAnswer: 1,
       difficulty: "easy",
       category: "sports",
     };
 
-    // Enviar pergunta para o Arduino
     sendQuestionToArduino(exampleQuestion);
 
     toast({
@@ -193,7 +182,6 @@ export const PhysicalMode = ({
       duration,
     });
 
-    // Atualizar estado local do LED
     setLedStates((prev) => ({
       ...prev,
       [led]: action === "on" || action === "blink",
@@ -242,14 +230,14 @@ export const PhysicalMode = ({
 
       <div className="relative z-10 flex flex-col h-full max-w-2xl mx-auto justify-center px-4">
         {/* Cabeçalho */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-4 mt-10">
           <Button
             variant="ghost"
+            size="icon"
             onClick={onBackToMenu}
-            className="text-white hover:bg-white/20 backdrop-blur-lg"
+            className="bg-white/20 hover:bg-white/30 text-white p-1.5 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg flex items-center justify-center"
           >
-            <ArrowLeft className="h-5 w-5 mr-2" />
-            Voltar
+            <ArrowLeft className="h-4 w-4" />
           </Button>
 
           <Badge
