@@ -1,0 +1,13 @@
+android/
+ios/
+server/
+arduino/
+docs/
+supabase/
+*.md
+.gitignore
+capacitor.config.ts
+setup-hardware.sh
+start-arduino-real.sh
+fix-*.sql
+add-*.sql
