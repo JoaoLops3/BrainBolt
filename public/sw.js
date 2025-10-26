@@ -19,7 +19,6 @@ const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/Brain-Bolt-Logo.png',
-  '/manifest.json',
   '/placeholder.svg',
 ];
 
@@ -38,7 +37,14 @@ self.addEventListener('install', (event) => {
     caches.open(STATIC_CACHE)
       .then((cache) => {
         console.log('[SW] Caching static assets');
-        return cache.addAll(STATIC_ASSETS);
+        return Promise.allSettled(
+          STATIC_ASSETS.map(asset => 
+            cache.add(asset).catch(error => {
+              console.warn(`[SW] Failed to cache ${asset}:`, error);
+              return null;
+            })
+          )
+        );
       })
       .then(() => {
         console.log('[SW] Static assets cached successfully');
@@ -46,6 +52,7 @@ self.addEventListener('install', (event) => {
       })
       .catch((error) => {
         console.error('[SW] Failed to cache static assets:', error);
+        return self.skipWaiting();
       })
   );
 });
