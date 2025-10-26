@@ -73,7 +73,7 @@ const Auth = () => {
 
   if (loading) {
     return (
-      <div className="min-h-[100dvh] flex items-center justify-center bg-gradient-auth overflow-y-auto safe-top safe-bottom">
+      <div className="min-h-[100dvh] flex items-center justify-center bg-gradient-primary overflow-y-auto safe-top safe-bottom">
         <Loader2 className="h-8 w-8 animate-spin text-white" />
       </div>
     );
@@ -84,12 +84,35 @@ const Auth = () => {
     setIsLoading(true);
 
     try {
+      // Validar email e senha
+      if (!loginForm.email || !loginForm.password) {
+        toast({
+          title: "Campos obrigatórios",
+          description: "Por favor, preencha email e senha.",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
       const { error } = await signIn(loginForm.email, loginForm.password);
 
       if (error) {
+        // Mostrar mensagem de erro mais amigável
+        let errorMessage = error.message;
+
+        if (error.message.includes("Invalid login credentials")) {
+          errorMessage =
+            "Email ou senha incorretos. Verifique suas credenciais.";
+        } else if (error.message.includes("Email not confirmed")) {
+          errorMessage = "Verifique seu email para confirmar a conta.";
+        } else if (error.message.includes("400")) {
+          errorMessage = "Formato de email inválido. Verifique seus dados.";
+        }
+
         toast({
           title: "Erro ao fazer login",
-          description: error.message,
+          description: errorMessage,
           variant: "destructive",
         });
       } else {
@@ -162,7 +185,7 @@ const Auth = () => {
 
   return (
     <div
-      className="min-h-[100dvh] flex items-center justify-center bg-gradient-auth p-4 overflow-y-auto safe-top safe-bottom"
+      className="min-h-[100dvh] flex items-center justify-center bg-gradient-primary p-4 overflow-y-auto safe-top safe-bottom"
       style={{ minHeight: "100vh", overflowY: "auto" }}
     >
       <div className="w-full max-w-md animate-fade-in-up py-8">

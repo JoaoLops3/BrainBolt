@@ -155,12 +155,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      await supabase.auth.signOut({ scope: "local" });
+      localStorage.removeItem("supabase.auth.token");
 
-    return { error };
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
+
+      return { error };
+    } catch (error) {
+      console.error("Erro durante o login:", error);
+      return { error };
+    }
   };
 
   const signInWithOAuth = async (provider: "google" | "apple") => {
@@ -175,8 +183,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-    localStorage.removeItem("brainbolt_user");
+    try {
+      localStorage.removeItem("brainbolt_user");
+      localStorage.clear();
+
+      await supabase.auth.signOut({ scope: "local" });
+    } catch (error) {
+      console.error("Error during sign out:", error);
+      setUser(null);
+      setSession(null);
+      setProfile(null);
+    } finally {
+      setUser(null);
+      setSession(null);
+      setProfile(null);
+    }
   };
 
   const updateProfile = async (updates: Partial<Profile>) => {

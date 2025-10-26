@@ -29,10 +29,10 @@ interface OnboardingFlowProps {
   onComplete: () => void;
 }
 
-type OnboardingStep = "welcome" | "permissions" | "features" | "ready";
+type OnboardingStep = "permissions" | "features" | "ready";
 
 export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
-  const [currentStep, setCurrentStep] = useState<OnboardingStep>("welcome");
+  const [currentStep, setCurrentStep] = useState<OnboardingStep>("permissions");
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
@@ -102,48 +102,6 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
     setShowTutorial(false);
     onComplete();
   };
-
-  const renderWelcomeStep = () => (
-    <Card className="w-full max-w-md mx-auto backdrop-blur-lg bg-white/95 border-white/30 shadow-2xl">
-      <CardHeader className="text-center pb-4">
-        <div className="mx-auto mb-4 w-20 h-20 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center">
-          <Sparkles className="h-10 w-10 text-white" />
-        </div>
-        <CardTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-          Bem-vindo ao Brain Bolt!
-        </CardTitle>
-        <p className="text-gray-600 mt-2">
-          O quiz mais divertido e desafiador para exercitar sua mente!
-        </p>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="text-center">
-            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2">
-              <Trophy className="h-6 w-6 text-blue-600" />
-            </div>
-            <p className="text-sm font-medium">Desafios</p>
-            <p className="text-xs text-gray-500">Milhares de perguntas</p>
-          </div>
-          <div className="text-center">
-            <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-2">
-              <Users className="h-6 w-6 text-green-600" />
-            </div>
-            <p className="text-sm font-medium">Multiplayer</p>
-            <p className="text-xs text-gray-500">Jogue com amigos</p>
-          </div>
-        </div>
-        <Button
-          onClick={() => setCurrentStep("permissions")}
-          className="w-full"
-          size="lg"
-        >
-          Começar
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
-      </CardContent>
-    </Card>
-  );
 
   const renderPermissionsStep = () => (
     <Card className="w-full max-w-md mx-auto backdrop-blur-lg bg-white/95 border-white/30 shadow-2xl">
@@ -373,7 +331,6 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
   );
 
   const stepContent = {
-    welcome: renderWelcomeStep,
     permissions: renderPermissionsStep,
     features: renderFeaturesStep,
     ready: renderReadyStep,
@@ -390,26 +347,19 @@ export const OnboardingFlow = ({ onComplete }: OnboardingFlowProps) => {
           {/* Progress indicator */}
           <div className="flex justify-center mt-4">
             <div className="flex space-x-2">
-              {["welcome", "permissions", "features", "ready"].map(
-                (step, index) => {
-                  const allSteps = [
-                    "welcome",
-                    "permissions",
-                    "features",
-                    "ready",
-                  ];
-                  const currentIndex = allSteps.indexOf(currentStep);
+              {["permissions", "features", "ready"].map((step, index) => {
+                const allSteps = ["permissions", "features", "ready"];
+                const currentIndex = allSteps.indexOf(currentStep);
 
-                  return (
-                    <div
-                      key={step}
-                      className={`w-2 h-2 rounded-full transition-colors ${
-                        currentIndex >= index ? "bg-primary" : "bg-gray-300"
-                      }`}
-                    />
-                  );
-                }
-              )}
+                return (
+                  <div
+                    key={step}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      currentIndex >= index ? "bg-primary" : "bg-gray-300"
+                    }`}
+                  />
+                );
+              })}
             </div>
           </div>
         </DialogContent>

@@ -138,25 +138,7 @@ export const BrainBoltGame = () => {
 
   const [gameStartTime, setGameStartTime] = useState<number>(0);
 
-  // Solicitar permissão automática apenas se não passou pelo onboarding
-  useEffect(() => {
-    const hasCompletedOnboarding = localStorage.getItem(
-      "brainbolt-onboarding-completed"
-    );
-
-    if (
-      user &&
-      isSupported &&
-      permission === "default" &&
-      !hasCompletedOnboarding
-    ) {
-      const timer = setTimeout(() => {
-        requestPermission();
-      }, 60000); // 1 minuto para usuários que não passaram pelo onboarding
-
-      return () => clearTimeout(timer);
-    }
-  }, [user, isSupported, permission, requestPermission]);
+  // Notificações serão gerenciadas nas configurações
 
   const shuffleArray = <T,>(array: T[]): T[] => {
     const shuffled = [...array];
