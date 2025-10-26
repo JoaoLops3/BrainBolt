@@ -161,15 +161,18 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-[100dvh] flex items-center justify-center bg-gradient-auth p-4 overflow-y-auto safe-top safe-bottom">
-      <div className="w-full max-w-md animate-fade-in-up">
+    <div
+      className="min-h-[100dvh] flex items-center justify-center bg-gradient-auth p-4 overflow-y-auto safe-top safe-bottom"
+      style={{ minHeight: "100vh", overflowY: "auto" }}
+    >
+      <div className="w-full max-w-md animate-fade-in-up py-8">
         <div className="text-center mb-8">
           <div
             className="relative animate-float"
             style={{ pointerEvents: "none" }}
           >
             <img
-              src="/Brain%20Bolt%20Logo.png"
+              src="/Brain-Bolt-Logo.png"
               alt="Brain Bolt Logo"
               className="mx-auto w-24 sm:w-28 md:w-32 h-auto mb-3 select-none object-contain animate-scale-in"
             />
