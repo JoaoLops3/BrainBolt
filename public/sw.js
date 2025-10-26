@@ -211,9 +211,7 @@ async function getOfflineFallback(request) {
   });
 }
 
-// ==================================================
 // BACKGROUND SYNC
-// ==================================================
 self.addEventListener('sync', (event) => {
   console.log('[SW] Background sync:', event.tag);
   
@@ -278,9 +276,7 @@ async function syncProfile() {
   }
 }
 
-// ==================================================
 // PUSH NOTIFICATIONS
-// ==================================================
 self.addEventListener('push', (event) => {
   console.log('[SW] Push notification received');
   
@@ -331,9 +327,7 @@ self.addEventListener('notificationclick', (event) => {
   }
 });
 
-// ==================================================
 // MESSAGE HANDLER
-// ==================================================
 self.addEventListener('message', (event) => {
   console.log('[SW] Message received:', event.data);
   
