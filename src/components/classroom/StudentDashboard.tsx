@@ -37,17 +37,16 @@ export const StudentDashboard = ({ onBack }: StudentDashboardProps) => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-primary p-4 safe-top safe-bottom">
+    <div className="min-h-[100dvh] bg-gradient-primary p-4 pt-50 safe-top safe-bottom overflow-y-auto">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-6">
+        <div className="mb-10 mt-10">
           <Button
             variant="ghost"
             onClick={onBack}
-            className="mb-4 text-white hover:bg-white/20"
+            className="mb-4 h-10 w-10 bg-white/20 hover:bg-white/30 text-white p-1.5 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg flex items-center justify-center"
           >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Voltar ao Menu
+            <ArrowLeft className="h-4 w-4" />
           </Button>
 
           <Card className="backdrop-blur-lg bg-white/20 border-white/30">
