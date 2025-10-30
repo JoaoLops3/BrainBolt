@@ -14,13 +14,15 @@ interface GameResultsProps {
   onBackToMenu: () => void;
 }
 
-const categoryIcons = {
+const categoryIcons: Record<string, string> = {
   sports: sportsIcon,
   entertainment: entertainmentIcon,
   art: artIcon,
   science: scienceIcon,
   geography: geographyIcon,
   history: historyIcon,
+  mathematics: scienceIcon, // Fallback para mathematics
+  portuguese: artIcon, // Fallback para portuguese
 };
 
 export const GameResults = ({
@@ -129,11 +131,17 @@ export const GameResults = ({
                     : "bg-muted border-2 border-transparent grayscale"
                 }`}
               >
-                <img
-                  src={categoryIcons[category.id]}
-                  alt={category.name}
-                  className="w-12 h-12 mx-auto mb-1"
-                />
+                {categoryIcons[category.id] ? (
+                  <img
+                    src={categoryIcons[category.id]}
+                    alt={category.name}
+                    className="w-12 h-12 mx-auto mb-1"
+                  />
+                ) : (
+                  <div className="w-12 h-12 mx-auto mb-1 bg-muted rounded-full flex items-center justify-center">
+                    <span className="text-lg font-bold">{category.name.charAt(0)}</span>
+                  </div>
+                )}
                 <p className="text-xs font-medium text-center">
                   {category.name}
                 </p>

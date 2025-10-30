@@ -7,7 +7,7 @@ export type CategoryType =
   | "history"
   | "mathematics"
   | "portuguese";
-export type GameMode = "normal" | "speed" | "multiplayer" | "survival";
+export type GameMode = "normal" | "speed" | "multiplayer" | "survival" | "physical";
 
 export interface Question {
   id: string;

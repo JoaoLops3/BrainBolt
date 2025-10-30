@@ -33,6 +33,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useGameQuestions } from "@/hooks/useGameQuestions";
 import { useToast } from "@/hooks/use-toast";
+import { useArduinoSerial } from "@/hooks/useArduinoSerial";
 
 const initialCategories: CategoryInfo[] = [
   {
@@ -137,6 +138,10 @@ export const BrainBoltGame = () => {
   useDailyNotifications(); // Ativar notificações diárias automáticas
 
   const [gameStartTime, setGameStartTime] = useState<number>(0);
+  // Integração com Arduino para respostas no modo físico
+  const { onMessage } = useArduinoSerial();
+
+  // Efeito de integração Arduino (posicionado após handleAnswerSelect)
 
   // Notificações serão gerenciadas nas configurações
 
@@ -181,114 +186,133 @@ export const BrainBoltGame = () => {
 
   const handleAnswerSelect = useCallback(
     (answerIndex: number) => {
-      if (gameState.selectedAnswer !== null) return;
+      // Proteção dupla: verificar estado ANTES e dentro do setState
+      setGameState((prev) => {
+        // Se já tem resposta selecionada ou está mostrando resposta, ignorar
+        if (prev.selectedAnswer !== null || prev.showAnswer) {
+          return prev;
+        }
 
-      setGameState((prev) => ({
-        ...prev,
-        selectedAnswer: answerIndex,
-        showAnswer: true,
-      }));
+        // Usar valores do estado atual (prev) em vez de capturados
+        const currentQuestion = gameQuestions[prev.currentQuestionIndex];
+        if (!currentQuestion) {
+          return prev; // Proteção caso não tenha pergunta
+        }
 
-      const currentQuestion = gameQuestions[gameState.currentQuestionIndex];
-      const isCorrect = answerIndex === currentQuestion.correctAnswer;
+        const isCorrect = answerIndex === currentQuestion.correctAnswer;
 
-      setTimeout(() => {
-        setGameState((prev) => {
-          const newScore = isCorrect ? prev.score + 100 : prev.score;
-          const newStreak = isCorrect ? prev.currentStreak + 1 : 0;
-          const questionsAnswered = prev.questionsAnswered + 1;
+        // Capturar o índice atual para verificação no setTimeout
+        const currentQuestionIndexAtAnswer = prev.currentQuestionIndex;
 
-          // Check if category should be collected (2+ correct answers in that category)
-          const categoryAnswers = gameQuestions
-            .slice(0, questionsAnswered)
-            .filter(
-              (q) =>
-                q.category === currentQuestion.category &&
-                gameQuestions.indexOf(q) <= gameState.currentQuestionIndex &&
-                // Check if this question was answered correctly
-                (gameQuestions.indexOf(q) < gameState.currentQuestionIndex
-                  ? true
-                  : isCorrect)
-            );
-
-          const correctCategoryAnswers = categoryAnswers.filter((_, index) =>
-            index < gameState.currentQuestionIndex ? true : isCorrect
-          ).length;
-
-          const updatedCategories = prev.categories.map((cat) =>
-            cat.id === currentQuestion.category && correctCategoryAnswers >= 2
-              ? { ...cat, collected: true }
-              : cat
-          );
-
-          if (questionsAnswered >= gameQuestions.length) {
-            // Game finished - save to database and calculate final stats
-            // Cada resposta correta vale 100 pontos, então score / 100 = total de corretas
-            const correctAnswers = Math.min(
-              Math.floor(newScore / 100),
-              gameQuestions.length
-            );
-
-            const finalStats = {
-              totalQuestions: gameQuestions.length,
-              correctAnswers: correctAnswers,
-              categoriesCompleted: updatedCategories
-                .filter((cat) => cat.collected)
-                .map((cat) => cat.id),
-              finalScore: newScore,
-              gameMode: prev.gameMode,
-              maxStreak: Math.max(prev.currentStreak, newStreak),
-              timeSpent: Math.floor((Date.now() - gameStartTime) / 1000),
-            };
-
-            setStats(finalStats);
-
-            // Save game session to database if user is logged in
-            if (user) {
-              saveGameSession(finalStats).catch(console.error);
+        // Marcar resposta como selecionada IMEDIATAMENTE
+        // Isso previne múltiplos disparos antes do setTimeout
+        setTimeout(() => {
+          setGameState((prevState) => {
+            // Verificar novamente se ainda está na mesma pergunta
+            if (
+              prevState.currentQuestionIndex !== currentQuestionIndexAtAnswer
+            ) {
+              // Se mudou de pergunta, não processar (já foi processado)
+              return prevState;
             }
 
-            // Atualizar última sessão e enviar notificação de retenção
-            updateLastSession();
-            sendSessionEndNotification();
+            const newScore = isCorrect
+              ? prevState.score + 100
+              : prevState.score;
+            const newStreak = isCorrect ? prevState.currentStreak + 1 : 0;
+            const questionsAnswered = prevState.questionsAnswered + 1;
+
+            // Check if category should be collected (2+ correct answers in that category)
+            const categoryAnswers = gameQuestions
+              .slice(0, questionsAnswered)
+              .filter(
+                (q) =>
+                  q.category === currentQuestion.category &&
+                  gameQuestions.indexOf(q) <= currentQuestionIndexAtAnswer &&
+                  (gameQuestions.indexOf(q) < currentQuestionIndexAtAnswer
+                    ? true
+                    : isCorrect)
+              );
+
+            const correctCategoryAnswers = categoryAnswers.filter((_, index) =>
+              index < currentQuestionIndexAtAnswer ? true : isCorrect
+            ).length;
+
+            const updatedCategories = prevState.categories.map((cat) =>
+              cat.id === currentQuestion.category && correctCategoryAnswers >= 2
+                ? { ...cat, collected: true }
+                : cat
+            );
+
+            if (questionsAnswered >= gameQuestions.length) {
+              // Game finished - save to database and calculate final stats
+              const correctAnswers = Math.min(
+                Math.floor(newScore / 100),
+                gameQuestions.length
+              );
+
+              const finalStats = {
+                totalQuestions: gameQuestions.length,
+                correctAnswers: correctAnswers,
+                categoriesCompleted: updatedCategories
+                  .filter((cat) => cat.collected)
+                  .map((cat) => cat.id),
+                finalScore: newScore,
+                gameMode: prevState.gameMode,
+                maxStreak: Math.max(prevState.currentStreak, newStreak),
+                timeSpent: Math.floor((Date.now() - gameStartTime) / 1000),
+              };
+
+              setStats(finalStats);
+
+              if (user) {
+                saveGameSession(finalStats).catch(console.error);
+              }
+
+              updateLastSession();
+              sendSessionEndNotification();
+
+              return {
+                ...prevState,
+                score: newScore,
+                questionsAnswered,
+                categories: updatedCategories,
+                gamePhase: "results" as const,
+                currentStreak: newStreak,
+              };
+            }
+
+            // Move to next question - apenas incrementar uma vez
+            const nextTimeLeft =
+              prevState.gameMode === "speed" ? prevState.totalTime : 0;
 
             return {
-              ...prev,
+              ...prevState,
+              currentQuestionIndex: prevState.currentQuestionIndex + 1, // Incrementar apenas 1
               score: newScore,
               questionsAnswered,
               categories: updatedCategories,
-              gamePhase: "results" as const,
+              selectedAnswer: null,
+              showAnswer: false,
               currentStreak: newStreak,
+              timeLeft: nextTimeLeft,
             };
-          }
+          });
+        }, 2000);
 
-          // Move to next question
-          const nextTimeLeft = prev.gameMode === "speed" ? prev.totalTime : 0;
-
-          return {
-            ...prev,
-            currentQuestionIndex: prev.currentQuestionIndex + 1,
-            score: newScore,
-            questionsAnswered,
-            categories: updatedCategories,
-            selectedAnswer: null,
-            showAnswer: false,
-            currentStreak: newStreak,
-            timeLeft: nextTimeLeft,
-          };
-        });
-      }, 2000);
+        return {
+          ...prev,
+          selectedAnswer: answerIndex,
+          showAnswer: true,
+        };
+      });
     },
     [
-      gameState.selectedAnswer,
-      gameState.currentQuestionIndex,
       gameQuestions,
-      gameState.score,
-      gameState.currentStreak,
-      gameState.questionsAnswered,
-      toast,
-      user,
       gameStartTime,
+      user,
+      updateLastSession,
+      sendSessionEndNotification,
     ]
   );
 
@@ -308,9 +332,13 @@ export const BrainBoltGame = () => {
         finalStats.totalQuestions
       );
 
-      await supabase.from("game_sessions").insert({
+      // Mapear game_mode "physical" para "normal" no banco (mesma mecânica de jogo)
+      const dbGameMode: "normal" | "speed" | "multiplayer" | "survival" =
+        finalStats.gameMode === "physical" ? "normal" : finalStats.gameMode;
+
+      const { error } = await supabase.from("game_sessions").insert({
         user_id: user.id,
-        game_mode: finalStats.gameMode,
+        game_mode: dbGameMode,
         final_score: finalStats.finalScore,
         questions_answered: finalStats.totalQuestions,
         correct_answers: safeCorrectAnswers,
@@ -319,6 +347,11 @@ export const BrainBoltGame = () => {
         time_spent: finalStats.timeSpent,
         game_result: gameResult,
       });
+
+      if (error) {
+        console.error("Erro ao salvar sessão:", error);
+        throw error;
+      }
     } catch (error) {
       console.error("Error saving game session:", error);
     }
@@ -334,6 +367,80 @@ export const BrainBoltGame = () => {
   const handleTimerTick = useCallback((newTime: number) => {
     setGameState((prev) => ({ ...prev, timeLeft: newTime }));
   }, []);
+
+  // Integração Arduino: ouvir "button_press" e responder
+  useEffect(() => {
+    if (
+      gameState.gamePhase !== "playing" ||
+      gameState.gameMode !== "physical"
+    ) {
+      return;
+    }
+
+    let lastButtonPressTime = 0;
+    let isProcessing = false;
+    const DEBOUNCE_MS = 800; // Evitar múltiplos disparos em 800ms
+
+    const messageHandler = (data: string) => {
+      // Debounce: ignorar cliques muito rápidos ou se já está processando
+      const now = Date.now();
+      if (isProcessing || now - lastButtonPressTime < DEBOUNCE_MS) {
+        return;
+      }
+
+      // Verificar estado antes de processar
+      if (gameState.selectedAnswer !== null || gameState.showAnswer) {
+        return;
+      }
+
+      try {
+        const msg = JSON.parse(data);
+        if (msg?.type === "button_press" && typeof msg.button === "string") {
+          const map: Record<string, number> = { A: 0, B: 1, C: 2, D: 3 };
+          const idx = map[msg.button.toUpperCase()];
+          if (idx !== undefined && !isProcessing) {
+            isProcessing = true;
+            lastButtonPressTime = now;
+            handleAnswerSelect(idx);
+            setTimeout(() => {
+              isProcessing = false;
+            }, DEBOUNCE_MS);
+          }
+        }
+      } catch {
+        // Suportar saída textual/fragmentada do Arduino
+        const text = (data || "").toString();
+        const jsonBtn = text.match(/"button"\s*:\s*"([ABCD])"/i);
+        const plainBtn = text.match(/\b([ABCD])\b/i);
+        const letter = (jsonBtn?.[1] || plainBtn?.[1] || "").toUpperCase();
+        if (
+          (letter === "A" ||
+            letter === "B" ||
+            letter === "C" ||
+            letter === "D") &&
+          !isProcessing
+        ) {
+          const map: Record<string, number> = { A: 0, B: 1, C: 2, D: 3 };
+          const idx = map[letter];
+          isProcessing = true;
+          lastButtonPressTime = now;
+          handleAnswerSelect(idx);
+          setTimeout(() => {
+            isProcessing = false;
+          }, DEBOUNCE_MS);
+        }
+      }
+    };
+
+    onMessage(messageHandler);
+  }, [
+    onMessage,
+    gameState.gamePhase,
+    gameState.gameMode,
+    gameState.selectedAnswer,
+    gameState.showAnswer,
+    handleAnswerSelect,
+  ]);
 
   const backToMenu = useCallback(() => {
     setGameState((prev) => ({ ...prev, gamePhase: "menu" }));
@@ -382,8 +489,8 @@ export const BrainBoltGame = () => {
       <PhysicalModeSimple
         onBackToMenu={() => setPhysicalModeActive(false)}
         onStartGame={(mode) => {
-          // Aqui você pode implementar a lógica para iniciar o jogo físico
-          console.log("Iniciando jogo físico:", mode);
+          startGame(mode);
+          setPhysicalModeActive(false);
         }}
       />
     );

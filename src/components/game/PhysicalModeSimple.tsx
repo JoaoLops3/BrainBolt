@@ -16,6 +16,7 @@ import {
   CheckCircle2,
   AlertCircle,
   ArrowLeft,
+  Settings,
   Play,
   Plug,
   RefreshCw,

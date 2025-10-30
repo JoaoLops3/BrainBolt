@@ -31,7 +31,8 @@ declare global {
   }
 }
 
-let messageCallback: ((data: string) => void) | null = null;
+// Permitir múltiplos listeners para evitar corrida entre telas/componentes
+const messageCallbacks = new Set<(data: string) => void>();
 let reader: ReadableStreamDefaultReader | null = null;
 let port: SerialPort | null = null;
 
@@ -51,12 +52,33 @@ export const useArduinoSerial = (): ArduinoSerialHook => {
     }
 
     try {
-      // Solicitar acesso à porta serial
-      const selectedPort = await navigator.serial.requestPort();
-      port = selectedPort;
+      // Se já temos uma porta e ela está aberta, apenas reutilize
+      if (port && (port as any).readable) {
+        setIsConnected(true);
+        if ((port as any).readable && messageCallbacks.size > 0 && !reader) {
+          readFromSerial(port as any);
+        }
+        toast({
+          title: "Arduino já conectado",
+          description: "Porta serial ativa",
+        });
+        return;
+      }
+
+      // Tentar reutilizar porta já autorizada
+      const available = await navigator.serial.getPorts();
+      if (available && available.length > 0) {
+        port = available[0];
+      } else {
+        // Solicitar acesso à porta serial
+        const selectedPort = await navigator.serial.requestPort();
+        port = selectedPort;
+      }
 
       // Configurar parâmetros da porta (115200 baud rate para Arduino)
-      await (port as any).open({ baudRate: 115200 });
+      if (!(port as any).readable) {
+        await (port as any).open({ baudRate: 115200 });
+      }
 
       console.log("✅ Arduino conectado via Serial!");
       setIsConnected(true);
@@ -67,7 +89,7 @@ export const useArduinoSerial = (): ArduinoSerialHook => {
       });
 
       // Ler dados da porta serial em uma loop assíncrona
-      if (port.readable && messageCallback) {
+      if (port.readable && messageCallbacks.size > 0) {
         readFromSerial(port);
       }
 
@@ -79,6 +101,28 @@ export const useArduinoSerial = (): ArduinoSerialHook => {
     } catch (error: any) {
       console.error("❌ Erro ao conectar Arduino:", error);
 
+      // Porta já aberta (por esta aba ou outra) — tentar anexar leitor e seguir
+      if (
+        error?.name === "InvalidStateError" ||
+        /already open/i.test(error?.message || "")
+      ) {
+        try {
+          if (port) {
+            setIsConnected(true);
+            if ((port as any).readable && messageCallbacks.size > 0 && !reader) {
+              readFromSerial(port as any);
+            }
+            toast({
+              title: "Arduino já conectado",
+              description: "Reutilizando porta serial aberta",
+            });
+            return;
+          }
+        } catch (_) {
+          // segue para tratamento padrão
+        }
+      }
+
       if (error.name === "NotFoundError") {
         toast({
           title: "Arduino não encontrado",
@@ -89,6 +133,13 @@ export const useArduinoSerial = (): ArduinoSerialHook => {
         toast({
           title: "Erro de segurança",
           description: "Permissão para acessar porta serial negada",
+          variant: "destructive",
+        });
+      } else if (error.name === "NetworkError") {
+        toast({
+          title: "Falha ao abrir a porta",
+          description:
+            "Feche outros programas que usam a porta (Arduino IDE, VSCode Serial Monitor) e tente novamente.",
           variant: "destructive",
         });
       } else {
@@ -156,7 +207,7 @@ export const useArduinoSerial = (): ArduinoSerialHook => {
   );
 
   const onMessage = useCallback((callback: (data: string) => void) => {
-    messageCallback = callback;
+    messageCallbacks.add(callback);
 
     // Se já estiver conectado, iniciar leitura
     if (port && port.readable && !reader) {
@@ -175,7 +226,7 @@ export const useArduinoSerial = (): ArduinoSerialHook => {
 
 // Função auxiliar para ler da porta serial
 async function readFromSerial(port: SerialPort) {
-  if (!port.readable || !messageCallback) return;
+  if (!port.readable || messageCallbacks.size === 0) return;
 
   const decoder = new TextDecoder();
   reader = port.readable.getReader();
@@ -197,7 +248,13 @@ async function readFromSerial(port: SerialPort) {
           const trimmed = line.trim();
           if (trimmed.length > 0) {
             console.log("📱 Arduino:", trimmed);
-            messageCallback(trimmed);
+            for (const cb of messageCallbacks) {
+              try {
+                cb(trimmed);
+              } catch (e) {
+                console.error("Listener error:", e);
+              }
+            }
           }
         }
       }
