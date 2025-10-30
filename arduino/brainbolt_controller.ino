@@ -56,7 +56,7 @@ void setup()
 
   Serial.println(F("\n\n================================="));
   Serial.println(F("Brain Bolt - Hardware Controller"));
-  Serial.println(F("Versão: 2.0.0"));
+  Serial.println(F("Versao: 2.0.0"));
   Serial.println(F("=================================\n"));
 
   // Configurar pinos dos botões
@@ -79,8 +79,8 @@ void setup()
   // Teste inicial do hardware
   testHardware();
 
-  Serial.println(F("✅ Arduino pronto!"));
-  Serial.println(F("📡 Aguardando conexão com o Brain Bolt..."));
+  Serial.println(F("Arduino pronto!"));
+  Serial.println(F("Aguardando conexao com o Brain Bolt..."));
 
   // LED de status piscando
   blinkStatusLED();
@@ -121,7 +121,7 @@ void handleMessage(String payload)
 
   if (error)
   {
-    Serial.print(F("❌ JSON Error: "));
+    Serial.print(F("JSON Error: "));
     Serial.println(error.c_str());
     return;
   }
@@ -131,7 +131,7 @@ void handleMessage(String payload)
   if (strcmp(type, "connected") == 0)
   {
     connected = true;
-    Serial.println(F("✅ Conectado ao Brain Bolt!"));
+    Serial.println(F("Conectado ao Brain Bolt!"));
     playSuccess();
     allLEDsOff();
     digitalWrite(LED_FAST, HIGH); // LED de conexão
@@ -140,9 +140,9 @@ void handleMessage(String payload)
   {
     roomCode = doc["room_code"].as<String>();
     playerId = doc["player_id"].as<String>();
-    Serial.print(F("🏠 Sala: "));
+    Serial.print(F("Sala: "));
     Serial.println(roomCode);
-    Serial.print(F("👤 Player ID: "));
+    Serial.print(F("Player ID: "));
     Serial.println(playerId);
     playSuccess();
     flashLED(LED_FAST, 3);
@@ -150,7 +150,7 @@ void handleMessage(String payload)
   else if (strcmp(type, "question_start") == 0)
   {
     gameActive = true;
-    Serial.println(F("❓ Nova pergunta iniciada!"));
+    Serial.println(F("Nova pergunta iniciada!"));
     allLEDsOn();
     playTone(1000, 200);
     delay(200);
@@ -158,32 +158,32 @@ void handleMessage(String payload)
   }
   else if (strcmp(type, "answer_correct") == 0)
   {
-    Serial.println(F("✅ Resposta correta!"));
+    Serial.println(F("Resposta correta!"));
     playSuccess();
     flashLED(LED_FAST, 5);
   }
   else if (strcmp(type, "answer_wrong") == 0)
   {
-    Serial.println(F("❌ Resposta incorreta"));
+    Serial.println(F("Resposta incorreta"));
     playError();
   }
   else if (strcmp(type, "game_end") == 0)
   {
     gameActive = false;
-    Serial.println(F("🏁 Jogo finalizado!"));
+    Serial.println(F("Jogo finalizado!"));
     celebrationAnimation();
   }
   else if (strcmp(type, "disconnected") == 0)
   {
     connected = false;
     gameActive = false;
-    Serial.println(F("🔌 Desconectado do Brain Bolt"));
+    Serial.println(F("Desconectado do Brain Bolt"));
     allLEDsOff();
   }
   else if (strcmp(type, "test_buttons_start") == 0)
   {
-    Serial.println(F("🧪 Teste de botões iniciado!"));
-    Serial.println(F("Pressione os botões para testar..."));
+    Serial.println(F("Teste de botoes iniciado!"));
+    Serial.println(F("Pressione os botoes para testar..."));
     testButtons();
   }
   else if (strcmp(type, "led_control") == 0)
@@ -198,54 +198,24 @@ void handleMessage(String payload)
   {
     // Armazenar pergunta atual
     JsonObject question = doc["question"];
-    currentQuestionId = question["id"];
-    currentQuestionText = question["text"];
+    currentQuestionId = question["id"].as<String>();
+    currentQuestionText = question["text"].as<String>();
     currentCorrectAnswer = question["correctAnswer"];
-    currentDifficulty = question["difficulty"];
-    currentCategory = question["category"];
+    currentDifficulty = question["difficulty"].as<String>();
+    currentCategory = question["category"].as<String>();
 
-    Serial.println(F("📝 Nova pergunta recebida:"));
+    Serial.println(F("Nova pergunta recebida:"));
     Serial.print(F("   Pergunta: "));
     Serial.println(currentQuestionText);
     Serial.print(F("   Resposta correta: "));
     Serial.print((char)('A' + currentCorrectAnswer));
-    Serial.print(F(" (índice "));
+    Serial.print(F(" (indice "));
     Serial.print(currentCorrectAnswer);
     Serial.println(F(")"));
     Serial.print(F("   Dificuldade: "));
     Serial.println(currentDifficulty);
     Serial.print(F("   Categoria: "));
     Serial.println(currentCategory);
-
-    // Piscar LED da resposta correta
-    int correctLedPin = -1;
-    switch (currentCorrectAnswer)
-    {
-    case 0:
-      correctLedPin = LED_A;
-      break;
-    case 1:
-      correctLedPin = LED_B;
-      break;
-    case 2:
-      correctLedPin = LED_C;
-      break;
-    case 3:
-      correctLedPin = LED_D;
-      break;
-    }
-
-    if (correctLedPin != -1)
-    {
-      // Piscar LED da resposta correta 3 vezes
-      for (int i = 0; i < 3; i++)
-      {
-        digitalWrite(correctLedPin, HIGH);
-        delay(200);
-        digitalWrite(correctLedPin, LOW);
-        delay(200);
-      }
-    }
   }
 }
 
@@ -302,7 +272,7 @@ void onButtonPress(const char *button, int ledPin)
   serializeJson(doc, output);
   Serial.println(output);
 
-  Serial.print(F("🔘 Botão pressionado: "));
+  Serial.print(F("Botao pressionado: "));
   Serial.println(button);
 
   // Apagar LED após 300ms
@@ -387,7 +357,7 @@ void playError()
 
 void testHardware()
 {
-  Serial.println(F("🔧 Testando hardware..."));
+  Serial.println(F("Testando hardware..."));
 
   // Testar LEDs sequencialmente
   int leds[] = {LED_A, LED_B, LED_C, LED_D, LED_FAST};
@@ -415,14 +385,14 @@ void testHardware()
   allLEDsOff();
   Serial.println(F("OK"));
 
-  Serial.println(F("✅ Teste de hardware concluído!\n"));
+  Serial.println(F("Teste de hardware concluido!\n"));
 }
 
 // Função para testar botões
 void testButtons()
 {
-  Serial.println(F("🧪 Teste de botões iniciado"));
-  Serial.println(F("Pressione cada botão para testar..."));
+  Serial.println(F("Teste de botoes iniciado"));
+  Serial.println(F("Pressione cada botao para testar..."));
 
   // Acender todos os LEDs para indicar modo de teste
   allLEDsOn();
@@ -438,7 +408,7 @@ void testButtons()
     delay(10);
   }
 
-  Serial.println(F("✅ Teste de botões concluído"));
+  Serial.println(F("Teste de botoes concluido"));
   playSuccess();
 }
 
@@ -461,7 +431,7 @@ void controlLED(const char *led, const char *action, int duration)
 
   if (ledPin == -1)
   {
-    Serial.print(F("❌ LED inválido: "));
+    Serial.print(F("LED invalido: "));
     Serial.println(led);
     return;
   }
@@ -470,7 +440,7 @@ void controlLED(const char *led, const char *action, int duration)
   if (strcmp(action, "on") == 0)
   {
     digitalWrite(ledPin, HIGH);
-    Serial.print(F("💡 LED "));
+    Serial.print(F("LED "));
     Serial.print(led);
     Serial.println(F(" ligado"));
     playTone(800, 100);
@@ -478,13 +448,13 @@ void controlLED(const char *led, const char *action, int duration)
   else if (strcmp(action, "off") == 0)
   {
     digitalWrite(ledPin, LOW);
-    Serial.print(F("💡 LED "));
+    Serial.print(F("LED "));
     Serial.print(led);
     Serial.println(F(" desligado"));
   }
   else if (strcmp(action, "blink") == 0)
   {
-    Serial.print(F("💡 LED "));
+    Serial.print(F("LED "));
     Serial.print(led);
     Serial.print(F(" piscando por "));
     Serial.print(duration);
