@@ -119,6 +119,21 @@ async function handleMessage(ws: WebSocket, message: any) {
       await handleEndGame(ws, message);
       break;
 
+    case "ping":
+      // Mantém a conexão ativa sem gerar erro no cliente
+      try {
+        // Responde com pong para clientes que esperam confirmação
+        send(ws, { type: "pong", server_time: new Date().toISOString() });
+        // Atualiza atividade do dispositivo, se conhecido
+        const device = findDeviceByWs(ws);
+        if (device) {
+          device.lastActivity = new Date();
+        }
+      } catch (_) {
+        // Não interrompe o fluxo em caso de erro de ping
+      }
+      break;
+
     default:
       sendError(ws, "Tipo de mensagem desconhecido");
   }
@@ -145,10 +160,13 @@ async function handleRegister(ws: WebSocket, message: any) {
   console.log(`✅ Dispositivo registrado: ${deviceId} (${mac})`);
   console.log(`📊 Total de dispositivos: ${devices.size}`);
 
+  const isRealArduino = device === "arduino_real" || device === "arduino";
+
   send(ws, {
     type: "registered",
     device_id: deviceId,
     server_time: new Date().toISOString(),
+    is_real_arduino: isRealArduino,
   });
 }
 
