@@ -312,7 +312,9 @@ export const MultiplayerGame = ({
   // Update current question when room updates
   useEffect(() => {
     if (room?.current_question_id) {
-      const question = questions.find((q) => q.id === room.current_question_id);
+      const question = gameQuestions.find(
+        (q) => q.id === room.current_question_id
+      );
       setCurrentQuestion(question || null);
       setSelectedAnswer(null);
       setShowAnswer(false);
@@ -325,7 +327,7 @@ export const MultiplayerGame = ({
         setTimeLeft(15);
       }
     }
-  }, [room?.current_question_id, calculateTimeLeft]);
+  }, [room?.current_question_id, calculateTimeLeft, gameQuestions]);
 
   // Calculate scores when both answered
   useEffect(() => {
