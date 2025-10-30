@@ -6,15 +6,10 @@
   "scripts": {
     "start": "tsx hardware-websocket.ts",
     "dev": "tsx watch hardware-websocket.ts",
-    "build": "tsc",
-    "bridge": "node simple-bridge.js",
-    "bridge:dev": "node simple-bridge.js --verbose",
-    "bridge:arduino": "node serial-bridge-simple.js",
-    "bridge:arduino:dev": "node serial-bridge-simple.js --verbose"
+    "build": "tsc"
   },
   "keywords": [
     "websocket",
-    "esp32",
     "arduino",
     "education",
     "quiz"

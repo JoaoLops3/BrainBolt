@@ -39,7 +39,7 @@ O Brain Bolt foi criado para resolver um dos maiores desafios da educação mode
 - **Salas de Aula**: Professores criam grupos para turmas
 - **Perguntas Customizadas**: Crie perguntas ilimitadas
 - **Competições**: Rankings e estatísticas por sala
-- **Hardware Físico**: Botões Arduino ([Tutorial](docs/hardware/ARDUINO-SETUP.md))
+- **Hardware Físico**: Botões Arduino - [Setup Super Simples](docs/hardware/SETUP-SIMPLES.md) | [Tutorial Completo](docs/hardware/ARDUINO-SETUP.md)
 
 #### 🎨 UX/UI
 
@@ -237,17 +237,14 @@ npm run preview
 
 Acesse: `http://localhost:8080`
 
-### 6. Servidor WebSocket para Hardware (Opcional)
+### 6. Hardware Arduino (Opcional)
 
-Se for usar botões físicos Arduino:
+**🎉 Método Super Simples:** [Guia Simplificado](docs/hardware/SETUP-SIMPLES.md)
 
-```bash
-cd server
-npm install
-npm run dev  # Porta 8080 (WebSocket)
-```
+**Antes:** Terminal, comandos, configurações...  
+**Agora:** Conecte via USB, clique em "Conectar Arduino" no site e jogue!
 
-Veja [Tutorial completo](docs/hardware/ARDUINO-SETUP.md)
+Veja também: [Tutorial Completo](docs/hardware/ARDUINO-SETUP.md) (método avançado com servidor WebSocket)
 
 ### 5. Configuração Mobile (Opcional)
 

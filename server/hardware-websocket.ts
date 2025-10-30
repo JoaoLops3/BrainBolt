@@ -6,7 +6,7 @@ import { supabaseServer as supabase } from "./supabase-server";
 interface Device {
   id: string;
   ws: WebSocket;
-  type: "esp32" | "arduino";
+  type: "arduino";
   mac: string;
   roomId?: string;
   connectedAt: Date;

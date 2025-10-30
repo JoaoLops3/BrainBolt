@@ -424,10 +424,9 @@ O projeto está em excelente estado, com a maioria das funcionalidades implement
 
 ### 🔧 **Hardware e IoT**
 
-17. **Botões Wireless**
+17. **Botões Wireless** (Futuro)
 
-    - ESP32 com WiFi/Bluetooth
-    - Múltiplos jogadores sem fio
+    - Comunicação sem fio para múltiplos jogadores
     - LED feedback colorido
 
 18. **Display em Tempo Real**

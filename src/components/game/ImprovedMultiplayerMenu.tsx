@@ -31,7 +31,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { MultiplayerRoom } from "@/types/game";
 import { cn } from "@/lib/utils";
-import { PhysicalModeModal } from "./PhysicalModeModal";
 
 interface ImprovedMultiplayerMenuProps {
   onStartMultiplayer: (roomId: string, isHost: boolean) => void;
@@ -52,7 +51,6 @@ export const ImprovedMultiplayerMenu = ({
   const [currentRoom, setCurrentRoom] = useState<MultiplayerRoom | null>(null);
   const [copied, setCopied] = useState(false);
   const [playerCount, setPlayerCount] = useState(1);
-  const [physicalModeModalOpen, setPhysicalModeModalOpen] = useState(false);
   const generateRoomCode = () => {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let result = "";
@@ -259,12 +257,6 @@ export const ImprovedMultiplayerMenu = ({
   const startGame = () => {
     if (currentRoom) {
       onStartMultiplayer(currentRoom.id, true);
-    }
-  };
-
-  const handleStartPhysicalMode = () => {
-    if (onStartPhysicalMode) {
-      onStartPhysicalMode();
     }
   };
 
@@ -646,13 +638,6 @@ export const ImprovedMultiplayerMenu = ({
         >
           <ArrowLeft className="h-4 w-4" />
         </Button>
-
-        {/* Physical Mode Modal */}
-        <PhysicalModeModal
-          open={physicalModeModalOpen}
-          onOpenChange={setPhysicalModeModalOpen}
-          onStartPhysicalMode={handleStartPhysicalMode}
-        />
       </div>
     </div>
   );

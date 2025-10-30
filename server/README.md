@@ -67,6 +67,22 @@ O servidor iniciará na porta `8080` por padrão.
 
 - **WebSocket**: `ws://localhost:8080/ws/hardware`
 
+## ⚡ Método Simplificado (Novo!)
+
+**Agora você pode conectar Arduino diretamente do navegador!** 🎉
+
+Veja o guia completo em: [SETUP-SIMPLES.md](../docs/hardware/SETUP-SIMPLES.md)
+
+### Passos super simples:
+
+1. Carregue o código no Arduino
+2. Abra o site Brain Bolt
+3. Clique em "Conectar Arduino"
+4. Selecione a porta
+5. JOGUE! 🎮
+
+**Sem terminal, sem comandos, sem complicação!**
+
 ## 📡 Protocolo de Comunicação
 
 ### Mensagens do Arduino → Servidor

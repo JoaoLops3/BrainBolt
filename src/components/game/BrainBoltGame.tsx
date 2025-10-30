@@ -24,7 +24,7 @@ import { AchievementNotification } from "@/components/achievements/AchievementNo
 import { TeacherDashboard } from "@/components/classroom/TeacherDashboard";
 import { StudentDashboard } from "@/components/classroom/StudentDashboard";
 import { SurvivalMode } from "./SurvivalMode";
-import { PhysicalMode } from "./PhysicalMode";
+import { PhysicalModeSimple } from "./PhysicalModeSimple";
 import { useAchievements } from "@/hooks/useAchievements";
 import { useRetentionNotifications } from "@/hooks/useRetentionNotifications";
 import { useNativeNotifications } from "@/hooks/useNativeNotifications";
@@ -379,7 +379,7 @@ export const BrainBoltGame = () => {
 
   if (physicalModeActive) {
     return (
-      <PhysicalMode
+      <PhysicalModeSimple
         onBackToMenu={() => setPhysicalModeActive(false)}
         onStartGame={(mode) => {
           // Aqui você pode implementar a lógica para iniciar o jogo físico
@@ -444,18 +444,6 @@ export const BrainBoltGame = () => {
 
   if (gameState.gamePhase === "studentClassrooms") {
     return <StudentDashboard onBack={backToMenu} />;
-  }
-
-  if (physicalModeActive) {
-    return (
-      <PhysicalMode
-        onBackToMenu={() => setPhysicalModeActive(false)}
-        onStartGame={(mode) => {
-          // Aqui você pode implementar a lógica para iniciar o jogo físico
-          console.log("Iniciando jogo físico:", mode);
-        }}
-      />
-    );
   }
 
   if (gameState.gamePhase === "multiplayer") {
