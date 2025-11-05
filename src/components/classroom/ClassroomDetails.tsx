@@ -63,7 +63,7 @@ export const ClassroomDetails = ({
       maxHeight="screen"
     >
       <div className="flex flex-col h-[90vh] max-h-[90vh]">
-        <div className="flex flex-col space-y-1.5 text-center sm:text-left flex-shrink-0">
+        <div className="flex flex-col gap-1.5 text-center sm:text-left flex-shrink-0 pt-12">
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-start gap-3 flex-1 min-w-0">
               <School className="h-6 w-6 text-white mt-1 flex-shrink-0" />
@@ -82,7 +82,7 @@ export const ClassroomDetails = ({
               <Button
                 onClick={handleStartCompetition}
                 size="sm"
-                className="bg-green-600/90 hover:bg-green-700/90 text-white backdrop-blur-sm border border-green-500/30 flex-shrink-0"
+                className="bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm border border-white/20 rounded-md flex-shrink-0"
               >
                 <Play className="h-4 w-4 mr-2" />
                 Iniciar Competição
@@ -133,7 +133,7 @@ export const ClassroomDetails = ({
           </div>
 
           {isTeacher && (
-            <div className="mt-2 mb-2 flex items-center gap-2">
+            <div className="mt-2 mb-4 flex items-center gap-2">
               <span className="text-sm text-white/80">Código da sala:</span>
               <code className="px-3 py-1 bg-white/5 backdrop-blur-sm rounded font-mono text-base font-bold text-white">
                 {classroom.class_code}
@@ -150,11 +150,11 @@ export const ClassroomDetails = ({
           <TabsList
             className={`grid w-full ${
               isTeacher ? "grid-cols-4" : "grid-cols-2"
-            } bg-white/5 backdrop-blur-sm border-white/20`}
+            } h-auto overflow-hidden rounded-md border bg-white/5 backdrop-blur-sm border-white/20`}
           >
             <TabsTrigger
               value="rankings"
-              className="flex items-center gap-2 text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
+              className="flex h-8 items-center gap-2 py-1 text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
             >
               <Trophy className="h-4 w-4" />
               <span className="hidden sm:inline">Rankings</span>
@@ -162,7 +162,7 @@ export const ClassroomDetails = ({
             </TabsTrigger>
             <TabsTrigger
               value="statistics"
-              className="flex items-center gap-2 text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
+              className="flex h-8 items-center gap-2 py-1 text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
             >
               <BarChart3 className="h-4 w-4" />
               <span className="hidden sm:inline">Estatísticas</span>
@@ -172,7 +172,7 @@ export const ClassroomDetails = ({
               <>
                 <TabsTrigger
                   value="students"
-                  className="flex items-center gap-2 text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
+                  className="flex h-8 items-center gap-2 py-1 text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
                 >
                   <Users className="h-4 w-4" />
                   <span className="hidden sm:inline">Alunos</span>
@@ -180,7 +180,7 @@ export const ClassroomDetails = ({
                 </TabsTrigger>
                 <TabsTrigger
                   value="questions"
-                  className="flex items-center gap-2 text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
+                  className="flex h-8 items-center gap-2 py-1 text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
                 >
                   <HelpCircle className="h-4 w-4" />
                   <span className="hidden sm:inline">Perguntas</span>

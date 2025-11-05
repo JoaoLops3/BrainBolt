@@ -103,7 +103,7 @@ export const ClassroomRankings = ({ classroomId }: ClassroomRankingsProps) => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-[600px] pr-4">
+        <ScrollArea className="max-h-[60vh] overflow-y-auto pr-4">
           <div className="space-y-3">
             {rankings.map((student) => (
               <Card
