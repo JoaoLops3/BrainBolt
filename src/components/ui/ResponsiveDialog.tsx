@@ -65,7 +65,7 @@ export const ResponsiveDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className={cn(
-          "w-[95vw] sm:w-full mx-2 sm:mx-auto",
+          "w-[95vw] sm:w-full mx-auto",
           maxWidthClasses[maxWidth],
           maxHeightClasses[maxHeight],
           "overflow-y-auto",
