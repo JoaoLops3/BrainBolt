@@ -263,15 +263,13 @@ export const CharactersModal = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => toggleFavorite(character.id)}
-                className={`flex-shrink-0 h-8 w-8 p-0 ${
-                  userCharacter.is_favorite
-                    ? "text-red-500 hover:text-red-700"
-                    : "text-gray-400 hover:text-red-500"
-                }`}
+                className={`group flex-shrink-0 h-8 w-8 p-0 rounded-md bg-white/5 hover:bg-white/10 border border-white/20 backdrop-blur-sm`}
               >
                 <Heart
                   className={`h-4 w-4 ${
-                    userCharacter.is_favorite ? "fill-current" : ""
+                    userCharacter.is_favorite
+                      ? "text-red-500 group-hover:text-red-700 fill-current"
+                      : "text-gray-400 group-hover:text-red-500"
                   }`}
                 />
               </Button>
@@ -350,16 +348,16 @@ export const CharactersModal = ({
           defaultValue="unlocked"
           className="w-full flex flex-col flex-1 min-h-0"
         >
-          <TabsList className="grid w-full grid-cols-2 h-10 flex-shrink-0 bg-white/20 backdrop-blur-lg border-white/30 p-1">
+          <TabsList className="items-center justify-center rounded-md text-muted-foreground grid w-full grid-cols-2 h-auto p-[2px] gap-[2px] bg-white/5 backdrop-blur-sm border-white/20">
             <TabsTrigger
               value="unlocked"
-              className="text-xs sm:text-sm text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white rounded-sm"
+              className="inline-flex items-center justify-center rounded-sm font-medium ring-offset-background transition-all data-[state=active]:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-[11px] sm:text-xs px-2 sm:px-2 py-1 sm:py-1 whitespace-nowrap leading-tight text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
             >
               Coletados ({unlockedCharacters.length})
             </TabsTrigger>
             <TabsTrigger
               value="locked"
-              className="text-xs sm:text-sm text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white rounded-sm"
+              className="inline-flex items-center justify-center rounded-sm font-medium ring-offset-background transition-all data-[state=active]:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 text-[11px] sm:text-xs px-2 sm:px-2 py-1 sm:py-1 whitespace-nowrap leading-tight text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
             >
               Bloqueados ({lockedCharacters.length})
             </TabsTrigger>

@@ -11,8 +11,8 @@ import { cn } from "@/lib/utils";
 interface ResponsiveDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  title?: string;
-  description?: string;
+  title?: ReactNode;
+  description?: ReactNode;
   children: ReactNode;
   className?: string;
   maxWidth?: "sm" | "md" | "lg" | "xl" | "2xl" | "4xl" | "6xl" | "full";
@@ -65,7 +65,7 @@ export const ResponsiveDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className={cn(
-          "w-[95vw] sm:w-full mx-auto p-4 sm:p-6",
+          "w-[95vw] sm:w-full mx-auto p-4 sm:p-6 pt-16",
           maxWidthClasses[maxWidth],
           maxHeightClasses[maxHeight],
           "overflow-y-auto",
@@ -75,10 +75,18 @@ export const ResponsiveDialog = ({
         )}
       >
         <DialogHeader>
-          <DialogTitle className={title ? "text-base sm:text-lg md:text-xl" : "sr-only"}>
+          <DialogTitle
+            className={
+              title ? "text-base sm:text-lg md:text-xl text-white" : "sr-only"
+            }
+          >
             {title || "Janela"}
           </DialogTitle>
-          <DialogDescription className={description ? "text-sm sm:text-base" : "sr-only"}>
+          <DialogDescription
+            className={
+              description ? "text-sm sm:text-base text-white/80" : "sr-only"
+            }
+          >
             {description || "Conteúdo da janela"}
           </DialogDescription>
         </DialogHeader>

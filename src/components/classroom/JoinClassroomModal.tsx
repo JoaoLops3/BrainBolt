@@ -1,12 +1,11 @@
 import { useState } from "react";
 import {
-  Dialog,
-  DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -61,92 +60,97 @@ export const JoinClassroomModal = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Users className="h-5 w-5" />
-            Entrar em uma Sala
-          </DialogTitle>
-          <DialogDescription>
-            Digite o código da sala fornecido pelo seu professor
-          </DialogDescription>
-        </DialogHeader>
+    <ResponsiveDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      title={
+        <span className="flex items-center gap-2">
+          <Users className="h-5 w-5" />
+          Entrar em uma Sala
+        </span>
+      }
+      description="Digite o código da sala fornecido pelo seu professor"
+      maxWidth="md"
+      maxHeight="screen"
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-2">
+          <Label
+            htmlFor="class_code"
+            className="flex items-center gap-2 text-white"
+          >
+            <KeyRound className="h-4 w-4" />
+            Código da Sala
+          </Label>
+          <Input
+            id="class_code"
+            placeholder="Ex: ABC123"
+            value={classCode}
+            onChange={(e) => handleCodeChange(e.target.value)}
+            maxLength={6}
+            className={`text-center text-2xl font-mono tracking-widest uppercase bg-white/10 border-white/20 text-white placeholder:text-white/60 focus:bg-white/15 ${
+              isOwnClassroom
+                ? "border-red-500 bg-red-50 dark:bg-red-900/20 text-red-900 dark:text-red-100 placeholder:text-red-400"
+                : ""
+            }`}
+            required
+          />
+          <p className="text-xs text-white/80 text-center">
+            O código tem 6 caracteres
+          </p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="class_code" className="flex items-center gap-2">
-              <KeyRound className="h-4 w-4" />
-              Código da Sala
-            </Label>
-            <Input
-              id="class_code"
-              placeholder="Ex: ABC123"
-              value={classCode}
-              onChange={(e) => handleCodeChange(e.target.value)}
-              maxLength={6}
-              className={`text-center text-2xl font-mono tracking-widest uppercase ${
-                isOwnClassroom
-                  ? "border-red-500 bg-red-50 dark:bg-red-900/20"
-                  : ""
-              }`}
-              required
-            />
-            <p className="text-xs text-muted-foreground text-center">
-              O código tem 6 caracteres
-            </p>
-          </div>
-
-          {isOwnClassroom ? (
-            <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-200 dark:border-red-800">
-              <div className="flex items-start gap-3">
-                <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
-                <div className="text-sm text-red-900 dark:text-red-100">
-                  <p className="font-medium mb-1">❌ Sala própria detectada</p>
-                  <p>
-                    Este é o código da sua própria sala. Professores não podem
-                    entrar na própria sala como alunos durante competições.
-                  </p>
-                </div>
+        {isOwnClassroom ? (
+          <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-200 dark:border-red-800">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+              <div className="text-sm text-red-900 dark:text-red-100">
+                <p className="font-medium mb-1">❌ Sala própria detectada</p>
+                <p>
+                  Este é o código da sua própria sala. Professores não podem
+                  entrar na própria sala como alunos durante competições.
+                </p>
               </div>
             </div>
-          ) : (
-            <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
-              <p className="text-sm text-purple-900 dark:text-purple-100">
-                🎓 Ao entrar na sala, você poderá participar das competições e
-                seus resultados serão registrados no ranking da turma!
-              </p>
-            </div>
-          )}
+          </div>
+        ) : (
+          <div className="bg-white/10 text-white border border-white/20 p-4 rounded-lg backdrop-blur-sm">
+            <p className="text-sm">
+              🎓 Ao entrar na sala, você poderá participar das competições e
+              seus resultados serão registrados no ranking da turma!
+            </p>
+          </div>
+        )}
 
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => {
-                onOpenChange(false);
-                setClassCode("");
-              }}
-              disabled={loading}
-            >
-              Cancelar
-            </Button>
-            <Button
-              type="submit"
-              disabled={loading || classCode.length !== 6 || isOwnClassroom}
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Entrando...
-                </>
-              ) : (
-                "Entrar na Sala"
-              )}
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+        <DialogFooter className="mt-4 gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => {
+              onOpenChange(false);
+              setClassCode("");
+            }}
+            disabled={loading}
+            className="backdrop-blur-sm bg-white/10 border-white/20 text-white hover:bg-white/20 hover:border-white/30"
+          >
+            Cancelar
+          </Button>
+          <Button
+            type="submit"
+            disabled={loading || classCode.length !== 6 || isOwnClassroom}
+            className="bg-white/20 text-white border border-white/30 hover:bg-white/30 hover:border-white/40"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Entrando...
+              </>
+            ) : (
+              "Entrar na Sala"
+            )}
+          </Button>
+        </DialogFooter>
+      </form>
+    </ResponsiveDialog>
   );
 };

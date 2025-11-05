@@ -1,6 +1,14 @@
 export function getBadgeClassesFromLabel(label: string) {
   const key = (label || "").trim().toLowerCase();
   switch (key) {
+    case "diamond":
+    case "diamante":
+      return "bg-[#22d3ee] text-white hover:bg-[#22d3ee]/90";
+    case "rainbow":
+    case "arco-iris":
+    case "arcoíris":
+    case "arcoiris":
+      return "bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 text-white hover:opacity-90";
     case "gold":
     case "dourado":
       return "bg-yellow-500 text-white hover:bg-yellow-500/80";
