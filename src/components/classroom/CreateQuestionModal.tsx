@@ -14,7 +14,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Save, X, HelpCircle } from "lucide-react";
+import { Save, X } from "lucide-react";
 import { CategoryType } from "@/types/game";
 import { CustomQuestion, CreateCustomQuestionData } from "@/types/classroom";
 
@@ -201,15 +201,17 @@ export const CreateQuestionModal = ({
       maxHeight="screen"
     >
       <div className="space-y-4">
-        <div className="flex items-center gap-2 text-lg sm:text-xl font-bold">
-          <HelpCircle className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+        <div className="flex items-center gap-2 text-lg sm:text-xl font-bold text-white pl-14 pt-3">
           {editQuestion ? "Editar Pergunta" : "Criar Nova Pergunta"}
         </div>
 
-        <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+        <div className="space-y-4 sm:space-y-6 max-h-[60vh] sm:max-h-[65vh] overflow-y-auto pr-2">
           {/* Question */}
           <div className="space-y-2">
-            <Label htmlFor="question" className="text-sm font-medium">
+            <Label
+              htmlFor="question"
+              className="text-sm sm:text-base font-medium text-white/90"
+            >
               Pergunta *
             </Label>
             <Textarea
@@ -217,26 +219,28 @@ export const CreateQuestionModal = ({
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               placeholder="Digite a pergunta aqui..."
-              className="min-h-[80px] resize-none"
+              className="min-h-[80px] sm:min-h-[100px] resize-none backdrop-blur-sm bg-white/10 border-white/20 text-white placeholder:text-white/60 focus-visible:ring-white/30 focus-visible:border-white/40"
               maxLength={500}
             />
-            <p className="text-xs text-muted-foreground text-right">
+            <p className="text-xs sm:text-sm text-white/70 text-right">
               {question.length}/500
             </p>
           </div>
 
           {/* Options */}
           <div className="space-y-3">
-            <Label className="text-sm font-medium">Opções de Resposta *</Label>
+            <Label className="text-sm sm:text-base font-medium text-white/90">
+              Opções de Resposta *
+            </Label>
             <RadioGroup value={correctAnswer} onValueChange={setCorrectAnswer}>
               {options.map((option, index) => (
-                <div key={index} className="flex items-center gap-2">
+                <div key={index} className="flex items-center gap-2 sm:gap-3">
                   <RadioGroupItem
                     value={index.toString()}
                     id={`option-${index}`}
-                    className="shrink-0"
+                    className="shrink-0 border-white/40 text-white focus-visible:ring-white/30"
                   />
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <Input
                       value={option}
                       onChange={(e) =>
@@ -246,15 +250,15 @@ export const CreateQuestionModal = ({
                       maxLength={200}
                       className={
                         parseInt(correctAnswer) === index
-                          ? "border-green-500 bg-green-50 dark:bg-green-950"
-                          : ""
+                          ? "border-green-400/60 bg-green-500/20 backdrop-blur-sm text-white placeholder:text-white/60 focus-visible:ring-green-400/30 focus-visible:border-green-400/60"
+                          : "backdrop-blur-sm bg-white/10 border-white/20 text-white placeholder:text-white/60 focus-visible:ring-white/30 focus-visible:border-white/40"
                       }
                     />
                   </div>
                 </div>
               ))}
             </RadioGroup>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs sm:text-sm text-white/70">
               ✓ Selecione a opção correta clicando no círculo
             </p>
           </div>
@@ -262,17 +266,23 @@ export const CreateQuestionModal = ({
           {/* Category and Difficulty */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-sm font-medium">Categoria *</Label>
+              <Label className="text-sm sm:text-base font-medium text-white/90">
+                Categoria *
+              </Label>
               <Select
                 value={category}
                 onValueChange={(val) => setCategory(val as CategoryType)}
               >
-                <SelectTrigger>
+                <SelectTrigger className="backdrop-blur-sm bg-white/10 border-white/20 text-white focus:ring-white/30 focus:border-white/40">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="backdrop-blur-xl bg-white/10 border-white/20">
                   {categories.map((cat) => (
-                    <SelectItem key={cat.value} value={cat.value}>
+                    <SelectItem
+                      key={cat.value}
+                      value={cat.value}
+                      className="text-white focus:bg-white/20 focus:text-white"
+                    >
                       {cat.emoji} {cat.label}
                     </SelectItem>
                   ))}
@@ -281,19 +291,25 @@ export const CreateQuestionModal = ({
             </div>
 
             <div className="space-y-2">
-              <Label className="text-sm font-medium">Dificuldade *</Label>
+              <Label className="text-sm sm:text-base font-medium text-white/90">
+                Dificuldade *
+              </Label>
               <Select
                 value={difficulty}
                 onValueChange={(val) =>
                   setDifficulty(val as "easy" | "medium" | "hard")
                 }
               >
-                <SelectTrigger>
+                <SelectTrigger className="backdrop-blur-sm bg-white/10 border-white/20 text-white focus:ring-white/30 focus:border-white/40">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="backdrop-blur-xl bg-white/10 border-white/20">
                   {difficulties.map((diff) => (
-                    <SelectItem key={diff.value} value={diff.value}>
+                    <SelectItem
+                      key={diff.value}
+                      value={diff.value}
+                      className="text-white focus:bg-white/20 focus:text-white"
+                    >
                       <span className={diff.color}>{diff.label}</span>
                     </SelectItem>
                   ))}
@@ -304,7 +320,10 @@ export const CreateQuestionModal = ({
 
           {/* Explanation (optional) */}
           <div className="space-y-2">
-            <Label htmlFor="explanation" className="text-sm font-medium">
+            <Label
+              htmlFor="explanation"
+              className="text-sm sm:text-base font-medium text-white/90"
+            >
               Explicação (Opcional)
             </Label>
             <Textarea
@@ -312,32 +331,39 @@ export const CreateQuestionModal = ({
               value={explanation}
               onChange={(e) => setExplanation(e.target.value)}
               placeholder="Adicione uma explicação educacional sobre a resposta correta..."
-              className="min-h-[60px] resize-none"
+              className="min-h-[60px] sm:min-h-[80px] resize-none backdrop-blur-sm bg-white/10 border-white/20 text-white placeholder:text-white/60 focus-visible:ring-white/30 focus-visible:border-white/40"
               maxLength={500}
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs sm:text-sm text-white/70">
               💡 Esta explicação será mostrada aos alunos após responderem
             </p>
           </div>
         </div>
 
         {/* Actions */}
-        <div className="flex flex-col sm:flex-row justify-end gap-2 pt-4 border-t">
+        <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 pt-4 border-t border-white/20">
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={isLoading}
+            className="backdrop-blur-sm bg-white/10 border-white/20 text-white hover:bg-white/20 hover:text-white focus-visible:ring-white/30"
           >
             <X className="mr-2 h-4 w-4" />
-            Cancelar
+            <span className="text-sm sm:text-base">Cancelar</span>
           </Button>
-          <Button onClick={handleSave} disabled={isLoading}>
+          <Button
+            onClick={handleSave}
+            disabled={isLoading}
+            className="backdrop-blur-sm bg-white/10 border border-white/20 text-white hover:bg-white/20 hover:text-white focus-visible:ring-white/30 disabled:opacity-50"
+          >
             <Save className="mr-2 h-4 w-4" />
-            {isLoading
-              ? "Salvando..."
-              : editQuestion
-              ? "Atualizar Pergunta"
-              : "Criar Pergunta"}
+            <span className="text-sm sm:text-base">
+              {isLoading
+                ? "Salvando..."
+                : editQuestion
+                ? "Atualizar Pergunta"
+                : "Criar Pergunta"}
+            </span>
           </Button>
         </div>
       </div>

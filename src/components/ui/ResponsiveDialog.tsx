@@ -65,7 +65,7 @@ export const ResponsiveDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className={cn(
-          "w-[95vw] sm:w-full mx-auto",
+          "w-[95vw] sm:w-full mx-auto p-4 sm:p-6",
           maxWidthClasses[maxWidth],
           maxHeightClasses[maxHeight],
           "overflow-y-auto",
@@ -75,10 +75,10 @@ export const ResponsiveDialog = ({
         )}
       >
         <DialogHeader>
-          <DialogTitle className={title ? "text-lg sm:text-xl" : "sr-only"}>
+          <DialogTitle className={title ? "text-base sm:text-lg md:text-xl" : "sr-only"}>
             {title || "Janela"}
           </DialogTitle>
-          <DialogDescription className={description ? undefined : "sr-only"}>
+          <DialogDescription className={description ? "text-sm sm:text-base" : "sr-only"}>
             {description || "Conteúdo da janela"}
           </DialogDescription>
         </DialogHeader>
