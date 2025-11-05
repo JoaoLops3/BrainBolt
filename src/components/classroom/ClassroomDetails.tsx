@@ -150,21 +150,21 @@ export const ClassroomDetails = ({
           <TabsList
             className={`grid w-full ${
               isTeacher ? "grid-cols-4" : "grid-cols-2"
-            } h-auto overflow-hidden rounded-md border bg-white/5 backdrop-blur-sm border-white/20`}
+            } h-[52px] p-1 overflow-hidden items-stretch rounded-md border bg-white/5 backdrop-blur-sm border-white/20`}
           >
             <TabsTrigger
               value="rankings"
-              className="flex h-8 items-center gap-2 py-1 text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
+              className="flex h-full w-full items-center gap-2 py-0 px-3 text-white/80 rounded-md box-border leading-none data-[state=active]:bg-white/20 data-[state=active]:text-white data-[state=active]:outline data-[state=active]:outline-1 data-[state=active]:outline-white/30"
             >
-              <Trophy className="h-4 w-4" />
+              <Trophy className="h-4 w-4 shrink-0" />
               <span className="hidden sm:inline">Rankings</span>
               <span className="sm:hidden">Rank</span>
             </TabsTrigger>
             <TabsTrigger
               value="statistics"
-              className="flex h-8 items-center gap-2 py-1 text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
+              className="flex h-full w-full items-center gap-2 py-0 px-3 text-white/80 rounded-md box-border leading-none data-[state=active]:bg-white/20 data-[state=active]:text-white data-[state=active]:outline data-[state=active]:outline-1 data-[state=active]:outline-white/30"
             >
-              <BarChart3 className="h-4 w-4" />
+              <BarChart3 className="h-4 w-4 shrink-0" />
               <span className="hidden sm:inline">Estatísticas</span>
               <span className="sm:hidden">Stats</span>
             </TabsTrigger>
@@ -172,17 +172,17 @@ export const ClassroomDetails = ({
               <>
                 <TabsTrigger
                   value="students"
-                  className="flex h-8 items-center gap-2 py-1 text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
+                  className="flex h-full w-full items-center gap-2 py-0 px-3 text-white/80 rounded-md box-border leading-none data-[state=active]:bg-white/20 data-[state=active]:text-white data-[state=active]:outline data-[state=active]:outline-1 data-[state=active]:outline-white/30"
                 >
-                  <Users className="h-4 w-4" />
+                  <Users className="h-4 w-4 shrink-0" />
                   <span className="hidden sm:inline">Alunos</span>
                   <span className="sm:hidden">Alunos</span>
                 </TabsTrigger>
                 <TabsTrigger
                   value="questions"
-                  className="flex h-8 items-center gap-2 py-1 text-white/80 data-[state=active]:bg-white/20 data-[state=active]:text-white"
+                  className="flex h-full w-full items-center gap-2 py-0 px-3 text-white/80 rounded-md box-border leading-none data-[state=active]:bg-white/20 data-[state=active]:text-white data-[state=active]:outline data-[state=active]:outline-1 data-[state=active]:outline-white/30"
                 >
-                  <HelpCircle className="h-4 w-4" />
+                  <HelpCircle className="h-4 w-4 shrink-0" />
                   <span className="hidden sm:inline">Perguntas</span>
                   <span className="sm:hidden">Q&A</span>
                 </TabsTrigger>
