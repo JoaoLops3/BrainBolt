@@ -262,7 +262,7 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
         {/* Botão X para sair */}
         <button
           onClick={onBack}
-          className="fixed top-12 sm:top-8 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
+          className="fixed top-5 sm:top-8 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
         >
           <svg
             className="w-6 h-6"
@@ -502,7 +502,7 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
       {/* Botão X para sair */}
       <button
         onClick={onBack}
-        className="fixed top-12 sm:top-8 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
+        className="fixed top-5 sm:top-8 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
       >
         <svg
           className="w-6 h-6"

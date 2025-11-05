@@ -82,7 +82,7 @@ export const ClassroomDetails = ({
               <Button
                 onClick={handleStartCompetition}
                 size="sm"
-                className="backdrop-blur-sm bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-md flex-shrink-0 text-xs sm:text-sm px-2 sm:px-3 py-1.5 sm:py-2 h-auto"
+                className="backdrop-blur-sm bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-md flex-shrink-0 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5 h-auto"
               >
                 <Play className="h-3 w-3 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" />
                 <span className="hidden sm:inline">Iniciar Competição</span>
