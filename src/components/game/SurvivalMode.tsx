@@ -18,6 +18,7 @@ import { useGameQuestions } from "@/hooks/useGameQuestions";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 
 interface SurvivalModeProps {
   onBack: () => void;
@@ -571,9 +572,9 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
 
         {/* Pergunta */}
         {currentQuestion && (
-          <Card className="backdrop-blur-lg bg-white/20 border-white/30 shadow-xl">
-            <CardHeader className="p-4 sm:p-6">
-              <CardTitle className="text-lg sm:text-xl md:text-2xl text-center text-white leading-tight">
+          <Card className="rounded-lg border text-card-foreground backdrop-blur-lg bg-white/20 border-white/30 shadow-xl">
+            <CardHeader className="flex flex-col space-y-1.5 p-4 sm:p-6">
+              <CardTitle className="font-semibold tracking-tight text-lg sm:text-xl md:text-2xl text-center text-white leading-tight">
                 {currentQuestion.question}
               </CardTitle>
             </CardHeader>
@@ -589,16 +590,17 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
                     key={index}
                     onClick={() => handleAnswer(index)}
                     disabled={showAnswer}
-                    className={`w-full h-auto min-h-[52px] sm:min-h-[60px] text-left justify-start p-3 sm:p-4 transition-all ${
+                    className={cn(
+                      "inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border hover:text-accent-foreground w-full h-auto min-h-[52px] sm:min-h-[60px] text-left justify-start p-3 sm:p-4 transition-all",
                       showCorrect
-                        ? "bg-green-500 hover:bg-green-500 text-white border-2 border-green-600"
+                        ? "bg-green-500/90 backdrop-blur-lg text-white border-green-400 shadow-lg shadow-green-500/50"
                         : showWrong
-                        ? "bg-red-500 hover:bg-red-500 text-white border-2 border-red-600"
+                        ? "bg-red-500/90 backdrop-blur-lg text-white border-red-400 shadow-lg shadow-red-500/50"
                         : isSelected
-                        ? "bg-white/30 border-2 border-white/50 text-white"
+                        ? "bg-white/30 border-white/30 text-white active:bg-white/30"
                         : "bg-white/5 border-white/20 hover:bg-white/20 text-white active:bg-white/30"
-                    }`}
-                    variant={showCorrect || showWrong ? "default" : "outline"}
+                    )}
+                    variant="ghost"
                   >
                     <span className="font-semibold mr-2 sm:mr-3 text-base sm:text-lg flex-shrink-0">
                       {String.fromCharCode(65 + index)}.

@@ -25,6 +25,7 @@ import { TeacherDashboard } from "@/components/classroom/TeacherDashboard";
 import { StudentDashboard } from "@/components/classroom/StudentDashboard";
 import { SurvivalMode } from "./SurvivalMode";
 import { PhysicalModeSimple } from "./PhysicalModeSimple";
+import { PhysicalModeGame } from "./PhysicalModeGame";
 import { useAchievements } from "@/hooks/useAchievements";
 import { useRetentionNotifications } from "@/hooks/useRetentionNotifications";
 import { useNativeNotifications } from "@/hooks/useNativeNotifications";
@@ -112,6 +113,7 @@ export const BrainBoltGame = () => {
   const [multiplayerRoomId, setMultiplayerRoomId] = useState<string>("");
   const [isMultiplayerHost, setIsMultiplayerHost] = useState(false);
   const [physicalModeActive, setPhysicalModeActive] = useState(false);
+  const [physicalModeGameActive, setPhysicalModeGameActive] = useState(false);
 
   const [gameQuestions, setGameQuestions] = useState<Question[]>([]);
   const [stats, setStats] = useState<GameStats>({
@@ -432,7 +434,10 @@ export const BrainBoltGame = () => {
       }
     };
 
-    onMessage(messageHandler);
+    const cleanup = onMessage(messageHandler);
+    
+    // Cleanup quando o componente desmontar ou as dependências mudarem
+    return cleanup;
   }, [
     onMessage,
     gameState.gamePhase,
@@ -484,13 +489,23 @@ export const BrainBoltGame = () => {
     return <SurvivalMode onBack={backToMenu} />;
   }
 
+  if (physicalModeGameActive) {
+    return (
+      <PhysicalModeGame
+        onBackToMenu={() => {
+          setPhysicalModeGameActive(false);
+          setPhysicalModeActive(false);
+        }}
+      />
+    );
+  }
+
   if (physicalModeActive) {
     return (
       <PhysicalModeSimple
         onBackToMenu={() => setPhysicalModeActive(false)}
         onStartGame={(mode) => {
-          startGame(mode);
-          setPhysicalModeActive(false);
+          setPhysicalModeGameActive(true);
         }}
       />
     );

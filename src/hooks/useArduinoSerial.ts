@@ -6,13 +6,29 @@ interface ArduinoSerialHook {
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
   sendCommand: (command: object) => Promise<void>;
-  onMessage: (callback: (data: string) => void) => void;
+  onMessage: (callback: (data: string) => void) => () => void; // Retorna função de cleanup
 }
 
 // Verificar suporte ao Web Serial API
 const isWebSerialSupported = () => {
   return "serial" in navigator;
 };
+
+// Filtrar avisos de Bluetooth do console para reduzir poluição
+if (typeof window !== "undefined") {
+  const originalWarn = console.warn;
+  console.warn = (...args: any[]) => {
+    const message = args.join(" ");
+    // Ignorar avisos de dispositivos Bluetooth bloqueados
+    if (
+      message.includes("Serial blocklist") ||
+      message.includes("bluetoothServiceClassId")
+    ) {
+      return;
+    }
+    originalWarn.apply(console, args);
+  };
+}
 
 // Declaração da interface SerialPort do navegador
 interface SerialPort extends EventTarget {
@@ -35,6 +51,9 @@ declare global {
 const messageCallbacks = new Set<(data: string) => void>();
 let reader: ReadableStreamDefaultReader | null = null;
 let port: SerialPort | null = null;
+let messageBuffer = ""; // Buffer para mensagens fragmentadas
+let commandQueue: object[] = []; // Fila de comandos
+let isProcessingQueue = false; // Flag para controlar processamento da fila
 
 export const useArduinoSerial = (): ArduinoSerialHook => {
   const [isConnected, setIsConnected] = useState(false);
@@ -109,7 +128,11 @@ export const useArduinoSerial = (): ArduinoSerialHook => {
         try {
           if (port) {
             setIsConnected(true);
-            if ((port as any).readable && messageCallbacks.size > 0 && !reader) {
+            if (
+              (port as any).readable &&
+              messageCallbacks.size > 0 &&
+              !reader
+            ) {
               readFromSerial(port as any);
             }
             toast({
@@ -185,34 +208,36 @@ export const useArduinoSerial = (): ArduinoSerialHook => {
         return;
       }
 
-      try {
-        const encoder = new TextEncoder();
-        const data = encoder.encode(JSON.stringify(command) + "\n");
+      if (!port.writable) {
+        console.warn("⚠️ Porta não está disponível para escrita");
+        return;
+      }
 
-        if (port.writable) {
-          const writer = port.writable.getWriter();
-          await writer.write(data);
-          writer.releaseLock();
-        }
-      } catch (error) {
-        console.error("❌ Erro ao enviar comando:", error);
-        toast({
-          title: "Erro ao enviar comando",
-          description: "Não foi possível enviar dados ao Arduino",
-          variant: "destructive",
-        });
+      // Adicionar comando à fila
+      commandQueue.push(command);
+
+      // Iniciar processamento da fila se não estiver processando
+      if (!isProcessingQueue) {
+        processCommandQueue();
       }
     },
     [port, toast]
   );
 
   const onMessage = useCallback((callback: (data: string) => void) => {
+    console.log("➕ Callback registrado. Total:", messageCallbacks.size + 1);
     messageCallbacks.add(callback);
 
     // Se já estiver conectado, iniciar leitura
     if (port && port.readable && !reader) {
       readFromSerial(port);
     }
+
+    // Retornar função de cleanup para remover o callback
+    return () => {
+      console.log("➖ Callback removido. Total:", messageCallbacks.size - 1);
+      messageCallbacks.delete(callback);
+    };
   }, []);
 
   return {
@@ -224,12 +249,52 @@ export const useArduinoSerial = (): ArduinoSerialHook => {
   };
 };
 
+// Função para processar fila de comandos
+async function processCommandQueue() {
+  if (isProcessingQueue || commandQueue.length === 0 || !port?.writable) {
+    return;
+  }
+
+  isProcessingQueue = true;
+
+  while (commandQueue.length > 0) {
+    const command = commandQueue.shift();
+    if (!command) continue;
+
+    let writer: WritableStreamDefaultWriter | null = null;
+
+    try {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(JSON.stringify(command) + "\n");
+
+      writer = port.writable.getWriter();
+      await writer.write(data);
+
+      // Pequeno delay entre comandos para evitar sobrecarga
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    } catch (error) {
+      console.error("❌ Erro ao enviar comando da fila:", error);
+    } finally {
+      if (writer) {
+        try {
+          writer.releaseLock();
+        } catch (e) {
+          console.error("Erro ao liberar writer:", e);
+        }
+      }
+    }
+  }
+
+  isProcessingQueue = false;
+}
+
 // Função auxiliar para ler da porta serial
 async function readFromSerial(port: SerialPort) {
   if (!port.readable || messageCallbacks.size === 0) return;
 
   const decoder = new TextDecoder();
   reader = port.readable.getReader();
+  messageBuffer = ""; // Resetar buffer ao iniciar
 
   try {
     while (true) {
@@ -242,12 +307,22 @@ async function readFromSerial(port: SerialPort) {
 
       if (value) {
         const text = decoder.decode(value);
-        const lines = text.split("\n");
+        messageBuffer += text;
+
+        // Processar mensagens completas (terminadas com \n)
+        const lines = messageBuffer.split("\n");
+
+        // Guardar a última linha incompleta no buffer
+        messageBuffer = lines.pop() || "";
 
         for (const line of lines) {
           const trimmed = line.trim();
           if (trimmed.length > 0) {
-            console.log("📱 Arduino:", trimmed);
+            // Logar apenas mensagens JSON importantes
+            if (trimmed.startsWith("{")) {
+              console.log("📱 Arduino:", trimmed);
+            }
+
             for (const cb of messageCallbacks) {
               try {
                 cb(trimmed);
@@ -264,5 +339,6 @@ async function readFromSerial(port: SerialPort) {
   } finally {
     reader?.releaseLock();
     reader = null;
+    messageBuffer = ""; // Limpar buffer ao finalizar
   }
 }
