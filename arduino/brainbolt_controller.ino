@@ -1,6 +1,6 @@
 /*
  * Brain Bolt - Controlador de Botões Físicos
- * Comunicação via Serial para WebSocket Bridge
+ * Comunicação via Web Serial API (USB → Navegador)
  *
  * Hardware:
  * - 4 botões de resposta (A, B, C, D)

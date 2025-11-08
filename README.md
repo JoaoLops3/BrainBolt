@@ -39,7 +39,7 @@ O Brain Bolt foi criado para resolver um dos maiores desafios da educação mode
 - **Salas de Aula**: Professores criam grupos para turmas
 - **Perguntas Customizadas**: Crie perguntas ilimitadas
 - **Competições**: Rankings e estatísticas por sala
-- **Hardware Físico**: Botões Arduino - [Setup Super Simples](docs/hardware/SETUP-SIMPLES.md) | [Tutorial Completo](docs/hardware/ARDUINO-SETUP.md)
+- **Hardware Físico**: Botões Arduino via Web Serial API - [Guia de Conexão](docs/CONECTAR-ARDUINO-RAPIDO.md)
 
 #### 🎨 UX/UI
 
@@ -77,6 +77,12 @@ O Brain Bolt foi criado para resolver um dos maiores desafios da educação mode
 - **Real-time subscriptions** - Atualizações em tempo real via WebSockets
 - **Supabase Auth** - Autenticação completa com providers sociais
 - **Edge Functions** - Serverless functions para lógica de negócio
+
+### Hardware & IoT
+
+- **Web Serial API** - Conexão direta USB → Navegador (sem servidor)
+- **Arduino** - Controladores físicos para modo educacional
+- **Plug & Play** - Configuração zero, conexão instantânea
 
 ### Mobile & PWA
 
@@ -224,7 +230,7 @@ VITE_SUPABASE_ANON_KEY=sua_chave_anonima_do_supabase
 
 > 💡 **Dica**: Nunca compartilhe seu arquivo `.env.local` - ele contém credenciais sensíveis!
 
-### 5. Execute o Projeto
+### 4. Execute o Projeto
 
 ```bash
 # Desenvolvimento (hot reload)
@@ -237,16 +243,19 @@ npm run preview
 
 Acesse: `http://localhost:8080`
 
-### 6. Hardware Arduino (Opcional)
+### 5. Hardware Arduino (Opcional)
 
-**🎉 Método Super Simples:** [Guia Simplificado](docs/hardware/SETUP-SIMPLES.md)
+**🎉 Conexão Direta via Web Serial API:** [Guia Rápido](docs/CONECTAR-ARDUINO-RAPIDO.md)
 
-**Antes:** Terminal, comandos, configurações...  
-**Agora:** Conecte via USB, clique em "Conectar Arduino" no site e jogue!
+✨ **Super Simples:**
 
-Veja também: [Tutorial Completo](docs/hardware/ARDUINO-SETUP.md) (método avançado com servidor WebSocket)
+1. Conecte Arduino via USB
+2. Clique em "Conectar Arduino"
+3. Jogue!
 
-### 5. Configuração Mobile (Opcional)
+**Sem servidor, sem terminal, sem complicação!** A conexão é feita diretamente do navegador para o Arduino usando a Web Serial API.
+
+### 6. Configuração Mobile (Opcional)
 
 Para desenvolvimento mobile, você precisa do Capacitor configurado:
 
@@ -344,11 +353,12 @@ BrainBolt/
 │   │   └── ui/             # Componentes de interface (shadcn/ui)
 │   ├── contexts/           # Contextos React (AuthContext)
 │   ├── data/              # Dados estáticos (perguntas.ts - 400+ perguntas)
-│   ├── hooks/             # Hooks customizados (use-mobile, use-toast)
+│   ├── hooks/             # Hooks customizados (useArduinoSerial - Web Serial API)
 │   ├── integrations/      # Integrações externas (Supabase client)
 │   ├── lib/               # Utilitários (utils, validações)
 │   ├── pages/             # Páginas principais (Index, Auth, NotFound)
 │   └── types/             # Definições TypeScript (game.ts)
+├── arduino/               # Código Arduino para hardware físico
 ├── ios/                   # Projeto iOS nativo (Xcode)
 ├── android/               # Projeto Android nativo (Gradle)
 ├── supabase/              # Configurações do Supabase
@@ -437,9 +447,6 @@ npx cap sync         # Sincronizar
 npx cap open ios     # Xcode
 npx cap open android # Android Studio
 
-# Hardware (Arduino)
-cd server && npm run dev  # Servidor WebSocket
-
 # Utilitários
 npm run lint         # ESLint
 npx cap doctor       # Verificar Capacitor
@@ -483,10 +490,10 @@ npx cap doctor       # Verificar Capacitor
 
 #### 🔧 Hardware Físico
 
-- Servidor WebSocket completo
-- Tutorial Arduino (790 linhas)
-- Protocolo de comunicação documentado
-- Integração Supabase
+- **Web Serial API**: Conexão direta USB → Navegador
+- **Zero Configuração**: Sem servidor ou terminal
+- **Plug & Play**: Conecte e jogue instantaneamente
+- **Compatível**: Chrome, Edge, Opera
 
 #### ⚡ Performance
 

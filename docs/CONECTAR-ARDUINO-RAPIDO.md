@@ -2,25 +2,15 @@
 
 ## 🎯 Setup Super Rápido
 
-**Metodo ANTIGO:**
-
-```
-1. Terminal
-2. npm run dev
-3. Outro terminal
-4. npm run bridge
-5. Configurar portas
-6. Esperar conexão
-7. Abrir site
-```
-
-**Metodo NOVO (Agora!):**
+**Conexão Direta via Web Serial API:**
 
 ```
 1. Conectar Arduino USB
 2. Clicar "Conectar Arduino"
 3. JOGAR! 🎮
 ```
+
+✨ **Sem servidor, sem terminal, sem complicação!**
 
 ---
 
@@ -62,8 +52,12 @@
 
 - ❌ Terminal
 - ❌ Comandos
-- ❌ Servidor WebSocket
+- ❌ Servidor externo
 - ❌ Configurações complicadas
+
+**Tecnologia:**
+
+- ✅ Web Serial API (conexão direta USB → Navegador)
 
 ---
 
@@ -90,10 +84,6 @@ Agora é só:
 - Use **Chrome**
 - Ou **Edge**
 - Ou **Opera**
-
-### Precisa do método antigo?
-
-Veja: [ARDUINO-SETUP.md](hardware/ARDUINO-SETUP.md)
 
 ---
 
