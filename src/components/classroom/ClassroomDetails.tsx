@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ResponsiveDialog } from "@/components/ui/ResponsiveDialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ClassroomWithDetails } from "@/types/classroom";
@@ -6,13 +6,14 @@ import { ClassroomRankings } from "./ClassroomRankings";
 import { ClassroomStatistics } from "./ClassroomStatistics";
 import { ClassroomStudentList } from "./ClassroomStudentList";
 import { CustomQuestionsManager } from "./CustomQuestionsManager";
+import { StudentGamePanel } from "./StudentGamePanel";
 import {
   School,
   Trophy,
   Users,
   BarChart3,
   HelpCircle,
-  Play,
+  Gamepad2,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -38,21 +39,23 @@ export const ClassroomDetails = ({
 
   if (!classroom) return null;
 
+  const handleStartGame = () => {
+    // Fechar o dialog
+    onOpenChange(false);
+
+    // Navegar para a tela de jogo
+    // O jogo já vai salvar automaticamente no ranking da sala
+    toast({
+      title: "🎮 Iniciando jogo!",
+      description: `Seus pontos serão salvos em ${classroom.name}`,
+    });
+  };
+
   const isActive = () => {
     const now = new Date();
     const start = new Date(classroom.competition_start_date);
     const end = new Date(classroom.competition_end_date);
     return now >= start && now <= end && classroom.is_active;
-  };
-
-  const handleStartCompetition = () => {
-    toast({
-      title: "🎯 Competição Iniciada!",
-      description:
-        "A competição da sala foi iniciada. Os alunos podem começar a jogar!",
-    });
-    // Aqui você pode implementar a lógica para iniciar a competição
-    // Por exemplo, atualizar o status da sala no banco de dados
   };
 
   return (
@@ -62,12 +65,12 @@ export const ClassroomDetails = ({
       maxWidth="6xl"
       maxHeight="screen"
     >
-      <div className="flex flex-col h-[90vh] max-h-[90vh]">
-        <div className="flex flex-col gap-1.5 text-center sm:text-left flex-shrink-0 pt-12">
+      <div className="flex flex-col h-[75vh] sm:h-[80vh] max-h-[75vh] sm:max-h-[80vh]">
+        <div className="flex flex-col gap-1.5 text-center sm:text-left flex-shrink-0 pt-4 sm:pt-6">
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-start gap-3 flex-1 min-w-0">
               <School className="h-6 w-6 text-white mt-1 flex-shrink-0" />
-              <div className="flex-1 min-w-0">
+              <div className="min-w-0">
                 <h2 className="font-semibold tracking-tight text-xl mb-2 text-white">
                   {classroom.name}
                 </h2>
@@ -78,20 +81,9 @@ export const ClassroomDetails = ({
                 )}
               </div>
             </div>
-            {isTeacher && isActive() && (
-              <Button
-                onClick={handleStartCompetition}
-                size="sm"
-                className="backdrop-blur-sm bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-md flex-shrink-0 text-xs sm:text-sm px-2 sm:px-3 py-1 sm:py-1.5 h-auto"
-              >
-                <Play className="h-3 w-3 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" />
-                <span className="hidden sm:inline">Iniciar Competição</span>
-                <span className="sm:hidden">Iniciar</span>
-              </Button>
-            )}
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 mt-3">
+          <div className="flex flex-wrap items-center gap-2 mt-2 sm:mt-3">
             {isActive() ? (
               <Badge className="bg-white/20 text-white border-white/20 hover:bg-white/30">
                 Em Andamento
@@ -114,7 +106,7 @@ export const ClassroomDetails = ({
             )}
           </div>
 
-          <div className="mt-2 text-sm text-white/80">
+          <div className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-white/80">
             📅{" "}
             {format(
               new Date(classroom.competition_start_date),
@@ -134,9 +126,11 @@ export const ClassroomDetails = ({
           </div>
 
           {isTeacher && (
-            <div className="mt-2 mb-4 flex items-center gap-2">
-              <span className="text-sm text-white/80">Código da sala:</span>
-              <code className="px-3 py-1 bg-white/5 backdrop-blur-sm rounded font-mono text-base font-bold text-white">
+            <div className="mt-1.5 sm:mt-2 mb-2 sm:mb-4 flex items-center gap-2">
+              <span className="text-xs sm:text-sm text-white/80">
+                Código da sala:
+              </span>
+              <code className="px-2 sm:px-3 py-0.5 sm:py-1 bg-white/5 backdrop-blur-sm rounded font-mono text-sm sm:text-base font-bold text-white">
                 {classroom.class_code}
               </code>
             </div>
@@ -150,7 +144,7 @@ export const ClassroomDetails = ({
         >
           <TabsList
             className={`grid w-full ${
-              isTeacher ? "grid-cols-4" : "grid-cols-2"
+              isTeacher ? "grid-cols-4" : "grid-cols-3"
             } h-auto p-px gap-px overflow-hidden items-stretch rounded-md border bg-white/5 backdrop-blur-sm border-white/20`}
           >
             <TabsTrigger
@@ -169,6 +163,16 @@ export const ClassroomDetails = ({
               <span className="hidden sm:inline">Estatísticas</span>
               <span className="sm:hidden">Stats</span>
             </TabsTrigger>
+            {!isTeacher && (
+              <TabsTrigger
+                value="play"
+                className="flex h-full w-full items-center gap-1.5 px-1.5 py-[2px] my-px text-[10px] sm:text-[11px] text-white/80 rounded-md box-border leading-tight data-[state=active]:bg-white/20 data-[state=active]:text-white data-[state=active]:outline data-[state=active]:outline-1 data-[state=active]:outline-white/30"
+              >
+                <Gamepad2 className="h-3 w-3 shrink-0" />
+                <span className="hidden sm:inline">Jogar</span>
+                <span className="sm:hidden">Jogar</span>
+              </TabsTrigger>
+            )}
             {isTeacher && (
               <>
                 <TabsTrigger
@@ -191,7 +195,7 @@ export const ClassroomDetails = ({
             )}
           </TabsList>
 
-          <div className="flex-1 overflow-y-auto mt-4">
+          <div className="flex-1 overflow-y-auto mt-2 sm:mt-4">
             <TabsContent value="rankings" className="mt-0">
               <ClassroomRankings classroomId={classroom.id} />
             </TabsContent>
@@ -199,6 +203,16 @@ export const ClassroomDetails = ({
             <TabsContent value="statistics" className="mt-0">
               <ClassroomStatistics classroomId={classroom.id} />
             </TabsContent>
+
+            {!isTeacher && (
+              <TabsContent value="play" className="mt-0">
+                <StudentGamePanel
+                  classroomId={classroom.id}
+                  classroomName={classroom.name}
+                  onStartGame={handleStartGame}
+                />
+              </TabsContent>
+            )}
 
             {isTeacher && (
               <>

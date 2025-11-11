@@ -338,21 +338,37 @@ export const BrainBoltGame = () => {
       const dbGameMode: "normal" | "speed" | "multiplayer" | "survival" =
         finalStats.gameMode === "physical" ? "normal" : finalStats.gameMode;
 
-      const { error } = await supabase.from("game_sessions").insert({
-        user_id: user.id,
-        game_mode: dbGameMode,
-        final_score: finalStats.finalScore,
-        questions_answered: finalStats.totalQuestions,
-        correct_answers: safeCorrectAnswers,
-        categories_completed: finalStats.categoriesCompleted,
-        max_streak: finalStats.maxStreak,
-        time_spent: finalStats.timeSpent,
-        game_result: gameResult,
-      });
+      const { data: sessionData, error } = await supabase
+        .from("game_sessions")
+        .insert({
+          user_id: user.id,
+          game_mode: dbGameMode,
+          final_score: finalStats.finalScore,
+          questions_answered: finalStats.totalQuestions,
+          correct_answers: safeCorrectAnswers,
+          categories_completed: finalStats.categoriesCompleted,
+          max_streak: finalStats.maxStreak,
+          time_spent: finalStats.timeSpent,
+          game_result: gameResult,
+        })
+        .select()
+        .single();
 
       if (error) {
         console.error("Erro ao salvar sessão:", error);
         throw error;
+      }
+
+      // Se estiver jogando dentro de uma sala, vincular a sessão
+      const classroomId = localStorage.getItem("currentClassroomId");
+      if (classroomId && sessionData) {
+        await supabase.from("classroom_game_sessions").insert({
+          classroom_id: classroomId,
+          student_id: user.id,
+          game_session_id: sessionData.id,
+        });
+        // Limpar o classroomId do localStorage
+        localStorage.removeItem("currentClassroomId");
       }
     } catch (error) {
       console.error("Error saving game session:", error);
@@ -435,7 +451,7 @@ export const BrainBoltGame = () => {
     };
 
     const cleanup = onMessage(messageHandler);
-    
+
     // Cleanup quando o componente desmontar ou as dependências mudarem
     return cleanup;
   }, [

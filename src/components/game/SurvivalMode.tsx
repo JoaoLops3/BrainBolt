@@ -209,16 +209,32 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
 
     // Salvar sessão no banco
     try {
-      const { error } = await supabase.from("game_sessions").insert({
-        user_id: user.id,
-        game_mode: "survival",
-        final_score: score,
-        correct_answers: questionsAnswered,
-        max_streak: streak,
-        time_spent: 0,
-      });
+      const { data: sessionData, error } = await supabase
+        .from("game_sessions")
+        .insert({
+          user_id: user.id,
+          game_mode: "survival",
+          final_score: score,
+          correct_answers: questionsAnswered,
+          max_streak: streak,
+          time_spent: 0,
+        })
+        .select()
+        .single();
 
       if (error) throw error;
+
+      // Se estiver jogando dentro de uma sala, vincular a sessão
+      const classroomId = localStorage.getItem("currentClassroomId");
+      if (classroomId && sessionData) {
+        await supabase.from("classroom_game_sessions").insert({
+          classroom_id: classroomId,
+          student_id: user.id,
+          game_session_id: sessionData.id,
+        });
+        // Limpar o classroomId do localStorage
+        localStorage.removeItem("currentClassroomId");
+      }
 
       // Atualizar leaderboard
       await loadLeaderboard();
@@ -263,7 +279,7 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
         {/* Botão X para sair */}
         <button
           onClick={onBack}
-          className="fixed top-5 sm:top-8 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
+          className="fixed top-16 sm:top-20 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
         >
           <svg
             className="w-6 h-6"
@@ -280,7 +296,7 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
           </svg>
         </button>
 
-        <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 md:space-y-6 pt-20 sm:pt-24">
+        <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 md:space-y-6 pt-[7.75rem]">
           {/* Card Principal */}
           <Card className="backdrop-blur-lg bg-white/20 border-white/30 shadow-2xl">
             <CardHeader className="p-4 sm:p-6">
@@ -503,7 +519,7 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
       {/* Botão X para sair */}
       <button
         onClick={onBack}
-        className="fixed top-5 sm:top-8 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
+        className="fixed top-16 sm:top-20 left-4 z-50 bg-white/20 hover:bg-white/30 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm border border-white/30 shadow-lg"
       >
         <svg
           className="w-6 h-6"

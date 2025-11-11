@@ -242,7 +242,7 @@ export const PhysicalModeSimple = ({
 
         <div className="relative z-10 flex flex-col h-full max-w-2xl mx-auto justify-center px-4">
           {/* Cabeçalho */}
-          <div className="flex items-center justify-between mb-4 mt-10">
+          <div className="flex items-center justify-between mb-4 mt-[4.5rem]">
             <Button
               variant="ghost"
               size="icon"

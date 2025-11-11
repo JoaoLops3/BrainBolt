@@ -58,14 +58,14 @@ export const ResponsiveDialog = ({
     "4xl": "max-h-4xl",
     "6xl": "max-h-6xl",
     full: "max-h-full",
-    screen: "max-h-[95vh] sm:max-h-[85vh]",
+    screen: "max-h-[85vh] sm:max-h-[80vh]",
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className={cn(
-          "w-[95vw] sm:w-full mx-auto p-4 sm:p-6 pt-16",
+          "w-[95vw] sm:w-full mx-auto p-3 sm:p-6 pt-14 sm:pt-16 rounded-2xl",
           maxWidthClasses[maxWidth],
           maxHeightClasses[maxHeight],
           "overflow-y-auto",

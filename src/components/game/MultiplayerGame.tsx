@@ -166,19 +166,35 @@ export const MultiplayerGame = ({
 
       const safeCorrectAnswers = Math.min(Math.floor(userScore / 100), 24);
 
-      await supabase.from("game_sessions").insert({
-        user_id: user.id,
-        game_mode: "multiplayer",
-        final_score: userScore,
-        questions_answered: 24,
-        correct_answers: safeCorrectAnswers,
-        categories_completed: [],
-        max_streak: 0,
-        time_spent: 360,
-        game_result: gameResult,
-        opponent_id: opponentId,
-        room_id: room.id,
-      });
+      const { data: sessionData } = await supabase
+        .from("game_sessions")
+        .insert({
+          user_id: user.id,
+          game_mode: "multiplayer",
+          final_score: userScore,
+          questions_answered: 24,
+          correct_answers: safeCorrectAnswers,
+          categories_completed: [],
+          max_streak: 0,
+          time_spent: 360,
+          game_result: gameResult,
+          opponent_id: opponentId,
+          room_id: room.id,
+        })
+        .select()
+        .single();
+
+      // Se estiver jogando dentro de uma sala, vincular a sessão
+      const classroomId = localStorage.getItem("currentClassroomId");
+      if (classroomId && sessionData) {
+        await supabase.from("classroom_game_sessions").insert({
+          classroom_id: classroomId,
+          student_id: user.id,
+          game_session_id: sessionData.id,
+        });
+        // Limpar o classroomId do localStorage
+        localStorage.removeItem("currentClassroomId");
+      }
     } catch (error) {
       console.error("Error saving multiplayer results:", error);
     }

@@ -262,7 +262,7 @@ export const useClassrooms = () => {
 
         toast({
           title: "✅ Entrada confirmada!",
-          description: `Você entrou na sala: ${classroom.name}`,
+          description: `Você entrou na sala: ${data.name}`,
         });
 
         await fetchStudentClassrooms();
@@ -475,7 +475,7 @@ export const useClassrooms = () => {
           .select(
             `
             *,
-            profiles:user_id (display_name, avatar_url)
+            profiles:student_id (display_name, avatar_url)
           `
           )
           .eq("classroom_id", classroomId)
