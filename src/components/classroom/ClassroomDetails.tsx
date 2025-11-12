@@ -26,6 +26,7 @@ interface ClassroomDetailsProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   isTeacher?: boolean;
+  onBack?: () => void;
 }
 
 export const ClassroomDetails = ({
@@ -33,6 +34,7 @@ export const ClassroomDetails = ({
   open,
   onOpenChange,
   isTeacher = false,
+  onBack,
 }: ClassroomDetailsProps) => {
   const [activeTab, setActiveTab] = useState("rankings");
   const { toast } = useToast();
@@ -43,11 +45,14 @@ export const ClassroomDetails = ({
     // Fechar o dialog
     onOpenChange(false);
 
-    // Navegar para a tela de jogo
-    // O jogo já vai salvar automaticamente no ranking da sala
+    // Voltar para o menu principal
+    if (onBack) {
+      onBack();
+    }
+
     toast({
-      title: "🎮 Iniciando jogo!",
-      description: `Seus pontos serão salvos em ${classroom.name}`,
+      title: "🎮 Pronto para jogar!",
+      description: `Escolha um modo de jogo. Seus pontos serão salvos em ${classroom.name}`,
     });
   };
 
@@ -207,6 +212,7 @@ export const ClassroomDetails = ({
             {!isTeacher && (
               <TabsContent value="play" className="mt-0">
                 <StudentGamePanel
+                  key={`${classroom.id}-${open}`}
                   classroomId={classroom.id}
                   classroomName={classroom.name}
                   onStartGame={handleStartGame}

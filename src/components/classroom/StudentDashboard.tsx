@@ -162,6 +162,7 @@ export const StudentDashboard = ({ onBack }: StudentDashboardProps) => {
         open={detailsOpen}
         onOpenChange={setDetailsOpen}
         isTeacher={false}
+        onBack={onBack}
       />
     </div>
   );

@@ -536,7 +536,7 @@ export const SurvivalMode = ({ onBack }: SurvivalModeProps) => {
         </svg>
       </button>
 
-      <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 pt-20 sm:pt-24">
+      <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 pt-28 sm:pt-32">
         {/* Header com estatísticas */}
         <Card className="backdrop-blur-lg bg-white/20 border-white/30 shadow-xl">
           <CardContent className="p-3 sm:p-4">

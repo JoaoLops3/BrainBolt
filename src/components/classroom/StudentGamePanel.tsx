@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,31 +12,133 @@ interface StudentGamePanelProps {
   onStartGame: () => void;
 }
 
+interface StudentStats {
+  rank: number;
+  totalScore: number;
+  accuracy: number;
+}
+
 export const StudentGamePanel = ({
   classroomId,
   classroomName,
   onStartGame,
 }: StudentGamePanelProps) => {
   const { user } = useAuth();
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<StudentStats | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const normalizeStats = (data: any): StudentStats => {
+    const rank = Number(data?.rank ?? data?.position ?? 1);
+    const totalScore = Number(data?.total_score ?? data?.score ?? 0);
+    const accuracyRaw =
+      data?.accuracy_rate ?? data?.accuracy_percentage ?? data?.accuracy ?? 0;
+    const accuracy = Number(accuracyRaw) || 0;
+
+    return {
+      rank: rank < 1 ? 1 : rank,
+      totalScore,
+      accuracy,
+    };
+  };
+
+  // Carregar estatísticas automaticamente
+  useEffect(() => {
+    if (user && classroomId) {
+      loadMyStats();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [classroomId, user]);
 
   // Buscar estatísticas do aluno nesta sala
   const loadMyStats = async () => {
     if (!user) return;
 
+    console.log(
+      "📊 Carregando estatísticas da sala:",
+      classroomId,
+      "para usuário:",
+      user.id
+    );
     setLoading(true);
     try {
-      const { data } = await supabase
+      const { data, error: rpcError } = await supabase
         .rpc("get_classroom_rankings", {
           p_classroom_id: classroomId,
         })
         .eq("student_id", user.id)
         .single();
 
-      setStats(data);
+      console.log("📊 Resultado RPC:", data, "Erro:", rpcError);
+      if (data) {
+        setStats(normalizeStats(data));
+      } else {
+        setStats(null);
+      }
     } catch (error) {
       console.error("Error loading stats:", error);
+      // Se houver erro, tentar buscar diretamente da tabela
+      console.log("🔄 Tentando fallback - buscar diretamente da tabela");
+      try {
+        const { data: sessionsData, error: fallbackError } = await supabase
+          .from("classroom_game_sessions")
+          .select(
+            `
+            *,
+            game_sessions (
+              final_score,
+              correct_answers,
+              questions_answered
+            )
+          `
+          )
+          .eq("classroom_id", classroomId)
+          .eq("student_id", user.id);
+
+        console.log(
+          "📊 Dados do fallback:",
+          sessionsData?.length || 0,
+          "sessões encontradas"
+        );
+
+        if (sessionsData && sessionsData.length > 0) {
+          const totalScore = sessionsData.reduce(
+            (sum: number, s: any) => sum + (s.game_sessions?.final_score || 0),
+            0
+          );
+          const totalCorrect = sessionsData.reduce(
+            (sum: number, s: any) =>
+              sum + (s.game_sessions?.correct_answers || 0),
+            0
+          );
+          const totalQuestions = sessionsData.reduce(
+            (sum: number, s: any) =>
+              sum + (s.game_sessions?.questions_answered || 0),
+            0
+          );
+          const accuracy =
+            totalQuestions > 0 ? (totalCorrect / totalQuestions) * 100 : 0;
+
+          console.log("✅ Estatísticas calculadas:", {
+            totalScore,
+            totalCorrect,
+            totalQuestions,
+            accuracy: accuracy.toFixed(1) + "%",
+          });
+
+          setStats(
+            normalizeStats({
+              rank: 1,
+              total_score: totalScore,
+              accuracy_rate: accuracy,
+            })
+          );
+        } else {
+          console.log("⚠️ Nenhuma sessão encontrada nesta sala");
+          setStats(null);
+        }
+      } catch (fallbackErr) {
+        console.error("❌ Erro no fallback:", fallbackErr);
+      }
     } finally {
       setLoading(false);
     }
@@ -47,6 +149,7 @@ export const StudentGamePanel = ({
     // Os componentes de jogo já salvam automaticamente quando essa key existe
     localStorage.setItem("currentClassroomId", classroomId);
     localStorage.setItem("currentClassroomName", classroomName);
+    localStorage.setItem("autoStartGame", "normal"); // Flag para iniciar automaticamente
     onStartGame();
   };
 
@@ -78,13 +181,13 @@ export const StudentGamePanel = ({
                 <div className="bg-white/5 p-3 rounded-lg">
                   <p className="text-xs text-white/70 mb-1">Pontos</p>
                   <p className="text-2xl font-bold text-yellow-300">
-                    {stats.total_score}
+                    {stats.totalScore}
                   </p>
                 </div>
                 <div className="bg-white/5 p-3 rounded-lg">
                   <p className="text-xs text-white/70 mb-1">Precisão</p>
                   <p className="text-2xl font-bold text-green-300">
-                    {stats.accuracy_rate?.toFixed(1)}%
+                    {stats.accuracy.toFixed(1)}%
                   </p>
                 </div>
               </div>

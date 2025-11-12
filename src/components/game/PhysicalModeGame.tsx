@@ -6,7 +6,7 @@ import { useArduinoSerial } from "@/hooks/useArduinoSerial";
 import { useToast } from "@/hooks/use-toast";
 import { CompetitionModal } from "./CompetitionModal";
 import { GameResultModal } from "./GameResultModal";
-import { questions } from "@/data/questions";
+import { useGameQuestions } from "@/hooks/useGameQuestions";
 import { Question } from "@/types/game";
 import { cn } from "@/lib/utils";
 
@@ -17,6 +17,7 @@ interface PhysicalModeGameProps {
 export const PhysicalModeGame = ({ onBackToMenu }: PhysicalModeGameProps) => {
   const { sendCommand, onMessage } = useArduinoSerial();
   const { toast } = useToast();
+  const { selectQuestions } = useGameQuestions();
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState<Question | null>(null);
@@ -62,9 +63,9 @@ export const PhysicalModeGame = ({ onBackToMenu }: PhysicalModeGameProps) => {
   useEffect(() => {
     console.log("🎮 PhysicalModeGame montado");
 
-    const allQuestions = Object.values(questions).flat();
-    const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
-    const selected = shuffled.slice(0, 10);
+    // Usar sistema de seleção com controle de repetições
+    const allSelected = selectQuestions(2); // 2 por categoria = 16 questões
+    const selected = allSelected.slice(0, 10); // Limitar a 10
     setGameQuestions(selected);
     setCurrentQuestion(selected[0]);
 
@@ -76,7 +77,7 @@ export const PhysicalModeGame = ({ onBackToMenu }: PhysicalModeGameProps) => {
     return () => {
       console.log("🔴 PhysicalModeGame desmontado");
     };
-  }, []);
+  }, [selectQuestions]);
 
   // Registrar callback para receber mensagens do Arduino (apenas uma vez)
   useEffect(() => {

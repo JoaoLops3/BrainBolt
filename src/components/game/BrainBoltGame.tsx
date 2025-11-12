@@ -157,8 +157,10 @@ export const BrainBoltGame = () => {
   };
 
   const selectQuestionsCallback = useCallback(() => {
-    // Usar o sistema melhorado de seleção de perguntas
-    return selectQuestions(4);
+    // Selecionar 3 questões por categoria (3 * 8 = 24) e depois limitar a 20
+    const allSelected = selectQuestions(3);
+    // Embaralhar e limitar a 20 questões
+    return allSelected.sort(() => Math.random() - 0.5).slice(0, 20);
   }, [selectQuestions]);
 
   const startGame = useCallback(
@@ -185,6 +187,16 @@ export const BrainBoltGame = () => {
     },
     [selectQuestionsCallback, toast]
   );
+
+  // Auto-iniciar jogo quando vindo de uma sala de aula
+  useEffect(() => {
+    const autoStart = localStorage.getItem("autoStartGame");
+    if (autoStart && gameState.gamePhase === "menu") {
+      localStorage.removeItem("autoStartGame");
+      // Iniciar jogo no modo especificado
+      startGame(autoStart as GameMode);
+    }
+  }, [gameState.gamePhase, startGame]);
 
   const handleAnswerSelect = useCallback(
     (answerIndex: number) => {
@@ -361,14 +373,30 @@ export const BrainBoltGame = () => {
 
       // Se estiver jogando dentro de uma sala, vincular a sessão
       const classroomId = localStorage.getItem("currentClassroomId");
+      console.log(
+        "💾 Salvando jogo - classroomId:",
+        classroomId,
+        "sessionData:",
+        sessionData?.id
+      );
       if (classroomId && sessionData) {
-        await supabase.from("classroom_game_sessions").insert({
-          classroom_id: classroomId,
-          student_id: user.id,
-          game_session_id: sessionData.id,
-        });
+        const { error: classroomError } = await supabase
+          .from("classroom_game_sessions")
+          .insert({
+            classroom_id: classroomId,
+            student_id: user.id,
+            game_session_id: sessionData.id,
+          });
+
+        if (classroomError) {
+          console.error("❌ Erro ao salvar na sala:", classroomError);
+        } else {
+          console.log("✅ Jogo salvo na sala com sucesso!");
+        }
+
         // Limpar o classroomId do localStorage
         localStorage.removeItem("currentClassroomId");
+        localStorage.removeItem("currentClassroomName");
       }
     } catch (error) {
       console.error("Error saving game session:", error);
