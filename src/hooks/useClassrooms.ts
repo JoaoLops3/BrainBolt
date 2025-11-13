@@ -74,7 +74,10 @@ export const useClassrooms = () => {
         .select(
           `
           *,
-          classrooms:classroom_id (*)
+          classrooms:classroom_id (
+            *,
+            classroom_students(count)
+          )
         `
         )
         .eq("student_id", user.id)
@@ -83,7 +86,10 @@ export const useClassrooms = () => {
       if (fetchError) throw fetchError;
 
       const studentClassrooms: ClassroomWithDetails[] = (data || []).map(
-        (item: any) => item.classrooms
+        (item: any) => ({
+          ...item.classrooms,
+          student_count: item.classrooms.classroom_students?.[0]?.count || 0,
+        })
       );
 
       setMyClassrooms(studentClassrooms);
@@ -262,7 +268,7 @@ export const useClassrooms = () => {
 
         toast({
           title: "✅ Entrada confirmada!",
-          description: `Você entrou na sala: ${classroom.name}`,
+          description: `Você entrou na sala: ${data.name}`,
         });
 
         await fetchStudentClassrooms();
@@ -453,12 +459,140 @@ export const useClassrooms = () => {
           throw error;
         }
 
-        return data?.[0] || null;
+        if (data?.[0]) {
+          return data[0];
+        }
+
+        console.warn(
+          "RPC get_classroom_statistics returned empty data, using fallback"
+        );
       } catch (err: any) {
         console.error("Error fetching classroom statistics:", err);
+      }
+
+      try {
+        const [
+          { data: studentsData, error: studentsError },
+          { data: sessionsData, error: sessionsError },
+        ] = await Promise.all([
+          sb
+            .from("classroom_students")
+            .select(
+              `
+              student_id,
+              status,
+              profiles:student_id (display_name)
+            `
+            )
+            .eq("classroom_id", classroomId),
+          sb
+            .from("classroom_game_sessions")
+            .select(
+              `
+              student_id,
+              game_session_id,
+              game_sessions (
+                final_score,
+                correct_answers,
+                questions_answered
+              )
+            `
+            )
+            .eq("classroom_id", classroomId),
+        ]);
+
+        if (studentsError) throw studentsError;
+        if (sessionsError) throw sessionsError;
+
+        const totalStudents = studentsData?.length ?? 0;
+        const activeStudents =
+          studentsData?.filter((s: any) => s.status === "active").length ?? 0;
+        const totalGamesPlayed = sessionsData?.length ?? 0;
+
+        if (!totalStudents && !totalGamesPlayed) {
+          return {
+            total_students: 0,
+            active_students: 0,
+            total_games_played: 0,
+            average_score: 0,
+            average_accuracy: 0,
+          };
+        }
+
+        const profilesMap = new Map<string, string>();
+        (studentsData || []).forEach((student: any) => {
+          profilesMap.set(
+            student.student_id,
+            student.profiles?.display_name || "Aluno"
+          );
+        });
+
+        let totalScore = 0;
+        let totalCorrect = 0;
+        let totalQuestions = 0;
+        const activityMap = new Map<string, { games: number; score: number }>();
+
+        (sessionsData || []).forEach((session: any) => {
+          const studentId = session.student_id;
+          const metrics = session.game_sessions || {};
+          const score = Number(metrics.final_score) || 0;
+          const correct = Number(metrics.correct_answers) || 0;
+          const questions = Number(metrics.questions_answered) || 0;
+
+          totalScore += score;
+          totalCorrect += correct;
+          totalQuestions += questions;
+
+          const current = activityMap.get(studentId) || { games: 0, score: 0 };
+          activityMap.set(studentId, {
+            games: current.games + 1,
+            score: current.score + score,
+          });
+        });
+
+        const averageScore =
+          totalGamesPlayed > 0 ? totalScore / totalGamesPlayed : 0;
+        const averageAccuracy =
+          totalQuestions > 0 ? (totalCorrect / totalQuestions) * 100 : 0;
+
+        let mostActiveStudentId: string | undefined;
+        let mostActiveName: string | undefined;
+        let mostGames = -1;
+        let topScorerId: string | undefined;
+        let topScorerName: string | undefined;
+        let topScore = -1;
+
+        activityMap.forEach((entry, studentId) => {
+          if (entry.games > mostGames) {
+            mostGames = entry.games;
+            mostActiveStudentId = studentId;
+            mostActiveName = profilesMap.get(studentId);
+          }
+
+          if (entry.score > topScore) {
+            topScore = entry.score;
+            topScorerId = studentId;
+            topScorerName = profilesMap.get(studentId);
+          }
+        });
+
+        return {
+          total_students: totalStudents,
+          active_students: activeStudents,
+          total_games_played: totalGamesPlayed,
+          average_score: Number(averageScore.toFixed(1)),
+          average_accuracy: Number(averageAccuracy.toFixed(1)),
+          most_active_student_id: mostActiveStudentId,
+          most_active_student_name: mostActiveName,
+          top_scorer_id: topScorerId,
+          top_scorer_name: topScorerName,
+          top_score: topScore > -1 ? topScore : undefined,
+        };
+      } catch (fallbackError: any) {
+        console.error("Fallback statistics computation failed:", fallbackError);
         toast({
           title: "❌ Erro ao carregar estatísticas",
-          description: err.message,
+          description: fallbackError.message,
           variant: "destructive",
         });
         return null;
@@ -475,7 +609,7 @@ export const useClassrooms = () => {
           .select(
             `
             *,
-            profiles:user_id (display_name, avatar_url)
+            profiles:student_id (display_name, avatar_url)
           `
           )
           .eq("classroom_id", classroomId)

@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ClassroomStatistics as ClassroomStats } from "@/types/classroom";
 import { useClassrooms } from "@/hooks/useClassrooms";
 import {
-  Users,
   Trophy,
   Target,
   Gamepad2,
@@ -70,14 +69,6 @@ export const ClassroomStatistics = ({
 
   const statCards = [
     {
-      icon: Users,
-      label: "Total de Alunos",
-      value: stats.total_students,
-      subValue: `${stats.active_students} ativos`,
-      color: "text-blue-300",
-      bgColor: "bg-blue-500/20",
-    },
-    {
       icon: Gamepad2,
       label: "Jogos Realizados",
       value: stats.total_games_played,
@@ -113,7 +104,7 @@ export const ClassroomStatistics = ({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {statCards.map((stat, index) => (
               <Card
                 key={index}

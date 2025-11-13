@@ -2,7 +2,11 @@
 -- Migração para expandir o sistema de conquistas e personagens
 
 -- Primeiro, vamos adicionar os novos tipos de conquistas que não existiam antes
--- Adicionar novos tipos de requirement_type se necessário
+-- Remover constraint existente se houver
+ALTER TABLE public.achievements 
+DROP CONSTRAINT IF EXISTS achievements_requirement_type_check;
+
+-- Adicionar novos tipos de requirement_type
 ALTER TABLE public.achievements 
 ADD CONSTRAINT achievements_requirement_type_check 
 CHECK (requirement_type IN (
@@ -69,7 +73,7 @@ BEGIN
         END IF;
         
       WHEN 'multiplayer_games' THEN
-        IF user_profile.multiplayer_games_played >= achievement_record.requirement_value THEN
+        IF user_profile.games_played >= achievement_record.requirement_value THEN
           INSERT INTO public.user_achievements (user_id, achievement_id, is_completed, progress)
           VALUES (p_user_id, achievement_record.id, true, achievement_record.requirement_value)
           ON CONFLICT (user_id, achievement_id) DO UPDATE SET 
@@ -77,7 +81,7 @@ BEGIN
         END IF;
         
       WHEN 'survival_games' THEN
-        IF user_profile.survival_games_played >= achievement_record.requirement_value THEN
+        IF user_profile.games_played >= achievement_record.requirement_value THEN
           INSERT INTO public.user_achievements (user_id, achievement_id, is_completed, progress)
           VALUES (p_user_id, achievement_record.id, true, achievement_record.requirement_value)
           ON CONFLICT (user_id, achievement_id) DO UPDATE SET 
@@ -218,7 +222,7 @@ BEGIN
         
       WHEN 'survival' THEN
         -- Survival mode characters
-        IF user_profile.survival_games_played >= character_record.unlock_requirement THEN
+        IF user_profile.games_played >= character_record.unlock_requirement THEN
           INSERT INTO public.user_characters (user_id, character_id)
           VALUES (p_user_id, character_record.id)
           ON CONFLICT (user_id, character_id) DO NOTHING;
@@ -226,7 +230,7 @@ BEGIN
         
       WHEN 'multiplayer' THEN
         -- Multiplayer characters
-        IF user_profile.multiplayer_games_played >= character_record.unlock_requirement THEN
+        IF user_profile.games_played >= character_record.unlock_requirement THEN
           INSERT INTO public.user_characters (user_id, character_id)
           VALUES (p_user_id, character_record.id)
           ON CONFLICT (user_id, character_id) DO NOTHING;

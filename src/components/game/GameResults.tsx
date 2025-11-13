@@ -46,23 +46,23 @@ export const GameResults = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary to-entertainment flex items-center justify-center p-4 sm:p-6 no-scroll safe-top safe-bottom">
-      <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-2xl w-full shadow-2xl animate-bounce-in">
+    <div className="min-h-screen bg-gradient-to-br from-primary to-entertainment flex items-center justify-center p-3 sm:p-4 no-scroll safe-top safe-bottom">
+      <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-2xl sm:rounded-3xl p-4 sm:p-6 max-w-md sm:max-w-lg w-full shadow-2xl animate-bounce-in">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-primary mb-2">
+        <div className="text-center mb-4 sm:mb-6">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">
             Resultado Final
           </h1>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-sm sm:text-base text-white/80">
             {getPerformanceMessage()}
           </p>
         </div>
 
         {/* Score Circle */}
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center mb-4 sm:mb-6">
           <div className="relative">
             <svg
-              className="w-32 h-32 transform -rotate-90"
+              className="w-24 h-24 sm:w-28 sm:h-28 transform -rotate-90"
               viewBox="0 0 120 120"
             >
               <circle
@@ -87,66 +87,64 @@ export const GameResults = ({
             </svg>
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
-                <div className="text-3xl font-bold text-primary">
+                <div className="text-2xl sm:text-3xl font-bold text-white">
                   {accuracy}%
                 </div>
-                <div className="text-sm text-muted-foreground">Precisão</div>
+                <div className="text-xs sm:text-sm text-white/70">Precisão</div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 gap-4 mb-8">
-          <div className="text-center p-4 bg-muted rounded-2xl">
-            <div className="text-2xl font-bold text-primary">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-4 sm:mb-6">
+          <div className="text-center p-2 sm:p-3 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20">
+            <div className="text-xl sm:text-2xl font-bold text-white">
               {stats.correctAnswers}
             </div>
-            <div className="text-sm text-muted-foreground">
-              Respostas Certas
-            </div>
+            <div className="text-xs sm:text-sm text-white/70">Certas</div>
           </div>
-          <div className="text-center p-4 bg-muted rounded-2xl">
-            <div className="text-2xl font-bold text-primary">
+          <div className="text-center p-2 sm:p-3 bg-white/10 rounded-xl backdrop-blur-sm border border-white/20">
+            <div className="text-xl sm:text-2xl font-bold text-white">
               {stats.totalQuestions}
             </div>
-            <div className="text-sm text-muted-foreground">
-              Total de Perguntas
-            </div>
+            <div className="text-xs sm:text-sm text-white/70">Total</div>
           </div>
         </div>
 
         {/* Categories Progress */}
-        <div className="mb-8">
-          <h3 className="text-xl font-semibold mb-4 text-center">
-            Personagens Coletados ({collectedCount}/6)
+        <div className="mb-4 sm:mb-6">
+          <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 text-center text-white">
+            Personagens ({collectedCount}/6)
           </h3>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-2">
             {categories.map((category) => (
               <div
                 key={category.id}
-                className={`relative rounded-xl p-3 transition-all duration-300 ${
+                className={`relative rounded-lg p-2 transition-all duration-300 ${
                   category.collected
-                    ? `bg-${category.id}/20 border-2 border-${category.id}`
-                    : "bg-muted border-2 border-transparent grayscale"
+                    ? `bg-white/20 border-2 border-white/40`
+                    : "bg-white/5 border-2 border-white/10 grayscale"
                 }`}
               >
                 {categoryIcons[category.id] ? (
                   <img
                     src={categoryIcons[category.id]}
                     alt={category.name}
-                    className="w-12 h-12 mx-auto mb-1"
+                    className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-0.5"
                   />
                 ) : (
-                  <div className="w-12 h-12 mx-auto mb-1 bg-muted rounded-full flex items-center justify-center">
-                    <span className="text-lg font-bold">{category.name.charAt(0)}</span>
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-0.5 bg-white/10 rounded-full flex items-center justify-center">
+                    <span className="text-sm sm:text-base font-bold text-white">
+                      {category.name.charAt(0)}
+                    </span>
                   </div>
                 )}
-                <p className="text-xs font-medium text-center">
+                <p className="text-[10px] sm:text-xs font-medium text-center truncate text-white">
                   {category.name}
                 </p>
                 {category.collected && (
-                  <div className="absolute -top-1 -right-1 bg-correct-answer text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                  <div className="absolute -top-1 -right-1 bg-correct-answer text-white rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center text-[10px] sm:text-xs">
                     ✓
                   </div>
                 )}
@@ -156,17 +154,17 @@ export const GameResults = ({
         </div>
 
         {/* Actions */}
-        <div className="space-y-3">
+        <div className="space-y-2">
           <Button
             onClick={onPlayAgain}
-            className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-4 rounded-xl transition-all duration-300 hover:scale-[1.02]"
+            className="w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 text-white font-semibold py-2.5 sm:py-3 text-sm sm:text-base rounded-lg sm:rounded-xl transition-all duration-300 hover:scale-[1.02]"
           >
             Jogar Novamente
           </Button>
           <Button
             onClick={onBackToMenu}
             variant="outline"
-            className="w-full border-2 border-primary text-primary hover:bg-primary/5 font-semibold py-4 rounded-xl transition-all duration-300"
+            className="w-full border-2 border-white/30 bg-white/5 hover:bg-white/10 text-white font-semibold py-2.5 sm:py-3 text-sm sm:text-base rounded-lg sm:rounded-xl transition-all duration-300"
           >
             Voltar ao Menu
           </Button>

@@ -157,8 +157,10 @@ export const BrainBoltGame = () => {
   };
 
   const selectQuestionsCallback = useCallback(() => {
-    // Usar o sistema melhorado de seleção de perguntas
-    return selectQuestions(4);
+    // Selecionar 3 questões por categoria (3 * 8 = 24) e depois limitar a 20
+    const allSelected = selectQuestions(3);
+    // Embaralhar e limitar a 20 questões
+    return allSelected.sort(() => Math.random() - 0.5).slice(0, 20);
   }, [selectQuestions]);
 
   const startGame = useCallback(
@@ -185,6 +187,16 @@ export const BrainBoltGame = () => {
     },
     [selectQuestionsCallback, toast]
   );
+
+  // Auto-iniciar jogo quando vindo de uma sala de aula
+  useEffect(() => {
+    const autoStart = localStorage.getItem("autoStartGame");
+    if (autoStart && gameState.gamePhase === "menu") {
+      localStorage.removeItem("autoStartGame");
+      // Iniciar jogo no modo especificado
+      startGame(autoStart as GameMode);
+    }
+  }, [gameState.gamePhase, startGame]);
 
   const handleAnswerSelect = useCallback(
     (answerIndex: number) => {
@@ -338,21 +350,53 @@ export const BrainBoltGame = () => {
       const dbGameMode: "normal" | "speed" | "multiplayer" | "survival" =
         finalStats.gameMode === "physical" ? "normal" : finalStats.gameMode;
 
-      const { error } = await supabase.from("game_sessions").insert({
-        user_id: user.id,
-        game_mode: dbGameMode,
-        final_score: finalStats.finalScore,
-        questions_answered: finalStats.totalQuestions,
-        correct_answers: safeCorrectAnswers,
-        categories_completed: finalStats.categoriesCompleted,
-        max_streak: finalStats.maxStreak,
-        time_spent: finalStats.timeSpent,
-        game_result: gameResult,
-      });
+      const { data: sessionData, error } = await supabase
+        .from("game_sessions")
+        .insert({
+          user_id: user.id,
+          game_mode: dbGameMode,
+          final_score: finalStats.finalScore,
+          questions_answered: finalStats.totalQuestions,
+          correct_answers: safeCorrectAnswers,
+          categories_completed: finalStats.categoriesCompleted,
+          max_streak: finalStats.maxStreak,
+          time_spent: finalStats.timeSpent,
+          game_result: gameResult,
+        })
+        .select()
+        .single();
 
       if (error) {
         console.error("Erro ao salvar sessão:", error);
         throw error;
+      }
+
+      // Se estiver jogando dentro de uma sala, vincular a sessão
+      const classroomId = localStorage.getItem("currentClassroomId");
+      console.log(
+        "💾 Salvando jogo - classroomId:",
+        classroomId,
+        "sessionData:",
+        sessionData?.id
+      );
+      if (classroomId && sessionData) {
+        const { error: classroomError } = await supabase
+          .from("classroom_game_sessions")
+          .insert({
+            classroom_id: classroomId,
+            student_id: user.id,
+            game_session_id: sessionData.id,
+          });
+
+        if (classroomError) {
+          console.error("❌ Erro ao salvar na sala:", classroomError);
+        } else {
+          console.log("✅ Jogo salvo na sala com sucesso!");
+        }
+
+        // Limpar o classroomId do localStorage
+        localStorage.removeItem("currentClassroomId");
+        localStorage.removeItem("currentClassroomName");
       }
     } catch (error) {
       console.error("Error saving game session:", error);
@@ -435,7 +479,7 @@ export const BrainBoltGame = () => {
     };
 
     const cleanup = onMessage(messageHandler);
-    
+
     // Cleanup quando o componente desmontar ou as dependências mudarem
     return cleanup;
   }, [
