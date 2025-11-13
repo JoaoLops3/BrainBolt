@@ -23,8 +23,8 @@ O Brain Bolt foi criado para resolver um dos maiores desafios da educação mode
 
 #### 🎮 Sistema de Jogo
 
-- **3 Modos**: Normal (sem tempo), Veloz (15s), Físico (botões hardware)
-- **400+ Perguntas** em 6 categorias: ⚽ Esportes, 🎬 Entretenimento, 🎨 Arte, 🔬 Ciências, 🌍 Geografia, 🏛️ História
+- **4 Modos**: Normal (sem tempo), Veloz (15s), Físico (botões hardware), Multiplayer
+- **160 Perguntas** em 8 categorias: ⚽ Esportes, 🎬 Entretenimento, 🎨 Arte, 🔬 Ciências, 🌍 Geografia, 🏛️ História, ➕ Matemática, 📚 Português
 - **Sistema de Pontuação**: 100 pontos/acerto + bônus por streaks
 - **Personagens Colecionáveis**: Desbloqueie por categoria
 
@@ -107,9 +107,11 @@ O Brain Bolt foi criado para resolver um dos maiores desafios da educação mode
   - **1 Botão de Resposta Rápida**: Botão especial para quem quer responder primeiro
   - **Competição Física**: Alunos competem fisicamente apertando os botões
   - **Dinâmica em Sala**: Professor controla o jogo, alunos participam ativamente
+- **Modo Multiplayer**: Partidas 1v1 em tempo real com amigos
 - **Sistema de Pontuação**: 100 pontos por acerto, bônus por streaks
 - **Coleção de Personagens**: Desbloqueie personagens acertando 2+ perguntas por categoria
 - **Dificuldade Progressiva**: Perguntas de fácil a difícil por categoria
+- **160 Perguntas Fixas**: Distribuídas em 8 categorias (20 perguntas por categoria)
 
 ### 🏫 Sistema de Salas Educacionais
 
@@ -149,19 +151,21 @@ O Brain Bolt foi criado para resolver um dos maiores desafios da educação mode
 
 | Categoria             | Ícone   | Descrição                                  |
 | --------------------- | ------- | ------------------------------------------ |
-| 🏃‍♂️ **Esportes**       | Azul    | Futebol, basquete, tênis e mais            |
+| ⚽ **Esportes**        | Azul    | Futebol, basquete, tênis e mais            |
 | 🎬 **Entretenimento** | Rosa    | Cinema, música, TV e celebridades          |
 | 🎨 **Arte**           | Roxo    | Pintura, escultura, literatura e cultura   |
 | 🔬 **Ciências**       | Verde   | Física, química, biologia e tecnologia     |
 | 🌍 **Geografia**      | Laranja | Países, capitais, continentes e mapas      |
 | 🏛️ **História**       | Âmbar   | Eventos históricos, personalidades e datas |
+| ➕ **Matemática**     | Azul    | Cálculos, álgebra, geometria e mais        |
+| 📚 **Português**      | Roxo    | Gramática, ortografia, literatura e mais   |
 
 ## 🎮 Como Jogar
 
 ### 🏠 Uso Individual
 
 1. **Cadastre-se** ou faça login na plataforma
-2. **Escolha o modo**: Normal, Veloz ou Físico
+2. **Escolha o modo**: Normal, Veloz, Físico ou Multiplayer
 3. **Responda perguntas** de diferentes categorias
 4. **Colete personagens** acertando 2+ perguntas por categoria
 5. **Desafie amigos** no modo multiplayer
@@ -352,7 +356,7 @@ BrainBolt/
 │   │   ├── friends/        # Sistema de amigos (FriendsModal, FriendProfile)
 │   │   └── ui/             # Componentes de interface (shadcn/ui)
 │   ├── contexts/           # Contextos React (AuthContext)
-│   ├── data/              # Dados estáticos (perguntas.ts - 400+ perguntas)
+│   ├── data/              # Dados estáticos (perguntas.ts - 160 perguntas)
 │   ├── hooks/             # Hooks customizados (useArduinoSerial - Web Serial API)
 │   ├── integrations/      # Integrações externas (Supabase client)
 │   ├── lib/               # Utilitários (utils, validações)
@@ -483,7 +487,7 @@ npx cap doctor       # Verificar Capacitor
 #### 📝 Perguntas Customizadas
 
 - Professores criam perguntas ilimitadas
-- 6 categorias + 3 dificuldades
+- 8 categorias + 3 dificuldades
 - Explicações educacionais
 - Compartilhamento público
 - Estatísticas de uso
@@ -542,8 +546,8 @@ npx cap doctor       # Verificar Capacitor
   - CSS: 22 kB
   - JS Total: ~250 kB
 - **Build time**: ~4s
-- **Categorias**: 6
-- **Perguntas**: 400+ (fixas) + Ilimitadas (custom)
+- **Categorias**: 8
+- **Perguntas**: 160 (fixas) + Ilimitadas (custom)
 
 ## 👨‍💻 Autor
 
