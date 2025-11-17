@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Trophy } from "lucide-react";
@@ -45,10 +45,20 @@ export const PhysicalModeGame = ({ onBackToMenu }: PhysicalModeGameProps) => {
   // Refs para capturar valores atuais sem causar re-execuções do useEffect
   const canAnswerRef = useRef(canAnswer);
   const competitionModeRef = useRef(competitionMode);
+  const selectedAnswerRef = useRef(selectedAnswer);
+  const currentQuestionRef = useRef(currentQuestion);
+  const currentPlayerRef = useRef(currentPlayer);
+  const currentQuestionIndexRef = useRef(currentQuestionIndex);
+  const gameQuestionsRef = useRef(gameQuestions);
+  const scoresRef = useRef(scores);
   const handleCompetitionWinnerRef = useRef<
     (winner: "FAST1" | "FAST2", time: number) => void
   >(() => {});
   const handleAnswerPressRef = useRef<(button: string) => void>(() => {});
+  const startNewQuestionRef = useRef<() => Promise<void>>(() => Promise.resolve());
+  const endGameRef = useRef<() => Promise<void>>(() => Promise.resolve());
+  const initializedRef = useRef(false);
+  const firstQuestionStartedRef = useRef(false);
 
   // Atualizar refs quando os valores mudarem
   useEffect(() => {
@@ -59,25 +69,100 @@ export const PhysicalModeGame = ({ onBackToMenu }: PhysicalModeGameProps) => {
     competitionModeRef.current = competitionMode;
   }, [competitionMode]);
 
-  // Inicializar perguntas
   useEffect(() => {
+    selectedAnswerRef.current = selectedAnswer;
+  }, [selectedAnswer]);
+
+  useEffect(() => {
+    currentQuestionRef.current = currentQuestion;
+  }, [currentQuestion]);
+
+  useEffect(() => {
+    currentPlayerRef.current = currentPlayer;
+  }, [currentPlayer]);
+
+  useEffect(() => {
+    currentQuestionIndexRef.current = currentQuestionIndex;
+  }, [currentQuestionIndex]);
+
+  useEffect(() => {
+    gameQuestionsRef.current = gameQuestions;
+  }, [gameQuestions]);
+
+  useEffect(() => {
+    scoresRef.current = scores;
+  }, [scores]);
+
+  // Inicializar perguntas (apenas uma vez na montagem)
+  useEffect(() => {
+    if (initializedRef.current) return;
+    
     console.log("🎮 PhysicalModeGame montado");
+    initializedRef.current = true;
 
     // Usar sistema de seleção com controle de repetições
     const allSelected = selectQuestions(2); // 2 por categoria = 16 questões
     const selected = allSelected.slice(0, 10); // Limitar a 10
+    
+    if (selected.length === 0) {
+      console.error("❌ Nenhuma pergunta selecionada!");
+      toast({
+        title: "Erro",
+        description: "Não foi possível carregar as perguntas. Tente novamente.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    console.log(`📚 ${selected.length} perguntas carregadas`);
     setGameQuestions(selected);
     setCurrentQuestion(selected[0]);
 
-    // Iniciar primeira pergunta após carregar
-    setTimeout(() => {
-      startNewQuestion();
-    }, 500);
-
     return () => {
       console.log("🔴 PhysicalModeGame desmontado");
+      initializedRef.current = false;
     };
-  }, [selectQuestions]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Executar apenas uma vez na montagem - selectQuestions é estável
+
+  // Iniciar primeira pergunta após as perguntas serem carregadas e as funções estarem prontas
+  useEffect(() => {
+    console.log("🔍 Verificando condições para iniciar primeira pergunta:", {
+      gameQuestionsLength: gameQuestions.length,
+      hasCurrentQuestion: !!currentQuestion,
+      hasStartNewQuestionRef: !!startNewQuestionRef.current,
+      firstQuestionStarted: firstQuestionStartedRef.current
+    });
+    
+    // Só executar uma vez se temos perguntas e a função startNewQuestion está disponível
+    if (
+      gameQuestions.length > 0 && 
+      currentQuestion && 
+      startNewQuestionRef.current && 
+      !firstQuestionStartedRef.current
+    ) {
+      console.log("🚀 Todas as condições atendidas! Iniciando primeira pergunta...");
+      firstQuestionStartedRef.current = true;
+      const timer = setTimeout(() => {
+        console.log("⏰ Timer executado, chamando startNewQuestion...");
+        if (startNewQuestionRef.current) {
+          startNewQuestionRef.current();
+        } else {
+          console.error("❌ startNewQuestionRef não disponível no momento da execução!");
+        }
+      }, 500);
+      return () => {
+        clearTimeout(timer);
+        // Resetar flag se o componente desmontar antes de iniciar
+        if (!initializedRef.current) {
+          console.log("🔄 Resetando flag firstQuestionStarted");
+          firstQuestionStartedRef.current = false;
+        }
+      };
+    } else if (gameQuestions.length === 0 && initializedRef.current) {
+      console.warn("⚠️ gameQuestions está vazio, mas componente foi inicializado!");
+    }
+  }, [gameQuestions.length, currentQuestion]); // Executar quando as perguntas estiverem carregadas
 
   // Registrar callback para receber mensagens do Arduino (apenas uma vez)
   useEffect(() => {
@@ -137,7 +222,7 @@ export const PhysicalModeGame = ({ onBackToMenu }: PhysicalModeGameProps) => {
   }, [onMessage]); // Agora só depende de onMessage, que é estável
 
   // Iniciar nova pergunta
-  const startNewQuestion = async () => {
+  const startNewQuestion = useCallback(async () => {
     try {
       console.log("🆕 Iniciando nova pergunta...");
 
@@ -167,9 +252,9 @@ export const PhysicalModeGame = ({ onBackToMenu }: PhysicalModeGameProps) => {
     } catch (error) {
       console.error("❌ Erro em startNewQuestion:", error);
     }
-  };
+  }, [sendCommand, toast]);
 
-  const handleCompetitionWinner = (winner: "FAST1" | "FAST2", time: number) => {
+  const handleCompetitionWinner = useCallback((winner: "FAST1" | "FAST2", time: number) => {
     try {
       console.log("🏆 handleCompetitionWinner chamado:", winner, time);
 
@@ -201,21 +286,29 @@ export const PhysicalModeGame = ({ onBackToMenu }: PhysicalModeGameProps) => {
     } catch (error) {
       console.error("❌ Erro em handleCompetitionWinner:", error);
     }
-  };
+  }, [toast]);
 
-  // Atualizar ref sempre que a função mudar
+  // Atualizar refs sempre que as funções mudarem
   useEffect(() => {
     handleCompetitionWinnerRef.current = handleCompetitionWinner;
-  }, [handleCompetitionWinner, toast]);
+  }, [handleCompetitionWinner]);
 
-  const handleAnswerPress = async (button: string) => {
+  useEffect(() => {
+    startNewQuestionRef.current = startNewQuestion;
+  }, [startNewQuestion]);
+
+  const handleAnswerPress = useCallback(async (button: string) => {
     try {
-      if (!canAnswer || selectedAnswer !== null) {
+      // Usar refs para obter valores atuais
+      const currentCanAnswer = canAnswerRef.current;
+      const currentSelectedAnswer = selectedAnswerRef.current;
+      
+      if (!currentCanAnswer || currentSelectedAnswer !== null) {
         console.log(
           "⚠️ handleAnswerPress ignorado - canAnswer:",
-          canAnswer,
+          currentCanAnswer,
           "selectedAnswer:",
-          selectedAnswer
+          currentSelectedAnswer
         );
         return;
       }
@@ -232,13 +325,15 @@ export const PhysicalModeGame = ({ onBackToMenu }: PhysicalModeGameProps) => {
       setShowAnswer(true);
       setCanAnswer(false);
 
-      const isCorrect = answerIndex === currentQuestion?.correctAnswer;
+      const currentQuestionValue = currentQuestionRef.current;
+      const isCorrect = answerIndex === currentQuestionValue?.correctAnswer;
 
       if (isCorrect) {
-        // Atualizar pontuação
-        if (currentPlayer === 1) {
+        // Atualizar pontuação usando função de atualização funcional
+        const currentPlayerValue = currentPlayerRef.current;
+        if (currentPlayerValue === 1) {
           setScores((prev) => ({ ...prev, player1: prev.player1 + 10 }));
-        } else {
+        } else if (currentPlayerValue === 2) {
           setScores((prev) => ({ ...prev, player2: prev.player2 + 10 }));
         }
 
@@ -249,7 +344,7 @@ export const PhysicalModeGame = ({ onBackToMenu }: PhysicalModeGameProps) => {
 
         toast({
           title: "✅ Resposta Correta!",
-          description: `Jogador ${currentPlayer} ganhou 10 pontos!`,
+          description: `Jogador ${currentPlayerValue} ganhou 10 pontos!`,
         });
       } else {
         await sendCommand({
@@ -265,20 +360,36 @@ export const PhysicalModeGame = ({ onBackToMenu }: PhysicalModeGameProps) => {
 
       // Próxima pergunta após 3 segundos
       setTimeout(() => {
-        const nextIndex = currentQuestionIndex + 1;
+        const nextIndex = currentQuestionIndexRef.current + 1;
+        const currentGameQuestions = gameQuestionsRef.current;
+        
         console.log(
-          "📊 Próxima pergunta - Index:",
+          "📊 Verificando próxima pergunta - Index atual:",
+          currentQuestionIndexRef.current,
+          "Próximo Index:",
           nextIndex,
-          "Total:",
-          gameQuestions.length
+          "Total de perguntas:",
+          currentGameQuestions.length,
+          "Array de perguntas:",
+          currentGameQuestions
         );
-        if (nextIndex < gameQuestions.length) {
+        
+        if (currentGameQuestions.length === 0) {
+          console.error("❌ ERRO: Array de perguntas vazio!");
+          return;
+        }
+        
+        if (nextIndex < currentGameQuestions.length) {
+          console.log("➡️ Avançando para próxima pergunta:", nextIndex);
           setCurrentQuestionIndex(nextIndex);
-          setCurrentQuestion(gameQuestions[nextIndex]);
-          startNewQuestion();
+          setCurrentQuestion(currentGameQuestions[nextIndex]);
+          // Pequeno delay antes de iniciar nova pergunta
+          setTimeout(() => {
+            startNewQuestionRef.current();
+          }, 100);
         } else {
-          console.log("🏁 Fim do jogo!");
-          endGame();
+          console.log("🏁 Fim do jogo! Todas as perguntas foram respondidas.");
+          endGameRef.current();
         }
       }, 3000);
     } catch (error) {
@@ -290,24 +401,42 @@ export const PhysicalModeGame = ({ onBackToMenu }: PhysicalModeGameProps) => {
         variant: "destructive",
       });
     }
-  };
+  }, [sendCommand, toast]);
 
   // Atualizar ref sempre que a função mudar
   useEffect(() => {
     handleAnswerPressRef.current = handleAnswerPress;
-  });
+  }, [handleAnswerPress]);
 
-  const endGame = async () => {
-    console.log("🎮 Jogo finalizado! Scores:", scores);
-
-    // Enviar comando de fim de jogo ao Arduino
-    await sendCommand({
-      type: "game_end",
+  const endGame = useCallback(async () => {
+    const currentScores = scoresRef.current;
+    const currentIndex = currentQuestionIndexRef.current;
+    const totalQuestions = gameQuestionsRef.current.length;
+    
+    console.log("🎮 endGame chamado!");
+    console.log("📊 Estado do jogo:", {
+      indexAtual: currentIndex,
+      totalPerguntas: totalQuestions,
+      scores: currentScores
     });
+    
+    // Enviar comando de fim de jogo ao Arduino
+    try {
+      await sendCommand({
+        type: "game_end",
+      });
+    } catch (error) {
+      console.error("❌ Erro ao enviar comando de fim de jogo:", error);
+    }
 
     // Mostrar modal de resultado
     setShowResultModal(true);
-  };
+  }, [sendCommand]);
+
+  // Atualizar ref sempre que a função mudar
+  useEffect(() => {
+    endGameRef.current = endGame;
+  }, [endGame]);
 
   const getButtonStyle = (index: number) => {
     if (!showAnswer) {
